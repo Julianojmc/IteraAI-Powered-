@@ -648,22 +648,108 @@ textarea{resize:vertical;min-height:78px;line-height:1.5}
     <div class="pg-orb pg-o2"></div>
     <nav>
       <div class="pg-logo">
-        <div class="pg-logo-icon" id="pw-icon-trigger" onclick="devIconTap()" style="cursor:default;user-select:none;background:rgba(0,201,167,0.18);border:1.5px solid rgba(0,201,167,0.38);border-radius:12px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg width="22" height="22" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="22" cy="22" r="18" stroke="rgba(0,201,167,0.3)" stroke-width="1.5"/>
-            <path d="M22 6 C34 6 38 14 38 22 C38 30 34 38 22 38 C10 38 6 30 6 22 C6 15 10 8 22 10" stroke="#00C9A7" stroke-width="2.6" stroke-linecap="round" fill="none" stroke-dasharray="44 10"/>
-            <path d="M22 4 L27 9 L22 14" stroke="#00C9A7" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <circle cx="22" cy="22" r="4" fill="#00C9A7"/>
+        <div id="pw-icon-trigger" onclick="devIconTap()" style="cursor:default;user-select:none;flex-shrink:0">
+          <svg width="340" height="90" viewBox="0 0 400 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block">
+            <defs>
+              <linearGradient id="pg-lg1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00E5FF"/>
+                <stop offset="50%" stop-color="#00C9A7"/>
+                <stop offset="100%" stop-color="#007A66"/>
+              </linearGradient>
+              <linearGradient id="pg-lg2" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00E5FF"/>
+                <stop offset="100%" stop-color="#00C9A7"/>
+              </linearGradient>
+              <filter id="pg-glow">
+                <feGaussianBlur stdDeviation="3" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="pg-glow-strong">
+                <feGaussianBlur stdDeviation="5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <polygon points="44,5 74,22 74,56 44,73 14,56 14,22" fill="none" stroke="url(#pg-lg1)" stroke-width="2" opacity="0.7"/>
+            <polygon points="44,16 66,29 66,55 44,68 22,55 22,29" fill="rgba(0,201,167,0.08)" stroke="url(#pg-lg1)" stroke-width="1.2" opacity="0.9"/>
+            <circle cx="44" cy="39" r="28" fill="none" stroke="rgba(0,201,167,0.12)" stroke-width="1" stroke-dasharray="3 6"/>
+            <circle cx="44" cy="27" r="6.5" fill="url(#pg-lg1)" filter="url(#pg-glow)"/>
+            <line x1="44" y1="33.5" x2="44" y2="48" stroke="url(#pg-lg1)" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M33 40 Q38.5 34 44 37.5 Q49.5 34 55 40" fill="none" stroke="url(#pg-lg1)" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="44" y1="48" x2="36" y2="61" stroke="url(#pg-lg1)" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="44" y1="48" x2="52" y2="61" stroke="url(#pg-lg1)" stroke-width="2.8" stroke-linecap="round"/>
+            <circle cx="44" cy="5" r="3.8" fill="#00E5FF" filter="url(#pg-glow)" opacity="0.95"/>
+            <circle cx="74" cy="22" r="2.2" fill="#00C9A7" opacity="0.5"/>
+            <circle cx="74" cy="56" r="2.2" fill="#00C9A7" opacity="0.5"/>
+            <circle cx="44" cy="73" r="3.8" fill="#FFB627" filter="url(#pg-glow)" opacity="0.95"/>
+            <circle cx="14" cy="56" r="2.2" fill="#00C9A7" opacity="0.5"/>
+            <circle cx="14" cy="22" r="2.2" fill="#00C9A7" opacity="0.5"/>
+            <text x="96" y="56" font-family="'Space Grotesk',sans-serif" font-size="52" font-weight="700" letter-spacing="-1.5">
+              <tspan fill="white">Itera</tspan><tspan fill="url(#pg-lg2)" filter="url(#pg-glow-strong)">AI</tspan>
+            </text>
+            <line x1="96" y1="64" x2="300" y2="64" stroke="url(#pg-lg1)" stroke-width="2.5" opacity="0.55"/>
+            <text x="96" y="80" font-family="'Space Grotesk',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.85)" letter-spacing="2.8">WORKFORCE INTELLIGENCE PLATFORM</text>
           </svg>
         </div>
-        <div class="pg-logo-text" style="font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.02em">Itera<span style="color:#00C9A7;font-weight:700">AI</span><span style="display:block;font-size:11px;font-weight:400;color:rgba(255,255,255,.5);letter-spacing:.07em;text-transform:uppercase;margin-top:1px">By Juliano Calvo</span></div>
       </div>
       <div class="pg-badge">✶ Pilot Program · CTE Pathways</div>
     </nav>
     <div class="pg-hero-body">
       <div class="pg-left">
         <div class="pg-eyebrow">Built for Multilingual &amp; Multicultural Classrooms</div>
-        <h1 class="pg-h1">AI-powered CTE tools<br><em>for every language</em><br>in your classroom</h1>
+        <h1 class="pg-h1">AI-powered CTE tools<br><em><span id="lang-cycle">for every language</span></em><br>in your classroom</h1>
+<style>
+#lang-cycle{display:inline-block;min-width:10px}
+#lang-cycle .lang-char{display:inline-block;transition:opacity .2s ease, transform .2s ease;opacity:1;transform:translateY(0)}
+#lang-cycle .lang-char.out{opacity:0;transform:translateY(-9px)}
+#lang-cycle .lang-char.in{opacity:0;transform:translateY(9px)}
+</style>
+<script>
+(function(){
+  var phrases=[
+    'for every language',
+    'para cada idioma',
+    'pour chaque langue',
+    'para cada idioma',
+    'per ogni lingua',
+    '모든 언어를 위해',
+    '每一种语言',
+    'para sa bawat wika',
+    'لكل لغة',
+    'Для каждого языка',
+    'յուրաքանչյուր լեզվի համար',
+    'for every language'
+  ];
+  var idx=0;
+  function getEl(){return document.getElementById('lang-cycle');}
+  function renderChars(text){
+    var el=getEl();if(!el)return;
+    el.innerHTML=text.split('').map(function(c){
+      return '<span class="lang-char">'+(c===' '?'&nbsp;':c)+'</span>';
+    }).join('');
+  }
+  function morphTo(next){
+    var el=getEl();if(!el)return;
+    var chars=el.querySelectorAll('.lang-char');
+    chars.forEach(function(c,i){setTimeout(function(){c.classList.add('out');},i*26);});
+    var delay=chars.length*26+140;
+    setTimeout(function(){
+      renderChars(next);
+      var nc=getEl().querySelectorAll('.lang-char');
+      nc.forEach(function(c){c.classList.add('in');});
+      requestAnimationFrame(function(){requestAnimationFrame(function(){
+        nc.forEach(function(c,i){setTimeout(function(){c.classList.remove('in');},i*26);});
+      });});
+    },delay);
+  }
+  function init(){
+    var el=getEl();
+    if(!el){setTimeout(init,200);return;}
+    renderChars(phrases[0]);
+    setInterval(function(){idx=(idx+1)%phrases.length;morphTo(phrases[idx]);},2800);
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+})();
+</script>
         <p class="pg-sub">The only AI platform built from the ground up for CTE educators who serve multilingual, multicultural, and immigrant students. SIOP, SDAIE, translanguaging, and 40+ home languages — built into every prompt.</p>
         <div class="pg-pills">
           <span class="pg-pill">🌐 40+ Home Languages</span>
@@ -957,8 +1043,49 @@ textarea{resize:vertical;min-height:78px;line-height:1.5}
   <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px">
     <div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="width:38px;height:38px;background:rgba(0,201,167,0.18);border:1.5px solid rgba(0,201,167,0.38);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <svg width="20" height="20" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="18" stroke="rgba(0,201,167,0.3)" stroke-width="1.5"/><path d="M22 6 C34 6 38 14 38 22 C38 30 34 38 22 38 C10 38 6 30 6 22 C6 15 10 8 22 10" stroke="#00C9A7" stroke-width="2.6" stroke-linecap="round" fill="none" stroke-dasharray="44 10"/><path d="M22 4 L27 9 L22 14" stroke="#00C9A7" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="22" cy="22" r="4" fill="#00C9A7"/></svg>
+        <div style="flex-shrink:0">
+          <svg width="340" height="90" viewBox="0 0 400 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block">
+            <defs>
+              <linearGradient id="hdr-lg1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00E5FF"/>
+                <stop offset="50%" stop-color="#00C9A7"/>
+                <stop offset="100%" stop-color="#007A66"/>
+              </linearGradient>
+              <linearGradient id="hdr-lg2" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#00E5FF"/>
+                <stop offset="100%" stop-color="#00C9A7"/>
+              </linearGradient>
+              <filter id="hdr-glow">
+                <feGaussianBlur stdDeviation="3" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="hdr-glow-strong">
+                <feGaussianBlur stdDeviation="5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <!-- Hexagon icon -->
+            <polygon points="44,5 74,22 74,56 44,73 14,56 14,22" fill="none" stroke="url(#hdr-lg1)" stroke-width="2" opacity="0.7"/>
+            <polygon points="44,16 66,29 66,55 44,68 22,55 22,29" fill="rgba(0,201,167,0.08)" stroke="url(#hdr-lg1)" stroke-width="1.2" opacity="0.9"/>
+            <circle cx="44" cy="39" r="28" fill="none" stroke="rgba(0,201,167,0.12)" stroke-width="1" stroke-dasharray="3 6"/>
+            <circle cx="44" cy="27" r="6.5" fill="url(#hdr-lg1)" filter="url(#hdr-glow)"/>
+            <line x1="44" y1="33.5" x2="44" y2="48" stroke="url(#hdr-lg1)" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M33 40 Q38.5 34 44 37.5 Q49.5 34 55 40" fill="none" stroke="url(#hdr-lg1)" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="44" y1="48" x2="36" y2="61" stroke="url(#hdr-lg1)" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="44" y1="48" x2="52" y2="61" stroke="url(#hdr-lg1)" stroke-width="2.8" stroke-linecap="round"/>
+            <circle cx="44" cy="5" r="3.8" fill="#00E5FF" filter="url(#hdr-glow)" opacity="0.95"/>
+            <circle cx="74" cy="22" r="2.2" fill="#00C9A7" opacity="0.5"/>
+            <circle cx="74" cy="56" r="2.2" fill="#00C9A7" opacity="0.5"/>
+            <circle cx="44" cy="73" r="3.8" fill="#FFB627" filter="url(#hdr-glow)" opacity="0.95"/>
+            <circle cx="14" cy="56" r="2.2" fill="#00C9A7" opacity="0.5"/>
+            <circle cx="14" cy="22" r="2.2" fill="#00C9A7" opacity="0.5"/>
+            <!-- Wordmark: Itera + AI flush together, large -->
+            <text x="96" y="56" font-family="'Space Grotesk',sans-serif" font-size="52" font-weight="700" letter-spacing="-1.5">
+              <tspan fill="white">Itera</tspan><tspan fill="url(#hdr-lg2)" filter="url(#hdr-glow-strong)">AI</tspan>
+            </text>
+            <line x1="96" y1="64" x2="300" y2="64" stroke="url(#hdr-lg1)" stroke-width="2.5" opacity="0.55"/>
+            <text x="96" y="80" font-family="'Space Grotesk',sans-serif" font-size="10.5" fill="rgba(255,255,255,0.85)" letter-spacing="2.8">WORKFORCE INTELLIGENCE PLATFORM</text>
+          </svg>
         </div>
         <div class="hbadge" id="hbadge-text" style="margin-bottom:0">✦ IteraAI · Pilot Program</div>
       </div>
@@ -3749,12 +3876,16 @@ function buildPrompt(s){
   L.push('');
   L.push(`EQUITY AND EXCELLENCE REQUIREMENTS:
 Throughout the entire resource, please ensure:
-1. Cultural responsiveness — use names, businesses, examples, and scenarios that reflect the diverse backgrounds of the students described above. Avoid generic or Eurocentric default examples.
-2. High expectations with access — never "dumb down" content. Instead, provide scaffolds (sentence frames, graphic organizers, visual supports) that open access to rigorous content for all learners.
-3. Multilingual identity as strength — explicitly leverage home language connections, cognates, and translanguaging moments. Frame bilingualism and multilingualism as assets for CTE careers.
-4. Strategy-embedded design — for every major activity or section, include a callout box or teacher note suggesting the best teaching strategy to support multilingual learners at multiple ELD proficiency levels.
-5. Industry authenticity — use real workplace vocabulary, actual CTE job titles, authentic industry scenarios, and genuine career pathway connections throughout.
-6. Inclusive, affirming framing — avoid assumptions about family structure, documentation status, prior schooling, or country of origin that could feel excluding or triggering for any student group represented in this class.`);
+1. Cultural responsiveness — use names, businesses, scenarios, and industry examples that authentically reflect the cultural backgrounds, communities, and geographic contexts of the students described above. Default to diverse, globally representative examples; avoid Eurocentric assumptions.
+2. High expectations with scaffolded access — maintain full content rigor at all times. Never simplify or reduce cognitive demand. Instead, embed differentiated scaffolds — sentence frames, bilingual word banks, graphic organizers, worked examples, and visual supports — that open access to grade-level, industry-aligned content for every learner.
+3. Multilingual identity as professional asset — actively leverage home language connections, cognates, and strategic translanguaging throughout. Explicitly frame bilingualism and multilingualism as competitive advantages in CTE career pathways, naming specific industry contexts where these skills are valued.
+4. Strategy-embedded instructional design — for every major activity or section, include a clearly labeled teacher note or callout box identifying the recommended EL teaching strategy and how to adapt it across ELD proficiency levels (Emerging, Expanding, Bridging/Reaching).
+5. Industry authenticity — use accurate workplace terminology, real CTE job titles, genuine industry scenarios, and verifiable career pathway connections. Vocabulary and tasks should reflect actual professional practice in the identified CTE sector.
+6. Inclusive, affirming framing — make no assumptions about family structure, documentation status, country of origin, prior schooling, or religious background. All framing must be safe, affirming, and free from language that could marginalize any student group represented in this class.
+7. SYSTEM RULE — Universal Design for Learning (Auto-Embed): If no EL or UDL strategies are explicitly selected elsewhere in this prompt, automatically embed at least one UDL strategy from each of the following categories into the resource:
+   - Engagement (e.g., student choice, culturally relevant hooks, collaborative structures)
+   - Representation (e.g., multilingual glossary, visual models, real-world anchors)
+   - Action / Expression (e.g., multimodal response options, sentence frames, portfolio artifacts)`);
 
   return L.join('\n');
 }
@@ -4322,16 +4453,56 @@ function aOpenSaveModal() {
 // ════════════════════════════════════════
 //  LIBRARY
 // ════════════════════════════════════════
-const LIB_KEY='cte_prompt_library_v1';
-function _ls(op, key, val) {
-  try {
-    if (op === 'get') return localStorage.getItem(key);
-    if (op === 'set') { localStorage.setItem(key, val); return true; }
-    if (op === 'rm')  { localStorage.removeItem(key); return true; }
-  } catch(e) { return null; }
-}
-function loadLib(){try{return JSON.parse(_ls('get', LIB_KEY))||[];}catch(e){return[];}}
-function saveLib(arr){_ls('set', LIB_KEY, JSON.stringify(arr));}
+const LIB_KEY = 'cte_prompt_library_v1'; // ← same key, same data structure, no migration needed
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  StorageService — centralized library persistence layer
+//
+//  All library reads/writes flow through this object.
+//  To add cloud/account-based sync in the future, replace only the methods
+//  below — no other code in this file needs to change.
+//
+//  FUTURE CONNECTION POINTS are marked with: // [CLOUD HOOK]
+// ─────────────────────────────────────────────────────────────────────────────
+const StorageService = {
+
+  // [CLOUD HOOK] getLibrary — swap localStorage.getItem for an authenticated API call
+  getLibrary() {
+    try { return JSON.parse(localStorage.getItem(LIB_KEY)) || []; } catch(e) { return []; }
+  },
+
+  // [CLOUD HOOK] saveLibrary — swap localStorage.setItem for a debounced POST to /api/library/sync
+  saveLibrary(items) {
+    try { localStorage.setItem(LIB_KEY, JSON.stringify(items)); return true; } catch(e) { return false; }
+  },
+
+  // [CLOUD HOOK] addItem — swap for POST /api/library/items (returns server-assigned id)
+  addItem(item) {
+    const items = this.getLibrary();
+    items.push(item);
+    return this.saveLibrary(items);
+  },
+
+  // [CLOUD HOOK] updateItem — swap for PATCH /api/library/items/:id
+  updateItem(id, updates) {
+    const items = this.getLibrary().map(i => i.id === id ? { ...i, ...updates } : i);
+    return this.saveLibrary(items);
+  },
+
+  // [CLOUD HOOK] deleteItem — swap for DELETE /api/library/items/:id
+  deleteItem(id) {
+    return this.saveLibrary(this.getLibrary().filter(i => i.id !== id));
+  },
+
+  // [CLOUD HOOK] clearLibrary — swap for DELETE /api/library/items (bulk)
+  clearLibrary() {
+    try { localStorage.removeItem(LIB_KEY); return true; } catch(e) { return false; }
+  }
+};
+
+// Thin aliases so all existing call sites work without change
+function loadLib()         { return StorageService.getLibrary(); }
+function saveLib(arr)      { StorageService.saveLibrary(arr); }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function showLibrary(){
@@ -4533,7 +4704,7 @@ function deleteLib(id){
 }
 function clearLibrary(){
   if(!confirm('Delete ALL saved prompts? This cannot be undone.'))return;
-  _ls('rm', LIB_KEY);renderLibrary();
+  StorageService.clearLibrary(); renderLibrary();
 }
 function exportLibrary(){
   const items=loadLib();
@@ -5644,4 +5815,4 @@ rebuildPrompt();
 <footer class="site-footer">
   <div style="font-size:15px;margin-bottom:6px">✦</div>
   <div><strong>IteraAI</strong> — AI-Powered CTE Pathways For Multilingual Learners</div>
-  <div style="margin-top:5px">Created 
+  <div style="margin-top:5px">Created
