@@ -30,6 +30,13 @@ header p{color:rgba(255,255,255,.80);font-size:15px;max-width:620px;line-height:
 .ptab{display:flex;align-items:center;gap:9px;padding:15px 18px;border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap;font-size:13.5px;font-weight:500;color:var(--muted)}
 .ptab:hover{color:var(--teal);background:var(--teal-light)}
 .ptab.active{color:var(--teal);border-bottom-color:var(--teal);background:var(--teal-light)}
+/* Step completion indicator — appended via JS when a step's required fields are filled */
+.ptab.step-done .pletter::after{content:'✓';position:absolute;top:-5px;right:-7px;font-size:9px;background:#00C9A7;color:white;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;font-weight:700;line-height:14px}
+.ptab .pletter{position:relative}
+/* Readiness message strip above Generate button */
+#readiness-msg{font-size:12px;line-height:1.5;padding:8px 11px;border-radius:8px;margin-bottom:8px;transition:all .25s}
+#readiness-msg.ready{background:#e6faf6;color:#005f4a;border:1px solid #00C9A7}
+#readiness-msg.not-ready{background:#fff8f5;color:#7a3010;border:1px solid #f0c4a8}
 .pletter{width:28px;height:28px;border-radius:50%;background:var(--teal-light);color:var(--teal);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
 .ptab.active .pletter{background:var(--teal);color:white}
 .main{max-width:1180px;margin:0 auto;padding:32px 28px 80px;display:grid;grid-template-columns:1fr 390px;gap:26px;align-items:start}
@@ -1934,6 +1941,7 @@ textarea{resize:vertical;min-height:78px;line-height:1.5}
       <button class="btn bsec" onclick="clearAll()">🔄 Reset</button>
     </div>
     <div class="pcf" style="padding-top:0">
+      <div id="readiness-msg" class="not-ready">Fill in Persona, Output Type, and Topic to generate.</div>
       <button class="btn bai" onclick="generateWithAI('pout')" style="width:100%;font-size:13.5px;padding:11px">✨ Generate with AI</button>
     </div>
   </div>
@@ -3891,17 +3899,60 @@ Throughout the entire resource, please ensure:
 }
 
 // ═══════════════════════════════════════════
+//  STEP COMPLETION + READINESS INDICATORS
+//  Updates tab checkmarks and the sidebar readiness message.
+//  Required fields: persona (step 0), outputType (step 1),
+//  topic (step 1), and at least one grade (step 2).
+//  All other fields are optional — no hard blocking.
+// ═══════════════════════════════════════════
+function updateStepCompletionUI(s) {
+  // Step done rules — one boolean per P.A.R.T.S. tab (indices 0–5)
+  const done = [
+    !!(s.persona),                                        // P — Persona
+    !!(s.outputType && s.topic),                         // A — Aim (output type + topic)
+    !!(s.grades && s.grades.length > 0),                 // R — Recipients (at least one grade)
+    !!(s.tones.length || s.strats.length || s.themeNotes), // T — Theme (any selection)
+    !!(s.fmts.length || s.dur || s.structNotes),         // S — Structure (any selection)
+    !!(s.cteEls.length || s.stds.length || s.extra)      // + — Enhancements (any)
+  ];
+
+  // Mark the first 6 ptabs (P A R T S +) — skip library/sheet/connect tabs
+  const tabs = document.querySelectorAll('#main-fbar .ptab');
+  let tabIdx = 0;
+  tabs.forEach(tab => {
+    if (tabIdx < 6) { tab.classList.toggle('step-done', done[tabIdx]); tabIdx++; }
+  });
+
+  // Readiness message: only Persona + OutputType + Topic are truly required
+  const msg = document.getElementById('readiness-msg');
+  if (!msg) return;
+  const missing = [];
+  if (!s.persona)     missing.push('Persona (P)');
+  if (!s.outputType)  missing.push('Output Type (A)');
+  if (!s.topic)       missing.push('Topic (A)');
+
+  if (missing.length === 0) {
+    msg.className = 'ready';
+    msg.textContent = '✅ Ready to generate' + (s.grades && s.grades.length ? '' : ' — tip: add a grade level for better output');
+  } else {
+    msg.className = 'not-ready';
+    msg.textContent = '⚠ Still needed: ' + missing.join(', ');
+  }
+}
+
+// ═══════════════════════════════════════════
 //  REBUILD
 // ═══════════════════════════════════════════
 function rebuildPrompt(){
   const s=collect();
   const txt=buildPrompt(s);
   const out=document.getElementById('pout');
-  if(!txt){out.innerHTML='<div class="pph">✦ Your prompt builds here in real time.<br><br>Start with <strong>P → Persona</strong> above.</div>';document.getElementById('qfill').style.width='0%';document.getElementById('qpct').textContent='0%';return}
+  if(!txt){out.innerHTML='<div class="pph">✦ Your prompt builds here in real time.<br><br>Start with <strong>P → Persona</strong> above.</div>';document.getElementById('qfill').style.width='0%';document.getElementById('qpct').textContent='0%';updateStepCompletionUI(s);return}
   out.textContent=txt;
   const q=quality(s);
   document.getElementById('qfill').style.width=q+'%';
   document.getElementById('qpct').textContent=q+'%';
+  updateStepCompletionUI(s);
 }
 
 function generateFinal(){rebuildPrompt();document.querySelector('.sidebar').scrollIntoView({behavior:'smooth',block:'start'})}
@@ -4453,56 +4504,16 @@ function aOpenSaveModal() {
 // ════════════════════════════════════════
 //  LIBRARY
 // ════════════════════════════════════════
-const LIB_KEY = 'cte_prompt_library_v1'; // ← same key, same data structure, no migration needed
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  StorageService — centralized library persistence layer
-//
-//  All library reads/writes flow through this object.
-//  To add cloud/account-based sync in the future, replace only the methods
-//  below — no other code in this file needs to change.
-//
-//  FUTURE CONNECTION POINTS are marked with: // [CLOUD HOOK]
-// ─────────────────────────────────────────────────────────────────────────────
-const StorageService = {
-
-  // [CLOUD HOOK] getLibrary — swap localStorage.getItem for an authenticated API call
-  getLibrary() {
-    try { return JSON.parse(localStorage.getItem(LIB_KEY)) || []; } catch(e) { return []; }
-  },
-
-  // [CLOUD HOOK] saveLibrary — swap localStorage.setItem for a debounced POST to /api/library/sync
-  saveLibrary(items) {
-    try { localStorage.setItem(LIB_KEY, JSON.stringify(items)); return true; } catch(e) { return false; }
-  },
-
-  // [CLOUD HOOK] addItem — swap for POST /api/library/items (returns server-assigned id)
-  addItem(item) {
-    const items = this.getLibrary();
-    items.push(item);
-    return this.saveLibrary(items);
-  },
-
-  // [CLOUD HOOK] updateItem — swap for PATCH /api/library/items/:id
-  updateItem(id, updates) {
-    const items = this.getLibrary().map(i => i.id === id ? { ...i, ...updates } : i);
-    return this.saveLibrary(items);
-  },
-
-  // [CLOUD HOOK] deleteItem — swap for DELETE /api/library/items/:id
-  deleteItem(id) {
-    return this.saveLibrary(this.getLibrary().filter(i => i.id !== id));
-  },
-
-  // [CLOUD HOOK] clearLibrary — swap for DELETE /api/library/items (bulk)
-  clearLibrary() {
-    try { localStorage.removeItem(LIB_KEY); return true; } catch(e) { return false; }
-  }
-};
-
-// Thin aliases so all existing call sites work without change
-function loadLib()         { return StorageService.getLibrary(); }
-function saveLib(arr)      { StorageService.saveLibrary(arr); }
+const LIB_KEY='cte_prompt_library_v1';
+function _ls(op, key, val) {
+  try {
+    if (op === 'get') return localStorage.getItem(key);
+    if (op === 'set') { localStorage.setItem(key, val); return true; }
+    if (op === 'rm')  { localStorage.removeItem(key); return true; }
+  } catch(e) { return null; }
+}
+function loadLib(){try{return JSON.parse(_ls('get', LIB_KEY))||[];}catch(e){return[];}}
+function saveLib(arr){_ls('set', LIB_KEY, JSON.stringify(arr));}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function showLibrary(){
@@ -4555,10 +4566,13 @@ function renderLibrary(){
     const preview=item.prompt.replace(/\n+/g,' ').substring(0,130)+'…';
     const date=new Date(item.savedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
     const tagHTML=tags.length?`<div class="lib-card-tags">${tags.map(t=>`<span class="lib-card-tag">${esc(t)}</span>`).join('')}</div>`:'';
+    const itemDocType = item.documentType || 'General Document';
+    const itemEmoji = DOC_TYPE_EMOJI[itemDocType] || '📋';
     return `<div class="lib-card" onclick="viewPrompt('${item.id}')">
       <div class="lib-card-hd">
         <div class="lib-card-title">${esc(item.title)}</div>
         <div class="lib-card-meta">
+          <span title="Document type" style="color:var(--teal);font-weight:600">${itemEmoji} ${esc(itemDocType)}</span>
           <span>📅 ${date}</span>
           ${item.sector?`<span>🏫 ${esc(item.sector.split(',')[0].trim().substring(0,24))}</span>`:''}
           ${item.grades?`<span>📚 Gr ${esc(item.grades)}</span>`:''}
@@ -4607,6 +4621,7 @@ function savePrompt(){
     tags:document.getElementById('save-tags').value.trim(),
     notes:document.getElementById('save-notes').value.trim(),
     prompt:document.getElementById('pout').textContent,
+    documentType: detectDocumentType(s.outputType),
     sector:s.sector,grades:s.grades.join(', '),
     eldLevels:s.eldLevels.join(', '),langs:s.langs,
     savedAt:new Date().toISOString()
@@ -4638,7 +4653,14 @@ function viewPrompt(id){
 function closeViewModal(e){if(e.target===document.getElementById('view-modal'))closeViewModalBtn();}
 function closeViewModalBtn(){document.getElementById('view-modal').classList.remove('open');viewingId=null;}
 function copyFromView(){
-  navigator.clipboard.writeText(document.getElementById('view-modal-text').value).then(()=>{
+  const item = loadLib().find(i=>i.id===viewingId) || {};
+  const rawText = document.getElementById('view-modal-text').value;
+  const formatted = formatForExport(rawText, {
+    documentType: item.documentType || 'General Document',
+    title: item.title||'', savedAt: item.savedAt||new Date().toISOString(),
+    sector: item.sector||'', grades: item.grades||'', langs: item.langs||'', tags: item.tags||''
+  });
+  navigator.clipboard.writeText(formatted).then(()=>{
     const b=document.querySelector('#view-modal .gbtn');const o=b.textContent;
     b.textContent='✓ Copied!';setTimeout(()=>b.textContent=o,2000);
   });
@@ -4667,8 +4689,12 @@ function generateFromView(){
   }).then(r=>r.json()).then(data=>{
     if(data.error){ body.innerHTML='<div style="color:#c0392b;padding:10px;font-size:14px">⚠️ '+(data.error.message||'Something went wrong.')+'</div>'; subtitle.textContent='Error'; return; }
     aiResponseText = data.content&&data.content[0] ? data.content[0].text : '';
+    // Detect doc type from saved item if available
+    const viewItem = loadLib().find(i=>i.id===viewingId);
+    aiCurrentDocType = (viewItem && viewItem.documentType) ? viewItem.documentType : detectDocumentType((viewItem&&viewItem.tags)||'');
     body.style.whiteSpace='pre-wrap'; body.textContent=aiResponseText;
-    subtitle.textContent='Powered by Claude · Document ready ✓';
+    const vEmoji = DOC_TYPE_EMOJI[aiCurrentDocType]||'📋';
+    subtitle.textContent='Powered by Claude · '+vEmoji+' '+aiCurrentDocType+' ready ✓';
     copyBtn.style.display='inline-flex';
     document.getElementById('ai-save-btn').style.display='inline-flex';
   }).catch(()=>{
@@ -4681,13 +4707,15 @@ function saveAIResponse(){
   const title = prompt('Give this document a title:', 'AI Generated Document — ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}));
   if(!title) return;
   const items = loadLib();
+  const aiSect = (typeof collect === 'function') ? collect() : {};
   items.push({
     id:'ai_'+Date.now(),
     title: title.trim(),
     tags: 'AI Generated',
     notes: '',
     prompt: aiResponseText,
-    sector: '', grades: '', eldLevels: '', langs: '',
+    documentType: aiCurrentDocType,
+    sector: aiSect.sector||'', grades: (aiSect.grades||[]).join(', '), eldLevels: (aiSect.eldLevels||[]).join(', '), langs: aiSect.langs||'',
     savedAt: new Date().toISOString()
   });
   saveLib(items);
@@ -4697,25 +4725,42 @@ function saveAIResponse(){
   setTimeout(()=>{ btn.textContent = '💾 Save to Library'; btn.style.background = 'var(--teal)'; }, 2200);
 }
 function deleteFromView(){if(!viewingId||!confirm('Delete this prompt from your library?'))return;deleteLib(viewingId);closeViewModalBtn();}
-function copyLib(id){const item=loadLib().find(i=>i.id===id);if(item)navigator.clipboard.writeText(item.prompt);}
+function copyLib(id){
+  const item=loadLib().find(i=>i.id===id);
+  if(!item) return;
+  const formatted = formatForExport(item.prompt, {
+    documentType: item.documentType || 'General Document',
+    title: item.title, savedAt: item.savedAt,
+    sector: item.sector||'', grades: item.grades||'', langs: item.langs||'', tags: item.tags||''
+  });
+  navigator.clipboard.writeText(formatted);
+}
 function deleteLib(id){
   if(!confirm('Delete this prompt from your library? This cannot be undone.'))return;
   saveLib(loadLib().filter(i=>i.id!==id));renderLibrary();
 }
 function clearLibrary(){
   if(!confirm('Delete ALL saved prompts? This cannot be undone.'))return;
-  StorageService.clearLibrary(); renderLibrary();
+  _ls('rm', LIB_KEY);renderLibrary();
 }
 function exportLibrary(){
   const items=loadLib();
   if(!items.length){alert('No saved prompts to export.');return;}
-  const txt=items.map((item,i)=>{
-    const bar='═'.repeat(50);
-    return `${bar}\nPROMPT ${i+1}: ${item.title}\nSaved: ${new Date(item.savedAt).toLocaleString()}\n${item.sector?'Sector: '+item.sector+'\n':''}${item.grades?'Grade: '+item.grades+'\n':''}${item.langs?'Languages: '+item.langs+'\n':''}${item.tags?'Tags: '+item.tags+'\n':''}${item.notes?'Notes: '+item.notes+'\n':''}\n${item.prompt}`;
-  }).join('\n\n');
-  const blob=new Blob(['CTE AI PROMPT LIBRARY\nCreated by Juliano Calvo\nExported: '+new Date().toLocaleString()+'\n\n'+txt],{type:'text/plain'});
+  const sep='\n\n'+'═'.repeat(56)+'\n\n';
+  const txt=items.map(function(item){
+    return formatForExport(item.prompt, {
+      documentType: item.documentType || 'General Document',
+      title: item.title,
+      savedAt: item.savedAt,
+      sector: item.sector||'',
+      grades: item.grades||'',
+      langs: item.langs||'',
+      tags: item.tags||''
+    });
+  }).join(sep);
+  const blob=new Blob(['CTE AI DOCUMENT LIBRARY — IteraAI\nCreated by Juliano Calvo\nExported: '+new Date().toLocaleString()+'\nTotal documents: '+items.length+'\n\n'+txt],{type:'text/plain'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='CTE_Prompt_Library_'+new Date().toISOString().slice(0,10)+'.txt';a.click();
+  a.download='IteraAI_Library_'+new Date().toISOString().slice(0,10)+'.txt';a.click();
 }
 
 // ════════════════════════════════════════
@@ -5598,9 +5643,59 @@ function carlNotify(){
 }
 
 // ═══════════════════════════════════════════
+//  DOCUMENT TYPE AWARENESS
+// ═══════════════════════════════════════════
+
+const DOC_TYPE_MAP = {
+  'Lesson Plan':      ['lesson plan','curriculum unit','unit plan','scope and sequence','daily lesson'],
+  'Assignment':       ['assignment','project','pbl','portfolio','performance assessment','formative','exit ticket','study guide','simulation','role-play','career exploration','vocabulary','work-based learning','family engagement','differentiated resource'],
+  'Rubric':           ['rubric','scoring','scoring guide','scoring criteria','evaluation rubric','program evaluation rubric'],
+  'Communication':    ['communication','letter','email','flyer','newsletter','family','stakeholder','parent','announcement','outreach','multilingual'],
+  'Compliance / Planning': ['compliance','policy','program review','strategic','improvement plan','action plan','lcap','perkins','grant','budget','board presentation','coaching','observation protocol','needs assessment','professional development']
+};
+
+function detectDocumentType(outputTypeStr) {
+  if (!outputTypeStr) return 'General Document';
+  const lower = outputTypeStr.toLowerCase();
+  for (const [type, keywords] of Object.entries(DOC_TYPE_MAP)) {
+    if (keywords.some(k => lower.includes(k))) return type;
+  }
+  return 'General Document';
+}
+
+const DOC_TYPE_EMOJI = {
+  'Lesson Plan':           '📄',
+  'Assignment':            '📝',
+  'Rubric':                '📊',
+  'Communication':         '✉️',
+  'Compliance / Planning': '🏛️',
+  'General Document':      '📋'
+};
+
+function formatForExport(text, item) {
+  const docType = item.documentType || 'General Document';
+  const emoji = DOC_TYPE_EMOJI[docType] || '📋';
+  const title = item.title || 'Untitled';
+  const date = new Date(item.savedAt || Date.now()).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const meta = [
+    item.sector ? 'Sector: ' + item.sector.split(',')[0].trim() : '',
+    item.grades ? 'Grade(s): ' + item.grades : '',
+    item.langs  ? 'Languages: ' + item.langs.split(',').slice(0,3).join(', ') : '',
+    item.tags && item.tags !== 'AI Generated' ? 'Tags: ' + item.tags : ''
+  ].filter(Boolean);
+
+  const bar = '─'.repeat(56);
+  let header = `${emoji} ${docType.toUpperCase()}\n${bar}\n${title}\nGenerated: ${date}`;
+  if (meta.length) header += '\n' + meta.join(' · ');
+  header += '\n' + bar + '\n\n';
+  return header + text;
+}
+
+// ═══════════════════════════════════════════
 //  GENERATE WITH AI
 // ═══════════════════════════════════════════
 let aiResponseText = '';
+let aiCurrentDocType = 'General Document';
 
 function closeAIModal(){
   document.getElementById('ai-modal').classList.remove('open');
@@ -5608,7 +5703,16 @@ function closeAIModal(){
 
 function copyAIResponse(){
   if(!aiResponseText) return;
-  navigator.clipboard.writeText(aiResponseText).then(()=>{
+  const s = (typeof collect === 'function') ? collect() : {};
+  const mockItem = {
+    documentType: aiCurrentDocType,
+    title: (s.outputType ? s.outputType.charAt(0).toUpperCase()+s.outputType.slice(1,50) : aiCurrentDocType)
+           + (s.topic ? ' — ' + s.topic.substring(0,40) : ''),
+    savedAt: new Date().toISOString(),
+    sector: s.sector||'', grades: (s.grades||[]).join(', '), langs: s.langs||'', tags: ''
+  };
+  const formatted = formatForExport(aiResponseText, mockItem);
+  navigator.clipboard.writeText(formatted).then(()=>{
     const btn = document.getElementById('ai-copy-btn');
     btn.textContent = '✅ Copied!';
     setTimeout(()=>{ btn.textContent = '📋 Copy Document'; }, 2000);
@@ -5632,6 +5736,8 @@ async function generateWithAI(promptSourceId){
   const subtitle = document.getElementById('ai-modal-subtitle');
 
   aiResponseText = '';
+  // Detect document type from current outputType selection
+  aiCurrentDocType = detectDocumentType(getOutputType ? getOutputType() : '');
   body.style.whiteSpace = 'normal';
   body.innerHTML = '<div class="ai-typing-wrap"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Claude is writing your document…</span></div>';
   copyBtn.style.display = 'none';
@@ -5663,7 +5769,8 @@ async function generateWithAI(promptSourceId){
     aiResponseText = data.content && data.content[0] ? data.content[0].text : '';
     body.style.whiteSpace = 'pre-wrap';
     body.textContent = aiResponseText;
-    subtitle.textContent = 'Powered by Claude · Document ready ✓';
+    const dtEmoji = DOC_TYPE_EMOJI[aiCurrentDocType] || '📋';
+    subtitle.textContent = `Powered by Claude · ${dtEmoji} ${aiCurrentDocType} ready ✓`;
     copyBtn.style.display = 'inline-flex';
     document.getElementById('ai-save-btn').style.display = 'inline-flex';
 
