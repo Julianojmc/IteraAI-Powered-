@@ -163,7 +163,15 @@ textarea{resize:vertical;min-height:78px;line-height:1.5}
 .ai-box-hdr span{color:rgba(255,255,255,.8);font-size:12px;margin-top:2px;display:block}
 .ai-box-close{background:rgba(255,255,255,.2);border:none;color:white;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ai-box-close:hover{background:rgba(255,255,255,.35)}
-.ai-box-body{padding:22px 24px;overflow-y:auto;flex:1;font-size:14px;line-height:1.8;color:var(--ink);white-space:pre-wrap}
+.ai-box-body{padding:22px 24px;overflow-y:auto;flex:1;font-size:14px;line-height:1.8;color:var(--ink)}
+.ai-doc-h1{font-family:var(--font-head,var(--font-sans));font-size:18px;font-weight:700;color:var(--teal-dark,#003d35);margin:22px 0 6px;letter-spacing:-0.02em;border-bottom:2px solid var(--teal,#00C9A7);padding-bottom:6px}
+.ai-doc-h2{font-family:var(--font-sans);font-size:15px;font-weight:700;color:var(--teal-mid,#007A66);margin:18px 0 4px;letter-spacing:-0.01em}
+.ai-doc-h3{font-family:var(--font-sans);font-size:13px;font-weight:700;color:var(--ink);margin:14px 0 2px;text-transform:uppercase;letter-spacing:0.04em;opacity:.7}
+.ai-doc-p{margin:0 0 10px;font-size:14px;line-height:1.8}
+.ai-doc-ul{margin:0 0 10px 18px;padding:0}
+.ai-doc-li{margin-bottom:4px;font-size:14px;line-height:1.7}
+.ai-doc-divider{border:none;border-top:1px solid var(--border,#e0e0e0);margin:16px 0}
+.ai-doc-label{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--teal,#00C9A7);color:white;border-radius:4px;padding:1px 7px;margin-bottom:4px}
 .ai-box-body::-webkit-scrollbar{width:4px}
 .ai-box-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 .ai-typing-wrap{display:flex;align-items:center;gap:12px;padding:28px 24px;color:var(--muted);font-size:14px}
@@ -4692,7 +4700,7 @@ function generateFromView(){
     // Detect doc type from saved item if available
     const viewItem = loadLib().find(i=>i.id===viewingId);
     aiCurrentDocType = (viewItem && viewItem.documentType) ? viewItem.documentType : detectDocumentType((viewItem&&viewItem.tags)||'');
-    body.style.whiteSpace='pre-wrap'; body.textContent=aiResponseText;
+    body.innerHTML = renderDocument(aiResponseText);
     const vEmoji = DOC_TYPE_EMOJI[aiCurrentDocType]||'📋';
     subtitle.textContent='Powered by Claude · '+vEmoji+' '+aiCurrentDocType+' ready ✓';
     copyBtn.style.display='inline-flex';
@@ -5694,6 +5702,77 @@ function formatForExport(text, item) {
 // ═══════════════════════════════════════════
 //  GENERATE WITH AI
 // ═══════════════════════════════════════════
+// ── Minimal document renderer ──────────────────────────────────────────────
+function renderDocument(text) {
+  try {
+    const lines = text.split('\n');
+    let html = '';
+    let inList = false;
+
+    const closeList = () => { if (inList) { html += '</ul>'; inList = false; } };
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmed = line.trim();
+
+      // blank line
+      if (!trimmed) { closeList(); continue; }
+
+      // H1: lines starting with # or ALL-CAPS lines ≥ 4 chars followed by blank/end
+      if (/^#{1}\s+/.test(trimmed)) {
+        closeList();
+        html += `<div class="ai-doc-h1">${esc(trimmed.replace(/^#+\s+/, ''))}</div>`;
+      } else if (/^#{2}\s+/.test(trimmed)) {
+        closeList();
+        html += `<div class="ai-doc-h2">${esc(trimmed.replace(/^#+\s+/, ''))}</div>`;
+      } else if (/^#{3,}\s+/.test(trimmed)) {
+        closeList();
+        html += `<div class="ai-doc-h3">${esc(trimmed.replace(/^#+\s+/, ''))}</div>`;
+      }
+      // Detect un-marked headings: ALL-CAPS line, or line ending in colon that's short
+      else if (/^[A-Z][A-Z\s\d\-\/]{3,}$/.test(trimmed)) {
+        closeList();
+        html += `<div class="ai-doc-h2">${esc(trimmed)}</div>`;
+      } else if (/^[A-Z][^.!?]{3,40}:$/.test(trimmed)) {
+        closeList();
+        html += `<div class="ai-doc-h3">${esc(trimmed)}</div>`;
+      }
+      // Dividers
+      else if (/^[-─=]{3,}$/.test(trimmed)) {
+        closeList(); html += '<hr class="ai-doc-divider">';
+      }
+      // Bullet list items
+      else if (/^[-•*]\s+/.test(trimmed)) {
+        if (!inList) { html += '<ul class="ai-doc-ul">'; inList = true; }
+        html += `<li class="ai-doc-li">${inlineFormat(trimmed.replace(/^[-•*]\s+/, ''))}</li>`;
+      }
+      // Numbered list items
+      else if (/^\d+[.)]\s+/.test(trimmed)) {
+        if (!inList) { html += '<ul class="ai-doc-ul">'; inList = true; }
+        html += `<li class="ai-doc-li">${inlineFormat(trimmed.replace(/^\d+[.)]\s+/, ''))}</li>`;
+      }
+      // Regular paragraph
+      else {
+        closeList();
+        html += `<p class="ai-doc-p">${inlineFormat(trimmed)}</p>`;
+      }
+    }
+    closeList();
+    return html || `<pre style="white-space:pre-wrap">${esc(text)}</pre>`;
+  } catch(e) {
+    // safe fallback
+    return `<pre style="white-space:pre-wrap;font-size:13px">${esc(text)}</pre>`;
+  }
+}
+function esc(s){ const d=document.createElement('div');d.textContent=s;return d.innerHTML; }
+function inlineFormat(s){
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code style="background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:12px">$1</code>');
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 let aiResponseText = '';
 let aiCurrentDocType = 'General Document';
 
@@ -5767,8 +5846,7 @@ async function generateWithAI(promptSourceId){
     }
 
     aiResponseText = data.content && data.content[0] ? data.content[0].text : '';
-    body.style.whiteSpace = 'pre-wrap';
-    body.textContent = aiResponseText;
+    body.innerHTML = renderDocument(aiResponseText);
     const dtEmoji = DOC_TYPE_EMOJI[aiCurrentDocType] || '📋';
     subtitle.textContent = `Powered by Claude · ${dtEmoji} ${aiCurrentDocType} ready ✓`;
     copyBtn.style.display = 'inline-flex';
