@@ -7018,7 +7018,7 @@ function iftGenerateSummary(text, name, base64, mediaType) {
     ];
   }
 
-  fetch('https://api.anthropic.com/v1/messages', {
+  fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -7109,7 +7109,7 @@ function ikCapture(workflow, profileText, outputs) {
     .map(function(e) { return e[0] + ':\n' + e[1].slice(0, 600); })
     .join('\n\n---\n\n');
 
-  fetch('https://api.anthropic.com/v1/messages', {
+  fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -7386,7 +7386,7 @@ function runDualWorkflow() {
 function dualGenerate(profile, outputNum, systemPrompt, onDone) {
   var pill = document.getElementById('dual-pill-' + outputNum);
 
-  fetch('https://api.anthropic.com/v1/messages', {
+  fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -7536,7 +7536,7 @@ function iepGenerate(profile, outputNum, systemPrompt, onDone) {
     userPrompt += '\n\nATTACHED FILE CONTEXT ("' + window.iteraFileContext.name + '"): ' + window.iteraFileContext.summary;
   }
 
-  fetch('https://api.anthropic.com/v1/messages', {
+  fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
