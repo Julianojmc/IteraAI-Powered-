@@ -1,5 +1,9 @@
 {
   "rewrites": [
     { "source": "/api/claude", "destination": "/api/claude" }
-  ]
+  ],
+  "functions": {
+    "api/knowledge.js": { "maxDuration": 15 },
+    "api/insights.js":  { "maxDuration": 15 }
+  }
 }
