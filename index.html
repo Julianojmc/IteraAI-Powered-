@@ -950,8 +950,32 @@ header { margin-top: 58px !important; }
 .kb-save-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1.5px solid var(--teal);background:var(--teal-light);color:var(--teal-mid);font-family:var(--font-sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s;margin-top:12px}
 .kb-save-btn:hover{background:var(--teal);color:white}
 .kb-save-btn.saved{background:var(--teal);color:white;border-color:var(--teal)}
-/* Workflow History */
-.wh-run{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:default}
+/* ── My Dashboard ── */
+.myd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:28px}
+.myd-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;transition:box-shadow .15s}
+.myd-card:hover{box-shadow:var(--shadow)}
+.myd-num{font-size:32px;font-weight:700;color:var(--teal);line-height:1;margin-bottom:4px}
+.myd-label{font-size:12px;color:var(--muted);font-weight:500}
+.myd-sub{font-size:11px;color:var(--border);margin-top:2px}
+.myd-section{margin-bottom:28px}
+.myd-section-title{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.myd-activity-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.myd-activity-item:last-child{border-bottom:none}
+.myd-activity-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.myd-activity-body{flex:1;min-width:0}
+.myd-activity-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.myd-activity-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+.myd-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.myd-bar-label{font-size:12.5px;color:var(--ink);min-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.myd-bar-track{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden}
+.myd-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--teal),var(--teal-mid))}
+.myd-bar-count{font-size:11px;color:var(--muted);min-width:20px;text-align:right}
+.myd-empty{color:var(--muted);font-size:13.5px;padding:20px 0;text-align:center}
+.myd-qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.myd-qa-btn{padding:12px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-family:var(--font-sans);font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:8px}
+.myd-qa-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-light)}
+/* ── Workflow History ── */
+.wh-run{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px}
 .wh-run:hover{border-color:var(--teal);box-shadow:var(--shadow-sm)}
 .wh-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
 .wh-badge{padding:3px 9px;border-radius:12px;font-size:11px;font-weight:600;background:var(--teal-light);color:var(--teal-mid)}
@@ -1052,7 +1076,7 @@ header { margin-top: 58px !important; }
     <button class="itn-btn" id="itnb-iep"       onclick="itNav('iep')">📋 IEP/EL Workflow</button>
     <button class="itn-btn" id="itnb-dual"      onclick="itNav('dual')">🎓 Dual Enrollment</button>
     <button class="itn-btn" id="itnb-kb"        onclick="itNav('kb')">🧠 Knowledge Base</button>
-    <button class="itn-btn" id="itnb-history"   onclick="itNav('history')">🕓 History</button>
+    <button class="itn-btn" id="itnb-dashboard" onclick="itNav('dashboard')">📊 My Dashboard</button>
     <button class="itn-btn" id="itnb-connect"   onclick="itNav('connect')">💬 Connect</button>
     <button class="itn-btn" id="itnb-about"     onclick="itNav('about')">✦ About</button>
     <button class="itn-btn" id="itnb-plans"     onclick="itNav('plans')">🔑 Access</button>
@@ -1102,7 +1126,7 @@ header { margin-top: 58px !important; }
   <button class="itn-mob-btn" onclick="itNav('iep');itToggleMobile()">📋 IEP/EL Workflow</button>
   <button class="itn-mob-btn" onclick="itNav('dual');itToggleMobile()">🎓 Dual Enrollment</button>
   <button class="itn-mob-btn" onclick="itNav('kb');itToggleMobile()">🧠 Knowledge Base</button>
-  <button class="itn-mob-btn" onclick="itNav('history');itToggleMobile()">🕓 History</button>
+  <button class="itn-mob-btn" onclick="itNav('dashboard');itToggleMobile()">📊 My Dashboard</button>
   <button class="itn-mob-btn" onclick="itNav('connect');itToggleMobile()">💬 Connect</button>
   <button class="itn-mob-btn" onclick="itNav('about');itToggleMobile()">✦ About IteraAI</button>
   <button class="itn-mob-btn" onclick="itNav('plans');itToggleMobile()">🔑 Plans / Access</button>
@@ -1691,6 +1715,78 @@ header { margin-top: 58px !important; }
   <footer class="it-footer"><div><strong>IteraAI</strong> — © 2026 Juliano Calvo</div><div class="it-footer-links"><a onclick="itNav('home')">Home</a><a onclick="itNav('tool')">Tool</a><a onclick="itNav('connect')">Connect</a></div></footer>
 </div>
 
+<!-- ══ MY DASHBOARD ══ -->
+<div class="it-overlay" id="it-page-dashboard">
+  <div class="it-page-hero" style="background:linear-gradient(135deg,#040d0b,#003d35,#007A66)">
+    <h1>📊 My Dashboard</h1>
+    <p>Your activity, outputs, and impact — all in one place. Everything IteraAI has done with you, at a glance.</p>
+  </div>
+  <div class="it-page-body">
+
+    <!-- Metric cards -->
+    <div class="myd-grid" id="myd-cards">
+      <div class="myd-card"><div class="myd-num" id="myd-workflows">—</div><div class="myd-label">Workflows completed</div></div>
+      <div class="myd-card"><div class="myd-num" id="myd-docs">—</div><div class="myd-label">Documents saved</div></div>
+      <div class="myd-card"><div class="myd-num" id="myd-insights">—</div><div class="myd-label">Knowledge insights</div></div>
+      <div class="myd-card"><div class="myd-num" id="myd-files">—</div><div class="myd-label">Files analyzed</div></div>
+      <div class="myd-card" style="background:linear-gradient(135deg,var(--teal-light),#d0ede8);border-color:var(--teal)">
+        <div class="myd-num" id="myd-time" style="color:var(--teal-mid)">—</div>
+        <div class="myd-label">Est. minutes saved</div>
+        <div class="myd-sub">~15 min per workflow</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+
+      <!-- Recent activity -->
+      <div class="card myd-section">
+        <div class="ch">
+          <div class="ci" style="background:var(--teal-light)">🕓</div>
+          <div class="ch-text"><h2>Recent Activity</h2><p>Latest workflow runs and saves</p></div>
+          <button onclick="mydLoad()" style="margin-left:auto;flex-shrink:0;background:none;border:1.5px solid var(--border);border-radius:7px;padding:5px 10px;font-family:var(--font-sans);font-size:12px;color:var(--muted);cursor:pointer">↺</button>
+        </div>
+        <div class="cb" id="myd-activity"><div class="myd-empty">Loading…</div></div>
+      </div>
+
+      <!-- Right column -->
+      <div>
+        <!-- Top workflow types -->
+        <div class="card myd-section" style="margin-bottom:20px">
+          <div class="ch"><div class="ci" style="background:var(--purple-light)">📋</div>
+            <div class="ch-text"><h2>Top Workflows</h2><p>Most used workflow types</p></div>
+          </div>
+          <div class="cb" id="myd-top-workflows"><div class="myd-empty">Loading…</div></div>
+        </div>
+
+        <!-- Top sectors -->
+        <div class="card myd-section">
+          <div class="ch"><div class="ci" style="background:var(--gold-light)">🏫</div>
+            <div class="ch-text"><h2>Top Sectors</h2><p>Most active CTE areas</p></div>
+          </div>
+          <div class="cb" id="myd-top-sectors"><div class="myd-empty">Loading…</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="card">
+      <div class="ch"><div class="ci" style="background:var(--teal-light)">⚡</div>
+        <div class="ch-text"><h2>Quick Actions</h2><p>Jump back in</p></div>
+      </div>
+      <div class="cb">
+        <div class="myd-qa-grid">
+          <button class="myd-qa-btn" onclick="itNav('iep')">📋 New IEP/EL Workflow</button>
+          <button class="myd-qa-btn" onclick="itNav('dual')">🎓 New Dual Enrollment</button>
+          <button class="myd-qa-btn" onclick="itNav('tool')">⚡ Open Prompt Builder</button>
+          <button class="myd-qa-btn" onclick="itNav('history')">🕓 View Full History</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <footer class="it-footer"><div><strong>IteraAI</strong> — © 2026 Juliano Calvo</div><div class="it-footer-links"><a onclick="itNav('home')">Home</a><a onclick="itNav('tool')">Tool</a><a onclick="itNav('connect')">Connect</a></div></footer>
+</div>
+
 <!-- ══ WORKFLOW HISTORY ══ -->
 <div class="it-overlay" id="it-page-history">
   <div class="it-page-hero" style="background:linear-gradient(135deg,#040d0b,#1a2a1a,#007A66)">
@@ -1709,19 +1805,19 @@ header { margin-top: 58px !important; }
       </div>
       <div id="wh-count" style="font-size:12px;color:var(--muted)"></div>
     </div>
-    <div id="wh-list"><div class="kb-empty" style="padding:40px 0">Loading history…</div></div>
+    <div id="wh-list"><div class="myd-empty" style="padding:40px 0">Loading history…</div></div>
   </div>
   <footer class="it-footer"><div><strong>IteraAI</strong> — © 2026 Juliano Calvo</div><div class="it-footer-links"><a onclick="itNav('home')">Home</a><a onclick="itNav('tool')">Tool</a><a onclick="itNav('connect')">Connect</a></div></footer>
 </div>
 
-<!-- Modal for viewing full run output -->
+<!-- Run output modal (shared by History + Dashboard) -->
 <div id="wh-modal" style="display:none;position:fixed;inset:0;background:rgba(26,26,46,.55);z-index:11000;align-items:center;justify-content:center;padding:20px">
-  <div style="background:white;border-radius:16px;max-width:680px;width:100%;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25)">
+  <div style="background:white;border-radius:16px;max-width:700px;width:100%;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25)">
     <div style="background:linear-gradient(135deg,#007A66,#00C9A7);padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
       <div id="wh-modal-title" style="color:white;font-weight:600;font-size:15px"></div>
       <button onclick="whCloseModal()" style="background:rgba(255,255,255,.2);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
     </div>
-    <div id="wh-modal-tabs" style="display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg)"></div>
+    <div id="wh-modal-tabs" style="display:flex;border-bottom:1px solid var(--border);background:var(--bg)"></div>
     <div id="wh-modal-body" style="padding:20px;overflow-y:auto;flex:1;font-size:14px;line-height:1.75;color:var(--ink);white-space:pre-wrap"></div>
     <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px">
       <button onclick="whCopyActive()" class="wh-btn" style="border-color:var(--teal);color:var(--teal)">📋 Copy</button>
@@ -7488,12 +7584,12 @@ function runDualWorkflow() {
       };
       ikCapture('dual', profile, outputs);
       whSaveRun('dual', {
-        run_title: (document.getElementById('dual-course-name').value || 'Course') + ' — ' + (document.getElementById('dual-college').value || 'College'),
-        sector:    document.getElementById('dual-sector').value      || null,
-        eld_level: null,
-        inputs:    profile,
-        outputs:   outputs,
-        preview:   outputs.letter.slice(0, 200)
+        run_title:  (document.getElementById('dual-course-name').value || 'Course') + ' — ' + (document.getElementById('dual-college').value || 'College Partner'),
+        sector:     document.getElementById('dual-sector').value || null,
+        eld_level:  null,
+        inputs:     profile,
+        outputs:    outputs,
+        preview:    outputs.letter.slice(0, 200)
       });
     }
   }
@@ -7633,18 +7729,18 @@ function runIEPWorkflow() {
       document.getElementById('iep-run-btn').disabled = false;
       document.getElementById('iep-run-btn').textContent = '✦ Generate All Three Documents';
       var outputs = {
-        lesson_plan:  document.getElementById('iep-result-1').innerText,
-        checklist:    document.getElementById('iep-result-2').innerText,
-        parent_letter:document.getElementById('iep-result-3').innerText
+        lesson_plan:   document.getElementById('iep-result-1').innerText,
+        checklist:     document.getElementById('iep-result-2').innerText,
+        parent_letter: document.getElementById('iep-result-3').innerText
       };
       ikCapture('iep', profile, outputs);
       whSaveRun('iep', {
-        run_title: (document.getElementById('iep-name').value || 'Student') + ' — ' + (document.getElementById('iep-course').value || 'CTE Course'),
-        sector:    document.getElementById('iep-course').value || null,
-        eld_level: document.getElementById('iep-eld').value   || null,
-        inputs:    profile,
-        outputs:   outputs,
-        preview:   outputs.lesson_plan.slice(0, 200)
+        run_title:  (document.getElementById('iep-name').value || 'Student') + ' — ' + (document.getElementById('iep-course').value || 'CTE Course'),
+        sector:     document.getElementById('iep-course').value  || null,
+        eld_level:  document.getElementById('iep-eld').value     || null,
+        inputs:     profile,
+        outputs:    outputs,
+        preview:    outputs.lesson_plan.slice(0, 200)
       });
     }
   }
@@ -7820,94 +7916,76 @@ console.log("IteraAI Workflow Engine Loaded")
 console.log("Current Phase:", IteraWorkflowStatus())
 
 /* =====================================================
-   WORKFLOW HISTORY
+   WORKFLOW HISTORY + MY DASHBOARD
 ===================================================== */
-var _whActive = null; // currently open run outputs_json
-var _whActiveKey = null; // active tab key
+var _whActive = null;
+var _whActiveKey = null;
 
+// ── Save run silently after every workflow completion ──
 function whSaveRun(workflowType, data) {
-  // Silent — fires after every successful workflow completion
-  var payload = {
-    workflow_type:       workflowType,
-    run_title:           data.run_title        || null,
-    sector:              data.sector            || null,
-    eld_level:           data.eld_level         || null,
-    inputs_json:         { profile: (data.inputs || '').slice(0, 3000) },
-    outputs_json:        data.outputs           || {},
-    preview_text:        (data.preview || '').slice(0, 200),
-    source_file_summary: (window.iteraFileContext && window.iteraFileContext.summary) || null
-  };
   fetch('/api/runs', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).catch(function() {}); // silent
+    body: JSON.stringify({
+      workflow_type:       workflowType,
+      run_title:           data.run_title || null,
+      sector:              data.sector    || null,
+      eld_level:           data.eld_level || null,
+      inputs_json:         { profile: (data.inputs || '').slice(0, 3000) },
+      outputs_json:        data.outputs  || {},
+      preview_text:        (data.preview || '').slice(0, 200),
+      source_file_summary: (window.iteraFileContext && window.iteraFileContext.summary) || null
+    })
+  }).catch(function() {});
 }
 
+// ── Load Workflow History page ──
 function whLoad() {
-  var list = document.getElementById('wh-list');
-  var filter = document.getElementById('wh-filter') ? document.getElementById('wh-filter').value : '';
-  if (list) list.innerHTML = '<div class="kb-empty" style="padding:40px 0">Loading…</div>';
-  var url = '/api/runs?limit=30' + (filter ? '&workflow_type=' + filter : '');
-  fetch(url)
+  var list   = document.getElementById('wh-list');
+  var filter = document.getElementById('wh-filter');
+  var type   = filter ? filter.value : '';
+  if (list) list.innerHTML = '<div class="myd-empty" style="padding:40px 0">Loading…</div>';
+  fetch('/api/runs?limit=30' + (type ? '&workflow_type=' + type : ''))
     .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var runs = data.runs || [];
+    .then(function(d) {
+      var runs = d.runs || [];
       var countEl = document.getElementById('wh-count');
       if (countEl) countEl.textContent = runs.length + ' run' + (runs.length !== 1 ? 's' : '');
       if (!list) return;
-      if (!runs.length) {
-        list.innerHTML = '<div class="kb-empty" style="padding:40px 0">No workflow runs yet. Complete an IEP or Dual Enrollment workflow to see it here.</div>';
-        return;
-      }
+      if (!runs.length) { list.innerHTML = '<div class="myd-empty" style="padding:40px 0">No workflow runs yet. Complete an IEP or Dual Enrollment workflow to see it here.</div>'; return; }
       list.innerHTML = runs.map(function(r) {
         var iep  = r.workflow_type === 'iep';
-        var date = new Date(r.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-        var tags = [
-          r.sector   ? '<span class="wh-tag">' + r.sector   + '</span>' : '',
-          r.eld_level? '<span class="wh-tag">' + r.eld_level + '</span>' : ''
-        ].filter(Boolean).join(' ');
-        return '<div class="wh-run">' +
-          '<div class="wh-meta">' +
-            '<span class="wh-badge' + (iep ? '' : ' dual') + '">' + (iep ? '📋 IEP/EL' : '🎓 Dual Enrollment') + '</span>' +
-            '<span class="wh-time">' + date + '</span>' +
-            (r.source_file_summary ? '<span class="wh-tag">📎 file</span>' : '') +
-          '</div>' +
-          '<div class="wh-title">' + (r.run_title || 'Untitled run') + '</div>' +
-          (r.preview_text ? '<div class="wh-preview">' + r.preview_text + '</div>' : '') +
-          (tags ? '<div style="margin-bottom:8px">' + tags + '</div>' : '') +
-          '<div class="wh-actions">' +
-            '<button class="wh-btn" onclick=\'whOpenRun(' + JSON.stringify(r) + ')\'>👁 View Outputs</button>' +
-            '<button class="wh-btn" onclick=\'whCopyPreview(' + JSON.stringify(r.preview_text || '') + ')\'>📋 Copy Preview</button>' +
-          '</div>' +
+        var date = new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+        var tags = [r.sector ? '<span class="wh-tag">'+r.sector+'</span>' : '', r.eld_level ? '<span class="wh-tag">'+r.eld_level+'</span>' : ''].filter(Boolean).join(' ');
+        var rd   = JSON.stringify(r).replace(/'/g, '&#39;');
+        return '<div class="wh-run">'+
+          '<div class="wh-meta"><span class="wh-badge'+(iep?'':' dual')+'">'+(iep?'📋 IEP/EL':'🎓 Dual Enrollment')+'</span><span class="wh-time">'+date+'</span>'+(r.source_file_summary?'<span class="wh-tag">📎 file</span>':'')+'</div>'+
+          '<div class="wh-title">'+(r.run_title||'Untitled run')+'</div>'+
+          (r.preview_text?'<div class="wh-preview">'+r.preview_text+'</div>':'')+
+          (tags?'<div style="margin-bottom:8px">'+tags+'</div>':'')+
+          '<div class="wh-actions">'+
+            '<button class="wh-btn" onclick=\'whOpenRun('+rd+')\'>👁 View Outputs</button>'+
+            '<button class="wh-btn" onclick=\'navigator.clipboard.writeText("'+encodeURIComponent(r.preview_text||'')+'").catch(function(){})\'>📋 Copy Preview</button>'+
+          '</div>'+
         '</div>';
       }).join('');
     })
-    .catch(function() {
-      if (list) list.innerHTML = '<div class="kb-empty" style="color:var(--orange)">Could not load history. Check your backend connection.</div>';
-    });
+    .catch(function() { if (list) list.innerHTML = '<div class="myd-empty" style="color:var(--orange)">Could not load history. Check backend connection.</div>'; });
 }
 
 function whOpenRun(run) {
   _whActive = run.outputs_json || {};
-  var modal = document.getElementById('wh-modal');
+  var modal   = document.getElementById('wh-modal');
   var titleEl = document.getElementById('wh-modal-title');
   var tabsEl  = document.getElementById('wh-modal-tabs');
   var bodyEl  = document.getElementById('wh-modal-body');
   if (!modal) return;
-
   if (titleEl) titleEl.textContent = run.run_title || 'Workflow Run';
-
-  // Build tabs from output keys
-  var keys = Object.keys(_whActive);
-  var labels = { lesson_plan:'Lesson Plan', checklist:'Checklist', parent_letter:'Parent Letter', letter:'Artic. Letter', equivalency:'Equivalency', eligibility:'Eligibility' };
-  if (tabsEl) {
-    tabsEl.innerHTML = keys.map(function(k, i) {
-      return '<button onclick="whTab(\'' + k + '\')" id="wh-tab-' + k + '" style="padding:10px 16px;border:none;border-bottom:3px solid ' + (i===0?'var(--teal)':'transparent') + ';background:' + (i===0?'white':'var(--bg)') + ';font-family:var(--font-sans);font-size:12.5px;font-weight:' + (i===0?'600':'400') + ';color:' + (i===0?'var(--teal)':'var(--muted)') + ';cursor:pointer">' + (labels[k] || k) + '</button>';
-    }).join('');
-  }
-
-  // Show first tab
+  var keys    = Object.keys(_whActive);
+  var labels  = {lesson_plan:'Lesson Plan',checklist:'Checklist',parent_letter:'Parent Letter',letter:'Artic. Letter',equivalency:'Equivalency',eligibility:'Eligibility'};
+  if (tabsEl) tabsEl.innerHTML = keys.map(function(k,i) {
+    return '<button onclick="whTab(\''+k+'\')" id="wh-tab-'+k+'" style="padding:10px 16px;border:none;border-bottom:3px solid '+(i===0?'var(--teal)':'transparent')+';background:'+(i===0?'white':'var(--bg)')+';font-family:var(--font-sans);font-size:12.5px;font-weight:'+(i===0?'600':'400')+';color:'+(i===0?'var(--teal)':'var(--muted)')+';cursor:pointer">'+(labels[k]||k)+'</button>';
+  }).join('');
   if (keys.length) { _whActiveKey = keys[0]; if (bodyEl) bodyEl.textContent = _whActive[keys[0]] || ''; }
   modal.style.display = 'flex';
 }
@@ -7917,11 +7995,11 @@ function whTab(key) {
   var bodyEl = document.getElementById('wh-modal-body');
   if (bodyEl) bodyEl.textContent = (_whActive && _whActive[key]) || '';
   document.querySelectorAll('#wh-modal-tabs button').forEach(function(b) {
-    var active = b.id === 'wh-tab-' + key;
-    b.style.borderBottomColor = active ? 'var(--teal)' : 'transparent';
-    b.style.background = active ? 'white' : 'var(--bg)';
-    b.style.fontWeight  = active ? '600' : '400';
-    b.style.color       = active ? 'var(--teal)' : 'var(--muted)';
+    var on = b.id === 'wh-tab-' + key;
+    b.style.borderBottomColor = on ? 'var(--teal)' : 'transparent';
+    b.style.background = on ? 'white' : 'var(--bg)';
+    b.style.fontWeight  = on ? '600' : '400';
+    b.style.color       = on ? 'var(--teal)' : 'var(--muted)';
   });
 }
 
@@ -7933,15 +8011,10 @@ function whCloseModal() {
 
 function whCopyActive() {
   var text = (_whActive && _whActiveKey) ? (_whActive[_whActiveKey] || '') : '';
-  if (!text) return;
   navigator.clipboard.writeText(text).then(function() {
-    var btn = document.querySelector('#wh-modal .wh-btn');
+    var btn = document.querySelector('#wh-modal div:last-child .wh-btn');
     if (btn) { btn.textContent = '✓ Copied!'; setTimeout(function(){ btn.textContent = '📋 Copy'; }, 1800); }
-  });
-}
-
-function whCopyPreview(text) {
-  navigator.clipboard.writeText(text).catch(function(){});
+  }).catch(function(){});
 }
 
 function whSaveActiveToLib() {
@@ -7949,29 +8022,110 @@ function whSaveActiveToLib() {
   var LK = 'cte_prompt_library_v1';
   var text = _whActive[_whActiveKey] || '';
   var items = [];
-  try { items = JSON.parse(localStorage.getItem(LK)) || []; } catch(e){}
-  items.push({
-    id: 'wh_' + Date.now(),
-    title: (_whActiveKey.replace(/_/g,' ')) + ' — ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),
-    tags: 'Workflow History',
-    notes: '',
-    prompt: text,
-    sector:'', grades:'', eldLevels:'', langs:'',
-    savedAt: new Date().toISOString()
-  });
-  try { localStorage.setItem(LK, JSON.stringify(items)); } catch(e){}
+  try { items = JSON.parse(localStorage.getItem(LK)) || []; } catch(e) {}
+  items.push({ id:'wh_'+Date.now(), title:(_whActiveKey.replace(/_/g,' '))+' — '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}), tags:'Workflow History', notes:'', prompt:text, sector:'', grades:'', eldLevels:'', langs:'', savedAt:new Date().toISOString() });
+  try { localStorage.setItem(LK, JSON.stringify(items)); } catch(e) {}
   var btn = document.querySelector('#wh-modal div:last-child .wh-btn:last-child');
   if (btn) { btn.textContent = '✓ Saved!'; setTimeout(function(){ btn.textContent = '💾 Save to Library'; }, 1800); }
 }
 
-// Auto-load when page opens
+// ── My Dashboard ──
+function mydLoad() {
+  // Parallel: fetch runs + insights + read localStorage library
+  var libItems = [];
+  try { libItems = JSON.parse(localStorage.getItem('cte_prompt_library_v1')) || []; } catch(e) {}
+
+  Promise.all([
+    fetch('/api/runs?limit=100').then(function(r){return r.json();}).catch(function(){return {runs:[]};}),
+    fetch(IK_API_BASE + '/insights').then(function(r){return r.json();}).catch(function(){return {};})
+  ]).then(function(results) {
+    var runsData    = results[0];
+    var insightsData = results[1];
+    var runs        = runsData.runs || [];
+
+    // ── Metrics ──
+    var workflowCount = runs.length;
+    var docCount      = libItems.length;
+    var insightCount  = insightsData.total || 0;
+    var filesCount    = runs.filter(function(r){ return r.source_file_summary; }).length;
+    var timeSaved     = (workflowCount * 15) + (docCount * 5); // 15 min/workflow, 5 min/doc
+
+    function set(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+    set('myd-workflows', workflowCount);
+    set('myd-docs',      docCount);
+    set('myd-insights',  insightCount);
+    set('myd-files',     filesCount);
+    set('myd-time',      timeSaved);
+
+    // ── Recent activity (runs + lib merged, sorted by date) ──
+    var activityEl = document.getElementById('myd-activity');
+    if (activityEl) {
+      var events = runs.slice(0, 5).map(function(r) {
+        return { date: new Date(r.created_at), icon: r.workflow_type === 'iep' ? '📋' : '🎓', color: r.workflow_type === 'iep' ? 'var(--purple-light)' : '#e6f1fb', title: r.run_title || 'Workflow run', meta: r.workflow_type === 'iep' ? 'IEP/EL Workflow' : 'Dual Enrollment', run: r };
+      });
+      libItems.slice(-3).reverse().forEach(function(item) {
+        events.push({ date: new Date(item.savedAt), icon: '💾', color: 'var(--teal-light)', title: item.title || 'Saved document', meta: 'Library save' });
+      });
+      events.sort(function(a,b){ return b.date - a.date; });
+      if (!events.length) { activityEl.innerHTML = '<div class="myd-empty">No activity yet. Run a workflow to get started.</div>'; }
+      else {
+        activityEl.innerHTML = events.slice(0,8).map(function(e) {
+          var dateStr = e.date.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+          var viewBtn = e.run ? '<button class="wh-btn" style="margin-top:4px;font-size:11px;padding:3px 8px" onclick=\'whOpenRun('+JSON.stringify(e.run)+')\'>View</button>' : '';
+          return '<div class="myd-activity-item">'+
+            '<div class="myd-activity-icon" style="background:'+e.color+'">'+e.icon+'</div>'+
+            '<div class="myd-activity-body">'+
+              '<div class="myd-activity-title">'+e.title+'</div>'+
+              '<div class="myd-activity-meta">'+e.meta+' · '+dateStr+'</div>'+
+              viewBtn+
+            '</div>'+
+          '</div>';
+        }).join('');
+      }
+    }
+
+    // ── Top workflow types ──
+    var wfEl = document.getElementById('myd-top-workflows');
+    if (wfEl) {
+      var wfCounts = {};
+      runs.forEach(function(r){ wfCounts[r.workflow_type] = (wfCounts[r.workflow_type]||0)+1; });
+      var wfEntries = Object.entries(wfCounts).sort(function(a,b){return b[1]-a[1];});
+      var wfLabels  = {iep:'📋 IEP/EL Workflow', dual:'🎓 Dual Enrollment'};
+      if (!wfEntries.length) { wfEl.innerHTML = '<div class="myd-empty">No workflow data yet.</div>'; }
+      else {
+        var wfMax = wfEntries[0][1];
+        wfEl.innerHTML = wfEntries.map(function(e){
+          return '<div class="myd-bar-row"><div class="myd-bar-label">'+(wfLabels[e[0]]||e[0])+'</div><div class="myd-bar-track"><div class="myd-bar-fill" style="width:'+Math.round((e[1]/wfMax)*100)+'%"></div></div><div class="myd-bar-count">'+e[1]+'</div></div>';
+        }).join('');
+      }
+    }
+
+    // ── Top sectors ──
+    var secEl = document.getElementById('myd-top-sectors');
+    if (secEl) {
+      var secCounts = {};
+      runs.forEach(function(r){ if (r.sector) secCounts[r.sector] = (secCounts[r.sector]||0)+1; });
+      var secEntries = Object.entries(secCounts).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+      if (!secEntries.length) { secEl.innerHTML = '<div class="myd-empty">No sector data yet. Add sectors to your workflows.</div>'; }
+      else {
+        var secMax = secEntries[0][1];
+        secEl.innerHTML = secEntries.map(function(e){
+          return '<div class="myd-bar-row"><div class="myd-bar-label">'+e[0]+'</div><div class="myd-bar-track"><div class="myd-bar-fill" style="width:'+Math.round((e[1]/secMax)*100)+'%;background:linear-gradient(90deg,var(--gold),#e09a10)"></div></div><div class="myd-bar-count">'+e[1]+'</div></div>';
+        }).join('');
+      }
+    }
+  });
+}
+
+// ── Extend itNav to auto-load pages ──
 setTimeout(function() {
   var orig = window.itNav;
   if (orig) window.itNav = function(page) {
     orig(page);
-    if (page === 'history') whLoad();
+    if (page === 'dashboard') mydLoad();
+    if (page === 'history')   whLoad();
   };
-}, 600);
+}, 500);
 
 </script>
 
