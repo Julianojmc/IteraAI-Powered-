@@ -950,6 +950,19 @@ header { margin-top: 58px !important; }
 .kb-save-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1.5px solid var(--teal);background:var(--teal-light);color:var(--teal-mid);font-family:var(--font-sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s;margin-top:12px}
 .kb-save-btn:hover{background:var(--teal);color:white}
 .kb-save-btn.saved{background:var(--teal);color:white;border-color:var(--teal)}
+/* Workflow History */
+.wh-run{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;cursor:default}
+.wh-run:hover{border-color:var(--teal);box-shadow:var(--shadow-sm)}
+.wh-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px}
+.wh-badge{padding:3px 9px;border-radius:12px;font-size:11px;font-weight:600;background:var(--teal-light);color:var(--teal-mid)}
+.wh-badge.dual{background:#e6f1fb;color:#185fa5}
+.wh-time{font-size:11px;color:var(--muted)}
+.wh-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.wh-preview{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wh-actions{display:flex;gap:8px;flex-wrap:wrap}
+.wh-btn{padding:5px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--white);font-family:var(--font-sans);font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s}
+.wh-btn:hover{border-color:var(--teal);color:var(--teal)}
+.wh-tag{display:inline-block;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:2px 7px;font-size:11px;color:var(--muted)}
 
 /* IEP/EL Workflow */
 .iep-result-box { background:var(--bg);border-radius:10px;padding:18px 20px;min-height:80px;font-size:14px;line-height:1.75;color:var(--ink);word-break:break-word; }
@@ -1039,6 +1052,7 @@ header { margin-top: 58px !important; }
     <button class="itn-btn" id="itnb-iep"       onclick="itNav('iep')">📋 IEP/EL Workflow</button>
     <button class="itn-btn" id="itnb-dual"      onclick="itNav('dual')">🎓 Dual Enrollment</button>
     <button class="itn-btn" id="itnb-kb"        onclick="itNav('kb')">🧠 Knowledge Base</button>
+    <button class="itn-btn" id="itnb-history"   onclick="itNav('history')">🕓 History</button>
     <button class="itn-btn" id="itnb-connect"   onclick="itNav('connect')">💬 Connect</button>
     <button class="itn-btn" id="itnb-about"     onclick="itNav('about')">✦ About</button>
     <button class="itn-btn" id="itnb-plans"     onclick="itNav('plans')">🔑 Access</button>
@@ -1088,6 +1102,7 @@ header { margin-top: 58px !important; }
   <button class="itn-mob-btn" onclick="itNav('iep');itToggleMobile()">📋 IEP/EL Workflow</button>
   <button class="itn-mob-btn" onclick="itNav('dual');itToggleMobile()">🎓 Dual Enrollment</button>
   <button class="itn-mob-btn" onclick="itNav('kb');itToggleMobile()">🧠 Knowledge Base</button>
+  <button class="itn-mob-btn" onclick="itNav('history');itToggleMobile()">🕓 History</button>
   <button class="itn-mob-btn" onclick="itNav('connect');itToggleMobile()">💬 Connect</button>
   <button class="itn-mob-btn" onclick="itNav('about');itToggleMobile()">✦ About IteraAI</button>
   <button class="itn-mob-btn" onclick="itNav('plans');itToggleMobile()">🔑 Plans / Access</button>
@@ -1674,6 +1689,45 @@ header { margin-top: 58px !important; }
 
   </div>
   <footer class="it-footer"><div><strong>IteraAI</strong> — © 2026 Juliano Calvo</div><div class="it-footer-links"><a onclick="itNav('home')">Home</a><a onclick="itNav('tool')">Tool</a><a onclick="itNav('connect')">Connect</a></div></footer>
+</div>
+
+<!-- ══ WORKFLOW HISTORY ══ -->
+<div class="it-overlay" id="it-page-history">
+  <div class="it-page-hero" style="background:linear-gradient(135deg,#040d0b,#1a2a1a,#007A66)">
+    <h1>🕓 Workflow History</h1>
+    <p>Every completed workflow run is saved here automatically. Reopen, copy, or review any prior output.</p>
+  </div>
+  <div class="it-page-body">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div style="display:flex;gap:8px">
+        <button class="wh-btn" onclick="whLoad()" style="border-color:var(--teal);color:var(--teal)">↺ Refresh</button>
+        <select id="wh-filter" onchange="whLoad()" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-sans);font-size:12px;color:var(--muted);background:var(--white)">
+          <option value="">All workflows</option>
+          <option value="iep">IEP/EL only</option>
+          <option value="dual">Dual Enrollment only</option>
+        </select>
+      </div>
+      <div id="wh-count" style="font-size:12px;color:var(--muted)"></div>
+    </div>
+    <div id="wh-list"><div class="kb-empty" style="padding:40px 0">Loading history…</div></div>
+  </div>
+  <footer class="it-footer"><div><strong>IteraAI</strong> — © 2026 Juliano Calvo</div><div class="it-footer-links"><a onclick="itNav('home')">Home</a><a onclick="itNav('tool')">Tool</a><a onclick="itNav('connect')">Connect</a></div></footer>
+</div>
+
+<!-- Modal for viewing full run output -->
+<div id="wh-modal" style="display:none;position:fixed;inset:0;background:rgba(26,26,46,.55);z-index:11000;align-items:center;justify-content:center;padding:20px">
+  <div style="background:white;border-radius:16px;max-width:680px;width:100%;max-height:85vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25)">
+    <div style="background:linear-gradient(135deg,#007A66,#00C9A7);padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div id="wh-modal-title" style="color:white;font-weight:600;font-size:15px"></div>
+      <button onclick="whCloseModal()" style="background:rgba(255,255,255,.2);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <div id="wh-modal-tabs" style="display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg)"></div>
+    <div id="wh-modal-body" style="padding:20px;overflow-y:auto;flex:1;font-size:14px;line-height:1.75;color:var(--ink);white-space:pre-wrap"></div>
+    <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px">
+      <button onclick="whCopyActive()" class="wh-btn" style="border-color:var(--teal);color:var(--teal)">📋 Copy</button>
+      <button onclick="whSaveActiveToLib()" class="wh-btn">💾 Save to Library</button>
+    </div>
+  </div>
 </div>
 
 <!-- ══ CONNECT OVERLAY ══ -->
@@ -7427,13 +7481,20 @@ function runDualWorkflow() {
     if (completed === 3) {
       document.getElementById('dual-run-btn').disabled = false;
       document.getElementById('dual-run-btn').textContent = '🎓 Generate Dual Enrollment Package';
-      // Trigger silent knowledge capture
       var outputs = {
         letter:      document.getElementById('dual-result-1').innerText,
         equivalency: document.getElementById('dual-result-2').innerText,
         eligibility: document.getElementById('dual-result-3').innerText
       };
       ikCapture('dual', profile, outputs);
+      whSaveRun('dual', {
+        run_title: (document.getElementById('dual-course-name').value || 'Course') + ' — ' + (document.getElementById('dual-college').value || 'College'),
+        sector:    document.getElementById('dual-sector').value      || null,
+        eld_level: null,
+        inputs:    profile,
+        outputs:   outputs,
+        preview:   outputs.letter.slice(0, 200)
+      });
     }
   }
 
@@ -7571,13 +7632,20 @@ function runIEPWorkflow() {
     if (completed === 3) {
       document.getElementById('iep-run-btn').disabled = false;
       document.getElementById('iep-run-btn').textContent = '✦ Generate All Three Documents';
-      // Trigger silent knowledge capture
       var outputs = {
         lesson_plan:  document.getElementById('iep-result-1').innerText,
         checklist:    document.getElementById('iep-result-2').innerText,
         parent_letter:document.getElementById('iep-result-3').innerText
       };
       ikCapture('iep', profile, outputs);
+      whSaveRun('iep', {
+        run_title: (document.getElementById('iep-name').value || 'Student') + ' — ' + (document.getElementById('iep-course').value || 'CTE Course'),
+        sector:    document.getElementById('iep-course').value || null,
+        eld_level: document.getElementById('iep-eld').value   || null,
+        inputs:    profile,
+        outputs:   outputs,
+        preview:   outputs.lesson_plan.slice(0, 200)
+      });
     }
   }
 
@@ -7750,6 +7818,161 @@ TEST COMMANDS (SAFE)
 --------------------------------- */
 console.log("IteraAI Workflow Engine Loaded")
 console.log("Current Phase:", IteraWorkflowStatus())
+
+/* =====================================================
+   WORKFLOW HISTORY
+===================================================== */
+var _whActive = null; // currently open run outputs_json
+var _whActiveKey = null; // active tab key
+
+function whSaveRun(workflowType, data) {
+  // Silent — fires after every successful workflow completion
+  var payload = {
+    workflow_type:       workflowType,
+    run_title:           data.run_title        || null,
+    sector:              data.sector            || null,
+    eld_level:           data.eld_level         || null,
+    inputs_json:         { profile: (data.inputs || '').slice(0, 3000) },
+    outputs_json:        data.outputs           || {},
+    preview_text:        (data.preview || '').slice(0, 200),
+    source_file_summary: (window.iteraFileContext && window.iteraFileContext.summary) || null
+  };
+  fetch('/api/runs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(function() {}); // silent
+}
+
+function whLoad() {
+  var list = document.getElementById('wh-list');
+  var filter = document.getElementById('wh-filter') ? document.getElementById('wh-filter').value : '';
+  if (list) list.innerHTML = '<div class="kb-empty" style="padding:40px 0">Loading…</div>';
+  var url = '/api/runs?limit=30' + (filter ? '&workflow_type=' + filter : '');
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var runs = data.runs || [];
+      var countEl = document.getElementById('wh-count');
+      if (countEl) countEl.textContent = runs.length + ' run' + (runs.length !== 1 ? 's' : '');
+      if (!list) return;
+      if (!runs.length) {
+        list.innerHTML = '<div class="kb-empty" style="padding:40px 0">No workflow runs yet. Complete an IEP or Dual Enrollment workflow to see it here.</div>';
+        return;
+      }
+      list.innerHTML = runs.map(function(r) {
+        var iep  = r.workflow_type === 'iep';
+        var date = new Date(r.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+        var tags = [
+          r.sector   ? '<span class="wh-tag">' + r.sector   + '</span>' : '',
+          r.eld_level? '<span class="wh-tag">' + r.eld_level + '</span>' : ''
+        ].filter(Boolean).join(' ');
+        return '<div class="wh-run">' +
+          '<div class="wh-meta">' +
+            '<span class="wh-badge' + (iep ? '' : ' dual') + '">' + (iep ? '📋 IEP/EL' : '🎓 Dual Enrollment') + '</span>' +
+            '<span class="wh-time">' + date + '</span>' +
+            (r.source_file_summary ? '<span class="wh-tag">📎 file</span>' : '') +
+          '</div>' +
+          '<div class="wh-title">' + (r.run_title || 'Untitled run') + '</div>' +
+          (r.preview_text ? '<div class="wh-preview">' + r.preview_text + '</div>' : '') +
+          (tags ? '<div style="margin-bottom:8px">' + tags + '</div>' : '') +
+          '<div class="wh-actions">' +
+            '<button class="wh-btn" onclick=\'whOpenRun(' + JSON.stringify(r) + ')\'>👁 View Outputs</button>' +
+            '<button class="wh-btn" onclick=\'whCopyPreview(' + JSON.stringify(r.preview_text || '') + ')\'>📋 Copy Preview</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    })
+    .catch(function() {
+      if (list) list.innerHTML = '<div class="kb-empty" style="color:var(--orange)">Could not load history. Check your backend connection.</div>';
+    });
+}
+
+function whOpenRun(run) {
+  _whActive = run.outputs_json || {};
+  var modal = document.getElementById('wh-modal');
+  var titleEl = document.getElementById('wh-modal-title');
+  var tabsEl  = document.getElementById('wh-modal-tabs');
+  var bodyEl  = document.getElementById('wh-modal-body');
+  if (!modal) return;
+
+  if (titleEl) titleEl.textContent = run.run_title || 'Workflow Run';
+
+  // Build tabs from output keys
+  var keys = Object.keys(_whActive);
+  var labels = { lesson_plan:'Lesson Plan', checklist:'Checklist', parent_letter:'Parent Letter', letter:'Artic. Letter', equivalency:'Equivalency', eligibility:'Eligibility' };
+  if (tabsEl) {
+    tabsEl.innerHTML = keys.map(function(k, i) {
+      return '<button onclick="whTab(\'' + k + '\')" id="wh-tab-' + k + '" style="padding:10px 16px;border:none;border-bottom:3px solid ' + (i===0?'var(--teal)':'transparent') + ';background:' + (i===0?'white':'var(--bg)') + ';font-family:var(--font-sans);font-size:12.5px;font-weight:' + (i===0?'600':'400') + ';color:' + (i===0?'var(--teal)':'var(--muted)') + ';cursor:pointer">' + (labels[k] || k) + '</button>';
+    }).join('');
+  }
+
+  // Show first tab
+  if (keys.length) { _whActiveKey = keys[0]; if (bodyEl) bodyEl.textContent = _whActive[keys[0]] || ''; }
+  modal.style.display = 'flex';
+}
+
+function whTab(key) {
+  _whActiveKey = key;
+  var bodyEl = document.getElementById('wh-modal-body');
+  if (bodyEl) bodyEl.textContent = (_whActive && _whActive[key]) || '';
+  document.querySelectorAll('#wh-modal-tabs button').forEach(function(b) {
+    var active = b.id === 'wh-tab-' + key;
+    b.style.borderBottomColor = active ? 'var(--teal)' : 'transparent';
+    b.style.background = active ? 'white' : 'var(--bg)';
+    b.style.fontWeight  = active ? '600' : '400';
+    b.style.color       = active ? 'var(--teal)' : 'var(--muted)';
+  });
+}
+
+function whCloseModal() {
+  var m = document.getElementById('wh-modal');
+  if (m) m.style.display = 'none';
+  _whActive = null; _whActiveKey = null;
+}
+
+function whCopyActive() {
+  var text = (_whActive && _whActiveKey) ? (_whActive[_whActiveKey] || '') : '';
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.querySelector('#wh-modal .wh-btn');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(function(){ btn.textContent = '📋 Copy'; }, 1800); }
+  });
+}
+
+function whCopyPreview(text) {
+  navigator.clipboard.writeText(text).catch(function(){});
+}
+
+function whSaveActiveToLib() {
+  if (!_whActive || !_whActiveKey) return;
+  var LK = 'cte_prompt_library_v1';
+  var text = _whActive[_whActiveKey] || '';
+  var items = [];
+  try { items = JSON.parse(localStorage.getItem(LK)) || []; } catch(e){}
+  items.push({
+    id: 'wh_' + Date.now(),
+    title: (_whActiveKey.replace(/_/g,' ')) + ' — ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),
+    tags: 'Workflow History',
+    notes: '',
+    prompt: text,
+    sector:'', grades:'', eldLevels:'', langs:'',
+    savedAt: new Date().toISOString()
+  });
+  try { localStorage.setItem(LK, JSON.stringify(items)); } catch(e){}
+  var btn = document.querySelector('#wh-modal div:last-child .wh-btn:last-child');
+  if (btn) { btn.textContent = '✓ Saved!'; setTimeout(function(){ btn.textContent = '💾 Save to Library'; }, 1800); }
+}
+
+// Auto-load when page opens
+setTimeout(function() {
+  var orig = window.itNav;
+  if (orig) window.itNav = function(page) {
+    orig(page);
+    if (page === 'history') whLoad();
+  };
+}, 600);
+
 </script>
 
 
