@@ -158,9 +158,14 @@ textarea{resize:vertical;min-height:78px;line-height:1.5}
 .ai-box-hdr span{color:rgba(255,255,255,.8);font-size:12px;margin-top:2px;display:block}
 .ai-box-close{background:rgba(255,255,255,.2);border:none;color:white;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ai-box-close:hover{background:rgba(255,255,255,.35)}
-.ai-box-body{padding:22px 24px;overflow-y:auto;flex:1;font-size:14px;line-height:1.8;color:var(--ink);white-space:pre-wrap}
+.ai-box-body{padding:22px 24px;overflow-y:auto;flex:1;font-size:14px;line-height:1.8;color:var(--ink);white-space:normal}
 .ai-box-body::-webkit-scrollbar{width:4px}
 .ai-box-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.ai-box-body h2{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--ink);margin:22px 0 8px;letter-spacing:-0.018em;border-bottom:2px solid var(--border);padding-bottom:6px}
+.ai-box-body h3{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--ink);margin:18px 0 6px;letter-spacing:-0.012em}
+.ai-box-body h4{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin:16px 0 5px}
+.ai-box-body strong{font-weight:600;color:var(--ink)}
+.ai-box-body hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 .ai-typing-wrap{display:flex;align-items:center;gap:12px;padding:28px 24px;color:var(--muted);font-size:14px}
 .ai-dot{width:9px;height:9px;background:var(--orange);border-radius:50%;animation:carlDot 1.2s infinite}
 .ai-dot:nth-child(2){animation-delay:.2s}
@@ -3317,7 +3322,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
     </select>
   </div>
   <div class="fr"><label>Pathway <span class="hint">auto-fills based on sector</span></label>
-    <select id="pw-sel" onchange="updateTopics()"><option value="">— Select sector first —</option></select>
+    <select id="pw-sel" onchange="rebuildPrompt()"><option value="">— Select sector first —</option></select>
   </div>
   <div class="fr"><label>Topic / Unit Focus <span class="req">*</span> <span class="hbtn" onclick="showTT('topic')">?</span></label>
     <select id="topic-sel" onchange="handleTopicSel()"><option value="">— Select a suggested topic —</option></select>
@@ -6669,9 +6674,10 @@ function generateFromView(){
   }).then(r=>r.json()).then(data=>{
     if(data.error){ body.innerHTML='<div style="color:#c0392b;padding:10px;font-size:14px">!️ '+(data.error.message||'Something went wrong.')+'</div>'; subtitle.textContent='Error'; return; }
     aiResponseText = data.content&&data.content[0] ? data.content[0].text : '';
-    body.style.whiteSpace='pre-wrap'; body.textContent=aiResponseText;
+    body.style.whiteSpace='normal'; body.innerHTML=iepMarkdown(aiResponseText);
     subtitle.textContent='Powered by Claude · Document ready ✓';
     copyBtn.style.display='inline-flex';
+    document.getElementById('ai-pdf-btn').style.display='inline-flex';
     document.getElementById('ai-save-btn').style.display='inline-flex';
   }).catch(()=>{
     body.innerHTML='<div style="color:#c0392b;padding:10px;font-size:14px">!️ Connection error. Please try again.</div>';
@@ -7608,6 +7614,101 @@ function closeAIModal(){
   document.getElementById('ai-modal').classList.remove('open');
 }
 
+function downloadAsPDF(){
+  if(!aiResponseText) return;
+  var title = document.getElementById('ai-modal-subtitle').textContent.replace('Powered by Claude · ','').trim() || 'IteraAI Document';
+  var htmlContent = iepMarkdown(aiResponseText);
+  var printWindow = window.open('','_blank');
+  printWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${title}</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #0D0A1E;
+    padding: 48px 56px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .doc-header {
+    border-bottom: 3px solid #6741D9;
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .doc-brand { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; color: #6741D9; letter-spacing: 0.04em; text-transform: uppercase; }
+  .doc-date { font-size: 11px; color: #64607A; margin-top: 3px; }
+  h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0D0A1E;
+    margin: 22px 0 7px;
+    padding-bottom: 5px;
+    border-bottom: 1.5px solid #E2DCFC;
+    letter-spacing: -0.015em;
+  }
+  h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #0D0A1E;
+    margin: 18px 0 5px;
+  }
+  h4 {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64607A;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 14px 0 4px;
+  }
+  strong { font-weight: 600; }
+  hr { border: none; border-top: 1px solid #E2DCFC; margin: 16px 0; }
+  p, div { margin-bottom: 4px; }
+  .doc-footer {
+    margin-top: 48px;
+    padding-top: 14px;
+    border-top: 1px solid #E2DCFC;
+    font-size: 10px;
+    color: #64607A;
+    display: flex;
+    justify-content: space-between;
+  }
+  @media print {
+    body { padding: 0; }
+    @page { margin: 2cm 2.2cm; }
+  }
+</style>
+</head>
+<body>
+<div class="doc-header">
+  <div>
+    <div class="doc-brand">IteraAI · AI-Powered CTE Pathways</div>
+    <div class="doc-date">Generated ${new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+  </div>
+  <div style="font-size:10px;color:#64607A;text-align:right">For Educational Use Only<br>© 2026 Juliano Calvo</div>
+</div>
+${htmlContent}
+<div class="doc-footer">
+  <span>IteraAI · iteraai.com</span>
+  <span>Created by Juliano Calvo · Powered by Claude AI (Anthropic)</span>
+</div>
+</body>
+</html>`);
+  printWindow.document.close();
+  setTimeout(function(){ printWindow.focus(); printWindow.print(); }, 600);
+}
+
 function copyAIResponse(){
   if(!aiResponseText) return;
   navigator.clipboard.writeText(aiResponseText).then(()=>{
@@ -7637,6 +7738,7 @@ async function generateWithAI(promptSourceId){
   body.style.whiteSpace = 'normal';
   body.innerHTML = '<div class="ai-typing-wrap"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Claude is writing your document…</span></div>';
   copyBtn.style.display = 'none';
+  document.getElementById('ai-pdf-btn').style.display = 'none';
   document.getElementById('ai-save-btn').style.display = 'none';
   subtitle.textContent = 'Powered by Claude · Generating your document…';
   modal.classList.add('open');
@@ -7663,10 +7765,11 @@ async function generateWithAI(promptSourceId){
     }
 
     aiResponseText = data.content && data.content[0] ? data.content[0].text : '';
-    body.style.whiteSpace = 'pre-wrap';
-    body.textContent = aiResponseText;
+    body.style.whiteSpace = 'normal';
+    body.innerHTML = iepMarkdown(aiResponseText);
     subtitle.textContent = 'Powered by Claude · Document ready ✓';
     copyBtn.style.display = 'inline-flex';
+    document.getElementById('ai-pdf-btn').style.display = 'inline-flex';
     document.getElementById('ai-save-btn').style.display = 'inline-flex';
 
   } catch(e){
@@ -7777,7 +7880,8 @@ rebuildPrompt();
     </div>
     <div class="ai-box-foot">
       <button class="ai-close-btn" onclick="closeAIModal()">Close</button>
-      <button class="ai-copy-btn" id="ai-copy-btn" onclick="copyAIResponse()" style="display:none"> Copy Document</button>
+      <button class="ai-copy-btn" id="ai-copy-btn" onclick="copyAIResponse()" style="display:none"> Copy</button>
+      <button class="ai-copy-btn" id="ai-pdf-btn" onclick="downloadAsPDF()" style="display:none;background:var(--orange)"> Download PDF</button>
       <button class="ai-copy-btn" id="ai-save-btn" onclick="saveAIResponse()" style="display:none;background:var(--teal)"> Save to Library</button>
     </div>
   </div>
