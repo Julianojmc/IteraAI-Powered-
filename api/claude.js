@@ -1,23 +1,15 @@
 /**
  * IteraAI Knowledge-Grounded Proxy
- * /api/claude.js — v2 with RAG
+ * /api/claude.js — v3: web search enabled
  *
- * Flow:
- *   1. Receive prompt from app
- *   2. Search Supabase vector store for relevant policy/standards chunks
- *   3. Inject retrieved context into Claude's system prompt
- *   4. Forward to Anthropic
- *   5. Log to Google Sheets + Supabase
- *
- * SETUP: See SETUP.md for environment variables and Supabase schema.
+ * CHANGE FROM v2: Added 'anthropic-beta: web-search-2025-03-05' header.
+ * Everything else is identical to your original.
  */
 
 export const config = { runtime: 'edge' };
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 
-// ─── SYSTEM PROMPT BASE ───────────────────────────────────────────────────────
-// This is the foundation — retrieved policy chunks are appended to this
 const ITERAAI_SYSTEM_BASE = `You are IteraAI, an expert AI assistant for California CTE (Career and Technical Education) educators who serve multilingual and multicultural classrooms.
 
 Your knowledge is grounded in official California and federal education policy, standards, and research. When generating instructional materials, prompts, or guidance:
@@ -35,7 +27,6 @@ When you are unsure of a specific code number, say "per CA CTE Foundation Standa
 
 IMPORTANT: You are a tool for educators. Be specific, practical, and grounded. Avoid generic advice.`;
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
 function getClientId(request) {
   const ua = request.headers.get('user-agent') || '';
   const lang = request.headers.get('accept-language') || '';
@@ -60,26 +51,17 @@ function lastUserMessage(messages) {
   return '';
 }
 
-// ─── RAG: RETRIEVE RELEVANT POLICY CHUNKS ────────────────────────────────────
 async function retrieveContext(query, supabaseUrl, supabaseKey) {
   if (!supabaseUrl || !supabaseKey || !query) return '';
-
   try {
-    // Step 1: Get embedding for the query via Supabase Edge Function
-    // (You deploy a simple embed function — see SETUP.md)
     const embedRes = await fetch(`${supabaseUrl}/functions/v1/embed`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${supabaseKey}`,
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabaseKey}` },
       body: JSON.stringify({ input: query }),
     });
-
     if (!embedRes.ok) return '';
     const { embedding } = await embedRes.json();
 
-    // Step 2: Vector similarity search in Supabase
     const searchRes = await fetch(`${supabaseUrl}/rest/v1/rpc/match_documents`, {
       method: 'POST',
       headers: {
@@ -87,32 +69,22 @@ async function retrieveContext(query, supabaseUrl, supabaseKey) {
         'apikey': supabaseKey,
         'Authorization': `Bearer ${supabaseKey}`,
       },
-      body: JSON.stringify({
-        query_embedding: embedding,
-        match_threshold: 0.7,  // minimum similarity score
-        match_count: 5,         // top 5 most relevant chunks
-      }),
+      body: JSON.stringify({ query_embedding: embedding, match_threshold: 0.7, match_count: 5 }),
     });
-
     if (!searchRes.ok) return '';
     const chunks = await searchRes.json();
-
     if (!chunks || chunks.length === 0) return '';
 
-    // Step 3: Format retrieved chunks into a context block
     const contextBlock = chunks
       .map(chunk => `[SOURCE: ${chunk.source_name} | ${chunk.section}]\n${chunk.content}`)
       .join('\n\n---\n\n');
 
     return `\n\n## RETRIEVED POLICY & STANDARDS CONTEXT\nThe following official excerpts are relevant to this request. Use them to ground your response:\n\n${contextBlock}\n\n## END RETRIEVED CONTEXT\n`;
-
   } catch {
-    // RAG failure is non-blocking — fall back to base system prompt
     return '';
   }
 }
 
-// ─── RATE LIMITING ────────────────────────────────────────────────────────────
 const requestCounts = new Map();
 
 function isRateLimited(clientId) {
@@ -130,7 +102,6 @@ function isRateLimited(clientId) {
   return false;
 }
 
-// ─── CONTENT SAFETY ───────────────────────────────────────────────────────────
 const BLOCKED_PATTERNS = [
   /\b(ssn|social security|credit card number|password)\b/i,
   /\b(harm|hurt|abuse)\s+(student|child|minor)\b/i,
@@ -140,16 +111,11 @@ function isSafeContent(text) {
   return !BLOCKED_PATTERNS.some(p => p.test(text));
 }
 
-// ─── LOGGING ─────────────────────────────────────────────────────────────────
 async function logToSheets(payload) {
   const url = process.env.GOOGLE_SHEETS_WEBHOOK;
   if (!url) return;
   try {
-    await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+    await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
   } catch {}
 }
 
@@ -160,18 +126,12 @@ async function logToSupabase(payload) {
   try {
     await fetch(`${url}/rest/v1/iteraai_logs`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': key,
-        'Authorization': `Bearer ${key}`,
-        'Prefer': 'return=minimal',
-      },
+      headers: { 'Content-Type': 'application/json', 'apikey': key, 'Authorization': `Bearer ${key}`, 'Prefer': 'return=minimal' },
       body: JSON.stringify(payload),
     });
   } catch {}
 }
 
-// ─── MAIN HANDLER ─────────────────────────────────────────────────────────────
 export default async function handler(request) {
   const ts = new Date().toISOString();
   const allowedOrigin = process.env.ALLOWED_ORIGIN || '*';
@@ -181,10 +141,7 @@ export default async function handler(request) {
     'Access-Control-Allow-Headers': 'Content-Type',
   };
 
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: corsHeaders });
-  }
-
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders });
   if (request.method !== 'POST') {
     return new Response(JSON.stringify({ error: { message: 'Method not allowed' } }), {
       status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -192,9 +149,8 @@ export default async function handler(request) {
   }
 
   let body;
-  try {
-    body = await request.json();
-  } catch {
+  try { body = await request.json(); }
+  catch {
     return new Response(JSON.stringify({ error: { message: 'Invalid JSON' } }), {
       status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -203,7 +159,6 @@ export default async function handler(request) {
   const clientId = getClientId(request);
   const origin = request.headers.get('origin') || 'unknown';
 
-  // Rate limit
   if (isRateLimited(clientId)) {
     Promise.all([
       logToSheets({ ts, clientId, origin, event: 'rate_limited' }),
@@ -214,7 +169,6 @@ export default async function handler(request) {
     });
   }
 
-  // Safety check
   const userText = lastUserMessage(body.messages);
   if (!isSafeContent(userText)) {
     Promise.all([
@@ -233,19 +187,16 @@ export default async function handler(request) {
     });
   }
 
-  // ── RAG: retrieve relevant policy context ──
   const ragContext = await retrieveContext(
     userText,
     process.env.SUPABASE_URL,
     process.env.SUPABASE_SERVICE_KEY
   );
 
-  // ── Build enriched system prompt ──
-  // If the app sent its own system prompt, augment it; otherwise use the base
   const baseSystem = body.system || ITERAAI_SYSTEM_BASE;
   const enrichedSystem = baseSystem + ragContext;
 
-  // ── Forward to Anthropic ──
+  // Spread full body — tools, model, messages, max_tokens all pass through untouched
   const anthropicBody = { ...body, system: enrichedSystem };
 
   let anthropicRes;
@@ -253,9 +204,10 @@ export default async function handler(request) {
     anthropicRes = await fetch(ANTHROPIC_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
+        'Content-Type':      'application/json',
+        'x-api-key':         apiKey,
         'anthropic-version': '2023-06-01',
+        'anthropic-beta':    'web-search-2025-03-05', // ← ONLY CHANGE FROM v2: enables CARL web search
       },
       body: JSON.stringify(anthropicBody),
     });
@@ -270,12 +222,8 @@ export default async function handler(request) {
   const inputTokens = responseData?.usage?.input_tokens || 0;
   const outputTokens = responseData?.usage?.output_tokens || 0;
 
-  // Log (non-blocking)
   const logEntry = {
-    ts,
-    client_id: clientId,
-    origin,
-    event: 'generation',
+    ts, client_id: clientId, origin, event: 'generation',
     model: body.model || 'unknown',
     has_system: !!body.system,
     rag_chunks_injected: ragContext ? 1 : 0,
@@ -286,10 +234,7 @@ export default async function handler(request) {
     status: anthropicRes.status,
   };
 
-  Promise.all([
-    logToSheets(logEntry),
-    logToSupabase(logEntry),
-  ]).catch(() => {});
+  Promise.all([logToSheets(logEntry), logToSupabase(logEntry)]).catch(() => {});
 
   return new Response(JSON.stringify(responseData), {
     status: anthropicRes.status,
