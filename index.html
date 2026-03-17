@@ -8855,36 +8855,33 @@ function hidePlaceholder() {
 }
 
 // Section context banner
-(function() {
-  var bannerMessages = {
-    0: 'Create real-world assignments that build student skills and pathways.',
-    1: 'Create real-world assignments that build student skills and pathways.',
-    2: 'Create real-world assignments that build student skills and pathways.',
-    3: 'Create real-world assignments that build student skills and pathways.',
-    4: 'Create real-world assignments that build student skills and pathways.',
-    5: 'Align learning to career and college pathways.'
-  };
-  // Patch goToStep to update banner
-  var _origGoToStep = window.goToStep;
+var _bannerMessages = {
+  0: 'Create real-world assignments that build student skills and pathways.',
+  1: 'Create real-world assignments that build student skills and pathways.',
+  2: 'Create real-world assignments that build student skills and pathways.',
+  3: 'Create real-world assignments that build student skills and pathways.',
+  4: 'Create real-world assignments that build student skills and pathways.',
+  5: 'Align learning to career and college pathways.'
+};
+function _updateSectionBanner(n) {
+  var banner = document.getElementById('section-context-banner');
+  if (banner && _bannerMessages[n] !== undefined) {
+    banner.textContent = _bannerMessages[n];
+    banner.style.display = 'block';
+  }
+}
+window.addEventListener('load', function() {
+  // Patch goToStep for banner updates
+  var _origGoToStep = goToStep;
   if (typeof _origGoToStep === 'function') {
     window.goToStep = function(n) {
       _origGoToStep(n);
-      var banner = document.getElementById('section-context-banner');
-      if (banner && bannerMessages[n]) {
-        banner.textContent = bannerMessages[n];
-        banner.style.display = 'block';
-      }
+      _updateSectionBanner(n);
     };
   }
-  // Show default banner on load
-  document.addEventListener('DOMContentLoaded', function() {
-    var banner = document.getElementById('section-context-banner');
-    if (banner) {
-      banner.textContent = bannerMessages[0];
-      banner.style.display = 'block';
-    }
-  });
-})();
+  // Show default banner immediately
+  _updateSectionBanner(0);
+});
 
 console.log("IteraAI Workflow Engine Loaded")
 console.log("Current Phase:", IteraWorkflowStatus())
@@ -8967,18 +8964,16 @@ function createPathway(name) {
 }
 
 // ── TASK 3: Non-Destructive Output Hook ────────────
-// Patches generateWithAI AFTER it resolves to record
-// every AI output as an artifact. The original function
-// is called first; this only runs on success.
-(function() {
-  var _orig = window.generateWithAI;
+// Deferred to after page load so generateWithAI is
+// fully defined before we wrap it.
+window.addEventListener('load', function() {
+  var _orig = generateWithAI;
   if (typeof _orig !== 'function') return;
 
   window.generateWithAI = async function(promptSourceId) {
     await _orig(promptSourceId);
     // aiResponseText is set by the original function on success
     if (typeof aiResponseText === 'string' && aiResponseText.length > 0) {
-      // Infer artifact type from which prompt panel triggered it
       var typeMap = {
         'pout':   'assignment',
         'a-pout': 'admin',
@@ -8990,7 +8985,7 @@ function createPathway(name) {
       console.log("IteraAI Pathway Engine: artifact captured →", artifact.id, "type:", artifactType);
     }
   };
-})();
+});
 
 // ── TASK 4: Console Debug ───────────────────────────
 console.log("IteraAI Pathway Engine loaded. Data store:", window.iteraData);
