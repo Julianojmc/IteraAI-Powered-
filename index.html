@@ -8141,35 +8141,64 @@ async function generateWithAI(promptSourceId){
   try {
     const response = await fetch('/api/claude',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-      },
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2500,
+        stream: true,
         system: 'You are an expert California CTE instructional designer. Create polished, printable, classroom-ready resources for multilingual learners. Use markdown: # ## ### for headings, - bullets, 1. numbered lists, **bold**, --- dividers, pipe tables. Structure every response with these sections: (1) Resource Header with title, course, grade, sector, standards, time, audience. (2) Teacher Overview with purpose, learning goals, materials, prep notes. (3) Student-Facing Instructions with numbered steps in simple language, deliverables, format. (4) Learning Supports with vocabulary table, sentence starters, EL supports tied to home languages and ELD level, and below/on/above grade differentiation. (5) Activity body with organized sections, tables, and [Student response here] placeholders. (6) Rubric with 4 criteria scored Excellent/Proficient/Developing/Beginning plus a success checklist. (7) Exit Ticket with 2 student reflection questions and 1 teacher follow-up prompt. Rules: no long paragraphs, teacher and student sections clearly labeled, student language simple and grade-appropriate, use the educator form data to make every section specific never generic.',
         messages: iftBuildMessages(cleaned)
       })
     });
 
-    const data = await response.json();
-
-    if(data.error){
-      body.innerHTML = '<div style="color:#c0392b;padding:10px;font-size:14px">!️ ' + (data.error.message || 'Something went wrong. Please try again.') + '</div>';
+    if(!response.ok){
+      const err = await response.json().catch(()=>({}));
+      body.innerHTML = '<div style="color:#c0392b;padding:10px;font-size:14px">⚠️ ' + (err.error?.message || 'Something went wrong. Please try again.') + '</div>';
       subtitle.textContent = 'Error — please try again';
       return;
     }
 
-    aiResponseText = data.content && data.content[0] ? data.content[0].text : '';
-    body.style.whiteSpace = 'normal';
-    body.innerHTML = iepMarkdown(aiResponseText);
+    // Read the SSE stream
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    aiResponseText = '';
+    body.innerHTML = '';
+
+    while(true){
+      const {done, value} = await reader.read();
+      if(done) break;
+      const chunk = decoder.decode(value, {stream:true});
+      const lines = chunk.split('\n');
+      for(const line of lines){
+        if(!line.startsWith('data:')) continue;
+        const data = line.slice(5).trim();
+        if(data === '[DONE]') continue;
+        try{
+          const evt = JSON.parse(data);
+          // Anthropic SSE: content_block_delta with text delta
+          if(evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta'){
+            aiResponseText += evt.delta.text;
+            body.innerHTML = iepMarkdown(aiResponseText);
+            // Auto-scroll modal body
+            body.scrollTop = body.scrollHeight;
+          }
+          // Handle error events
+          if(evt.type === 'error'){
+            body.innerHTML = '<div style="color:#c0392b;padding:10px;font-size:14px">⚠️ ' + (evt.error?.message || 'Something went wrong.') + '</div>';
+            subtitle.textContent = 'Error — please try again';
+            return;
+          }
+        } catch(e){ /* skip malformed lines */ }
+      }
+    }
+
     subtitle.textContent = 'Powered by Claude · Document ready ✓';
     copyBtn.style.display = 'inline-flex';
     document.getElementById('ai-pdf-btn').style.display = 'inline-flex';
     document.getElementById('ai-save-btn').style.display = 'inline-flex';
 
   } catch(e){
-    body.innerHTML = '<div style="color:#c0392b;padding:10px;font-size:14px">!️ Could not connect to Claude. Please check your internet connection and try again.</div>';
+    body.innerHTML = '<div style="color:#c0392b;padding:10px;font-size:14px">⚠️ Could not connect to Claude. Please check your internet connection and try again.</div>';
     subtitle.textContent = 'Connection error';
   }
 }
