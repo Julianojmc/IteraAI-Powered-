@@ -7351,6 +7351,16 @@ async function pgSubmit() {
   // Save to Supabase (non-blocking)
   saveRegistrationToSupabase(data);
 
+  // Send welcome email to registrant (non-blocking)
+  sendWelcomeEmail(data);
+  emailjs.send('service_2w7f3w9', 'template_fhqyqcs', {
+    to_email : email,
+    name     : first,
+    subject  : 'Welcome to IteraAI',
+    message  : 'Thank you for registering with IteraAI.',
+    reply_to : 'jmj.juliano@gmail.com'
+  });
+
   // Send registration email via EmailJS REST API (direct fetch — no SDK required)
   const emailBody = [
     'REGISTRATION — IteraAI',
@@ -7756,6 +7766,45 @@ const EMAILJS_TEMPLATE_ID  = 'template_jucbr65';  // Email Templates tab
 (function(){
   if(typeof emailjs !== 'undefined') emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 })();
+
+async function sendWelcomeEmail(data) {
+  try {
+    await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method  : 'POST',
+      headers : { 'Content-Type': 'application/json' },
+      body    : JSON.stringify({
+        service_id  : EMAILJS_SERVICE_ID,
+        template_id : EMAILJS_TEMPLATE_ID,
+        user_id     : EMAILJS_PUBLIC_KEY,
+        template_params : {
+          to_email   : data.email,
+          from_name  : 'Juliano Calvo · IteraAI',
+          reply_to   : 'jmj.juliano@gmail.com',
+          subject    : 'Welcome to IteraAI, ' + data.first_name + '!',
+          message    : [
+            'Hi ' + data.first_name + ',',
+            '',
+            'Thank you for registering for IteraAI — the AI platform built specifically for CTE educators serving multilingual and multicultural students.',
+            '',
+            'Here are 3 quick tips to get the most out of it right away:',
+            '',
+            '1. Start by selecting your CTE standards — this anchors everything the AI generates to your pathway.',
+            '2. Define your student level — set EL proficiency and grade so scaffolds are calibrated correctly.',
+            '3. Add cultural and language supports — choose home languages and SIOP/SDAIE strategies to personalize every output.',
+            '',
+            'If you have any questions, just reply to this email.',
+            '',
+            'Welcome aboard,',
+            'Juliano Calvo',
+            'Creator, IteraAI'
+          ].join('\n')
+        }
+      })
+    });
+  } catch(e) {
+    console.warn('Welcome email error:', e);
+  }
+}
 
 function formatDataAsMessage(data){
   return Object.entries(data)
