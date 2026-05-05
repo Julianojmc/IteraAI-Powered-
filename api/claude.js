@@ -193,7 +193,10 @@ export default async function handler(request) {
   // RAG disabled — Supabase embed lookup was causing 25s edge timeout
   const ragContext = '';
 
-  const baseSystem = body.system || ITERAAI_SYSTEM_BASE;
+  // For streaming: use only the caller's system prompt (no base append) to minimize tokens
+  const baseSystem = isStreaming
+    ? (body.system || '')
+    : (body.system || ITERAAI_SYSTEM_BASE);
   const enrichedSystem = baseSystem + ragContext;
 
   const anthropicBody = { ...body, system: enrichedSystem, stream: isStreaming };
