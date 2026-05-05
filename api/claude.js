@@ -188,7 +188,10 @@ export default async function handler(request) {
     });
   }
 
-  const ragContext = await retrieveContext(
+  const isStreaming = body.stream === true;
+
+  // Skip RAG for streaming — avoids Supabase embed latency eating the 25s edge budget
+  const ragContext = isStreaming ? '' : await retrieveContext(
     userText,
     process.env.SUPABASE_URL,
     process.env.SUPABASE_SERVICE_KEY
@@ -196,7 +199,6 @@ export default async function handler(request) {
 
   const baseSystem = body.system || ITERAAI_SYSTEM_BASE;
   const enrichedSystem = baseSystem + ragContext;
-  const isStreaming = body.stream === true;
 
   const anthropicBody = { ...body, system: enrichedSystem, stream: isStreaming };
 
