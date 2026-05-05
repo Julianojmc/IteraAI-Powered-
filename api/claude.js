@@ -207,7 +207,7 @@ export default async function handler(request) {
         'Content-Type':      'application/json',
         'x-api-key':         apiKey,
         'anthropic-version': '2023-06-01',
-        'anthropic-beta':    'web-search-2025-03-05', // ← ONLY CHANGE FROM v2: enables CARL web search
+        ...(Array.isArray(body.tools) && body.tools.some(t => t.type === 'web_search_20250305') ? { 'anthropic-beta': 'web-search-2025-03-05' } : {}),
       },
       body: JSON.stringify(anthropicBody),
     });
