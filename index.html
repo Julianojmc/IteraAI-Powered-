@@ -8144,9 +8144,9 @@ async function generateWithAI(promptSourceId){
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2500,
+        max_tokens: 1500,
         stream: true,
-        system: 'You are an expert California CTE instructional designer. Create polished, printable, classroom-ready resources for multilingual learners. Use markdown: # ## ### for headings, - bullets, 1. numbered lists, **bold**, --- dividers, pipe tables. Structure every response with these sections: (1) Resource Header with title, course, grade, sector, standards, time, audience. (2) Teacher Overview with purpose, learning goals, materials, prep notes. (3) Student-Facing Instructions with numbered steps in simple language, deliverables, format. (4) Learning Supports with vocabulary table, sentence starters, EL supports tied to home languages and ELD level, and below/on/above grade differentiation. (5) Activity body with organized sections, tables, and [Student response here] placeholders. (6) Rubric with 4 criteria scored Excellent/Proficient/Developing/Beginning plus a success checklist. (7) Exit Ticket with 2 student reflection questions and 1 teacher follow-up prompt. Rules: no long paragraphs, teacher and student sections clearly labeled, student language simple and grade-appropriate, use the educator form data to make every section specific never generic.',
+        system: 'You are a California CTE instructional designer. Output a structured classroom resource using markdown. Sections: # Title with course/grade/sector/standards/time/audience, ## Teacher Overview (purpose, goals, materials), ## Student Instructions (numbered steps, deliverables), ## Learning Supports (vocab table, sentence starters, EL supports, differentiation), ## Activity (organized with tables and [response here] placeholders), ## Rubric (4 criteria, 4 levels), ## Exit Ticket (2 student questions, 1 teacher prompt). Be specific, use educator form data, no generic content.',
         messages: iftBuildMessages(cleaned)
       })
     });
