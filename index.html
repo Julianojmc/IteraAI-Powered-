@@ -836,8 +836,27 @@ header { margin-top: 58px !important; }
   to   { opacity:1; transform: translateY(0); }
 }
 
-/* ── HOME OVERLAY ── */
-#it-page-home {
+/* ── ANALYTICS PANEL ── */
+.an-card { background:white;border-radius:16px;padding:20px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm); }
+.an-card-hdr { font-size:14px;font-weight:700;color:var(--ink); }
+.an-stat-val { font-size:32px;font-weight:900;color:var(--purple);letter-spacing:-.03em;line-height:1; }
+.an-stat-lbl { font-size:12px;color:var(--muted);margin-top:4px;font-weight:500; }
+.an-bar-wrap { display:flex;align-items:center;gap:10px;margin-bottom:10px; }
+.an-bar-label { font-size:12.5px;color:var(--ink);min-width:110px;font-weight:500; }
+.an-bar-track { flex:1;height:8px;background:var(--purple-light);border-radius:4px;overflow:hidden; }
+.an-bar-fill { height:100%;background:var(--purple);border-radius:4px;transition:width .6s ease; }
+.an-bar-count { font-size:12px;color:var(--muted);min-width:30px;text-align:right; }
+.an-reg-row { display:flex;flex-direction:column;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px; }
+.an-reg-row:last-child { border-bottom:none; }
+.an-log-tr td { padding:6px 10px;border-bottom:1px solid var(--border);color:var(--ink); }
+.an-log-tr:last-child td { border-bottom:none; }
+.an-badge { display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600; }
+.an-badge-gen { background:#e8f5e9;color:#2e7d32; }
+.an-badge-stream { background:#e3f2fd;color:#1565c0; }
+.an-badge-error { background:#fdecea;color:#c0392b; }
+.an-badge-view { background:var(--purple-light);color:var(--purple-deep); }
+.an-badge-click { background:#fff8e1;color:#b08000; }
+
   background: linear-gradient(170deg,#040d0b 0%,#012e26 35%,#004d3f 65%,#007A66 100%);
 }
 .it-home-grid-bg {
@@ -2129,6 +2148,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
     <button class="itn-btn" id="itnb-about"     onclick="itNav('about')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> About</button>
     <button class="itn-btn" id="itnb-plans"     onclick="itNav('plans')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Access</button>
     <button class="itn-btn" id="itnb-help"      onclick="itNav('help')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Help</button>
+    <button class="itn-btn" id="itnb-analytics" onclick="itNav('analytics')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Analytics</button>
   </div>
 
   <div class="itn-right">
@@ -2175,6 +2195,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
   <button class="itn-mob-btn" onclick="itNav('about');itToggleMobile()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> About IteraAI</button>
   <button class="itn-mob-btn" onclick="itNav('plans');itToggleMobile()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Plans / Access</button>
   <button class="itn-mob-btn" onclick="itNav('help');itToggleMobile()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Help</button>
+  <button class="itn-mob-btn" onclick="itNav('analytics');itToggleMobile()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Analytics</button>
 </div>
 
 <!-- ══ HOME OVERLAY ══ -->
@@ -2373,6 +2394,124 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 <div class="it-overlay" id="it-page-connect">
   <!-- connect-panel content is already in the DOM below; 
        we show this overlay and make connect-panel visible inside it via JS -->
+</div>
+
+<!-- ═══ ANALYTICS OVERLAY ═══ -->
+<div class="it-overlay" id="it-page-analytics">
+  <div style="max-width:900px;margin:0 auto;padding:36px 28px 60px">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:6px">Admin Only</div>
+        <h2 style="font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.02em;margin:0">IteraAI Analytics</h2>
+        <p style="font-size:13px;color:var(--muted);margin:4px 0 0">Live data from Supabase · Auto-refreshes every 60s</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button onclick="analyticsLoad()" style="background:var(--purple);color:white;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer">↻ Refresh</button>
+        <button onclick="itNav('home')" style="background:var(--purple-light);color:var(--purple-deep);border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer">← Back</button>
+      </div>
+    </div>
+
+    <!-- Password gate -->
+    <div id="an-gate" style="background:white;border-radius:18px;padding:40px;text-align:center;box-shadow:var(--shadow-sm);border:1.5px solid var(--border)">
+      <div style="font-size:32px;margin-bottom:12px">🔒</div>
+      <h3 style="font-size:18px;font-weight:700;color:var(--ink);margin:0 0 8px">Admin Access Required</h3>
+      <p style="font-size:14px;color:var(--muted);margin:0 0 20px">Enter the analytics password to view data</p>
+      <div style="display:flex;gap:10px;max-width:340px;margin:0 auto">
+        <input id="an-pw-input" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')analyticsAuth()" style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;font-family:inherit">
+        <button onclick="analyticsAuth()" style="background:var(--purple);color:white;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer">Enter</button>
+      </div>
+      <div id="an-pw-err" style="color:#c0392b;font-size:13px;margin-top:10px;display:none">Incorrect password</div>
+    </div>
+
+    <!-- Dashboard (hidden until auth) -->
+    <div id="an-dashboard" style="display:none">
+
+      <!-- Stat cards -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px">
+        <div class="an-card" style="text-align:center">
+          <div id="an-stat-pageviews" class="an-stat-val">—</div>
+          <div class="an-stat-lbl">Page Views</div>
+        </div>
+        <div class="an-card" style="text-align:center">
+          <div id="an-stat-users" class="an-stat-val">—</div>
+          <div class="an-stat-lbl">Unique Users</div>
+        </div>
+        <div class="an-card" style="text-align:center">
+          <div id="an-stat-regs" class="an-stat-val">—</div>
+          <div class="an-stat-lbl">Registrations</div>
+        </div>
+        <div class="an-card" style="text-align:center">
+          <div id="an-stat-gens" class="an-stat-val">—</div>
+          <div class="an-stat-lbl">AI Generations</div>
+        </div>
+        <div class="an-card" style="text-align:center">
+          <div id="an-stat-tokens" class="an-stat-val">—</div>
+          <div class="an-stat-lbl">Tokens Used</div>
+        </div>
+        <div class="an-card" style="text-align:center">
+          <div id="an-stat-errors" class="an-stat-val" style="color:#e74c3c">—</div>
+          <div class="an-stat-lbl">Errors</div>
+        </div>
+      </div>
+
+      <!-- Two column: feature usage + recent activity -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px">
+
+        <!-- Feature usage -->
+        <div class="an-card">
+          <div class="an-card-hdr">🎯 Feature Usage</div>
+          <div id="an-features" style="margin-top:12px"></div>
+        </div>
+
+        <!-- Recent registrations -->
+        <div class="an-card">
+          <div class="an-card-hdr">👥 Recent Registrations</div>
+          <div id="an-regs-list" style="margin-top:12px;max-height:280px;overflow-y:auto"></div>
+        </div>
+
+      </div>
+
+      <!-- Recent API activity -->
+      <div class="an-card" style="margin-bottom:22px">
+        <div class="an-card-hdr">⚡ Recent Activity Log</div>
+        <div style="overflow-x:auto;margin-top:12px">
+          <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+            <thead>
+              <tr style="border-bottom:1.5px solid var(--border)">
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Time</th>
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Event</th>
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Feature</th>
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Tokens</th>
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Status</th>
+              </tr>
+            </thead>
+            <tbody id="an-log-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Page event log -->
+      <div class="an-card">
+        <div class="an-card-hdr">🖱️ User Interactions (last 50)</div>
+        <div style="overflow-x:auto;margin-top:12px">
+          <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+            <thead>
+              <tr style="border-bottom:1.5px solid var(--border)">
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Time</th>
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Event</th>
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Page/Feature</th>
+                <th style="text-align:left;padding:6px 10px;color:var(--muted);font-weight:600">Session</th>
+              </tr>
+            </thead>
+            <tbody id="an-events-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /an-dashboard -->
+  </div>
 </div>
 
 
@@ -10462,6 +10601,195 @@ window.addEventListener('load', function() {
 });
 
 console.log('IteraAI Classroom Manager module registered.');
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  IteraAI Analytics System
+//  - Tracks page views, feature clicks, AI generations
+//  - Writes to Supabase iteraai_page_events table
+//  - Admin dashboard reads from iteraai_logs + iteraai_registrations
+// ═══════════════════════════════════════════════════════════
+
+const AN_PASSWORD   = 'iteraai2026';   // ← change this to your preferred password
+const AN_SUPA_URL   = 'https://igesutfxmzidtudbbltb.supabase.co';
+const AN_SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlnZXN1dGZ4bXppZHR1ZGJibHRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4OTE2OTEsImV4cCI6MjA4ODQ2NzY5MX0.GkpR1Lwz1nbbkCUVu62yo_QBFloMUMSw-BwxpUd4DsU';
+
+// ── Session ID (anonymous, resets per tab) ──
+const AN_SESSION_ID = Math.random().toString(36).slice(2, 10);
+let   AN_AUTHED     = false;
+let   AN_REFRESH_TIMER = null;
+
+// ── Track a page/feature event ──
+async function anTrack(event, detail) {
+  try {
+    const sb = getSupabase();
+    if (!sb) return;
+    await sb.from('iteraai_page_events').insert([{
+      session_id : AN_SESSION_ID,
+      event      : event,
+      detail     : detail || null,
+      url        : window.location.href,
+      ts         : new Date().toISOString()
+    }]);
+  } catch(e) { /* silent */ }
+}
+
+// Track page load
+anTrack('page_view', document.title);
+
+// Track nav clicks — patch itNav
+(function(){
+  const _orig = window.itNav;
+  window.itNav = function(page) {
+    anTrack('nav_click', page);
+    if (_orig) _orig(page);
+  };
+})();
+
+// Track Generate with AI clicks
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const txt = btn.textContent.trim();
+  if (txt.includes('Generate with AI'))  anTrack('feature_click', 'generate_ai');
+  if (txt.includes('Ask Carl') || btn.id === 'carl-send') anTrack('feature_click', 'carl_chat');
+  if (txt.includes('Copy') && btn.closest('#ai-modal')) anTrack('feature_click', 'copy_output');
+});
+
+// ── Auth ──
+function analyticsAuth() {
+  const val = document.getElementById('an-pw-input').value;
+  if (val === AN_PASSWORD) {
+    AN_AUTHED = true;
+    document.getElementById('an-gate').style.display      = 'none';
+    document.getElementById('an-dashboard').style.display = 'block';
+    analyticsLoad();
+    AN_REFRESH_TIMER = setInterval(analyticsLoad, 60000);
+  } else {
+    document.getElementById('an-pw-err').style.display = 'block';
+    document.getElementById('an-pw-input').value = '';
+  }
+}
+
+// ── Load all data ──
+async function analyticsLoad() {
+  const sb = getSupabase();
+  if (!sb || !AN_AUTHED) return;
+
+  // ── Page events ──
+  const { data: events } = await sb
+    .from('iteraai_page_events')
+    .select('*')
+    .order('ts', { ascending: false })
+    .limit(200);
+
+  const allEvents   = events || [];
+  const pageViews   = allEvents.filter(e => e.event === 'page_view').length;
+  const uniqueSess  = new Set(allEvents.map(e => e.session_id)).size;
+
+  document.getElementById('an-stat-pageviews').textContent = pageViews.toLocaleString();
+  document.getElementById('an-stat-users').textContent     = uniqueSess.toLocaleString();
+
+  // Feature usage breakdown
+  const featureClicks = allEvents.filter(e => e.event === 'feature_click');
+  const featureCounts = {};
+  featureClicks.forEach(e => { featureCounts[e.detail] = (featureCounts[e.detail] || 0) + 1; });
+  const navClicks = allEvents.filter(e => e.event === 'nav_click');
+  navClicks.forEach(e => {
+    const k = 'nav:' + e.detail;
+    featureCounts[k] = (featureCounts[k] || 0) + 1;
+  });
+
+  const featureLabels = {
+    'generate_ai'   : '⚡ Generate with AI',
+    'carl_chat'     : '💬 Ask Carl',
+    'copy_output'   : '📋 Copy Output',
+    'nav:tool'      : '🔧 Prompt Builder',
+    'nav:scaffolds' : '🧩 Supports',
+    'nav:connect'   : '🔗 Connect',
+    'nav:about'     : 'ℹ️ About',
+    'nav:help'      : '❓ Help',
+  };
+  const maxCount = Math.max(1, ...Object.values(featureCounts));
+  const featEl = document.getElementById('an-features');
+  const sortedFeats = Object.entries(featureCounts).sort((a,b) => b[1]-a[1]).slice(0,10);
+  featEl.innerHTML = sortedFeats.map(([k,v]) => `
+    <div class="an-bar-wrap">
+      <div class="an-bar-label">${featureLabels[k] || k}</div>
+      <div class="an-bar-track"><div class="an-bar-fill" style="width:${Math.round(v/maxCount*100)}%"></div></div>
+      <div class="an-bar-count">${v}</div>
+    </div>`).join('') || '<p style="color:var(--muted);font-size:13px">No interactions yet</p>';
+
+  // Events table
+  const evBody = document.getElementById('an-events-body');
+  evBody.innerHTML = allEvents.slice(0,50).map(e => `
+    <tr class="an-log-tr">
+      <td>${new Date(e.ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td>
+      <td><span class="an-badge ${e.event==='page_view'?'an-badge-view':'an-badge-click'}">${e.event}</span></td>
+      <td>${e.detail || '—'}</td>
+      <td style="font-family:monospace;font-size:11px;color:var(--muted)">${e.session_id}</td>
+    </tr>`).join('');
+
+  // ── API logs ──
+  const { data: logs } = await sb
+    .from('iteraai_logs')
+    .select('*')
+    .order('ts', { ascending: false })
+    .limit(100);
+
+  const allLogs   = logs || [];
+  const genLogs   = allLogs.filter(l => l.event === 'generation' || l.event === 'generation_stream');
+  const errorLogs = allLogs.filter(l => l.status && l.status >= 400);
+  const totalTok  = allLogs.reduce((s,l) => s + (l.input_tokens||0) + (l.output_tokens||0), 0);
+
+  document.getElementById('an-stat-gens').textContent   = genLogs.length.toLocaleString();
+  document.getElementById('an-stat-errors').textContent = errorLogs.length.toLocaleString();
+  document.getElementById('an-stat-tokens').textContent = totalTok > 999
+    ? (totalTok/1000).toFixed(1) + 'k' : totalTok.toLocaleString();
+
+  const logBody = document.getElementById('an-log-body');
+  logBody.innerHTML = allLogs.slice(0,30).map(l => {
+    const badge = l.event === 'generation_stream' ? 'an-badge-stream'
+      : l.event === 'generation' ? 'an-badge-gen'
+      : (l.status >= 400) ? 'an-badge-error' : 'an-badge-view';
+    const feat = l.has_system ? 'Generate AI' : (l.event.includes('stream') ? 'Generate AI' : 'Carl / Other');
+    return `<tr class="an-log-tr">
+      <td>${new Date(l.ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td>
+      <td><span class="an-badge ${badge}">${l.event}</span></td>
+      <td>${feat}</td>
+      <td>${((l.input_tokens||0)+(l.output_tokens||0)).toLocaleString()}</td>
+      <td style="color:${(l.status>=400)?'#c0392b':'#2e7d32'}">${l.status || '—'}</td>
+    </tr>`;
+  }).join('');
+
+  // ── Registrations ──
+  const { data: regs, count: regCount } = await sb
+    .from('iteraai_registrations')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  document.getElementById('an-stat-regs').textContent = (regCount || 0).toLocaleString();
+
+  const regList = document.getElementById('an-regs-list');
+  regList.innerHTML = (regs || []).map(r => `
+    <div class="an-reg-row">
+      <span style="font-weight:600;color:var(--ink)">${r.first_name} ${r.last_name}</span>
+      <span style="color:var(--muted)">${r.email}</span>
+      <span style="color:var(--muted);font-size:11.5px">${r.organization || ''} · ${new Date(r.created_at).toLocaleDateString()}</span>
+    </div>`).join('') || '<p style="color:var(--muted);font-size:13px">No registrations yet</p>';
+}
+
+// Stop refresh timer when leaving analytics
+const _origItNavAnalytics = window.itNav;
+window.itNav = function(page) {
+  if (page !== 'analytics' && AN_REFRESH_TIMER) {
+    clearInterval(AN_REFRESH_TIMER);
+    AN_REFRESH_TIMER = null;
+  }
+  if (_origItNavAnalytics) _origItNavAnalytics(page);
+};
 </script>
 
 
