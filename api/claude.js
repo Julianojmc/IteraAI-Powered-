@@ -6,7 +6,7 @@
  * Everything else is identical to your original.
  */
 
-export const config = { runtime: 'edge' };
+export const config = { runtime: 'edge', maxDuration: 60 };
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 
