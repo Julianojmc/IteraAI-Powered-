@@ -190,12 +190,8 @@ export default async function handler(request) {
 
   const isStreaming = body.stream === true;
 
-  // Skip RAG for streaming — avoids Supabase embed latency eating the 25s edge budget
-  const ragContext = isStreaming ? '' : await retrieveContext(
-    userText,
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY
-  );
+  // RAG disabled — Supabase embed lookup was causing 25s edge timeout
+  const ragContext = '';
 
   const baseSystem = body.system || ITERAAI_SYSTEM_BASE;
   const enrichedSystem = baseSystem + ragContext;
