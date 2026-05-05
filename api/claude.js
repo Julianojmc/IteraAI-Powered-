@@ -1,12 +1,13 @@
 /**
  * IteraAI Knowledge-Grounded Proxy
- * /api/claude.js — v3: web search enabled
+ * /api/claude.js — v4: streaming + web search conditional
  *
- * CHANGE FROM v2: Added 'anthropic-beta: web-search-2025-03-05' header.
- * Everything else is identical to your original.
+ * Changes from v3:
+ * - Streaming: if request body contains stream:true, pipes SSE straight to browser
+ * - anthropic-beta header only sent when web_search tool is present
  */
 
-export const config = { runtime: 'edge', maxDuration: 60 };
+export const config = { runtime: 'edge' };
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 
@@ -195,20 +196,24 @@ export default async function handler(request) {
 
   const baseSystem = body.system || ITERAAI_SYSTEM_BASE;
   const enrichedSystem = baseSystem + ragContext;
+  const isStreaming = body.stream === true;
 
-  // Spread full body — tools, model, messages, max_tokens all pass through untouched
-  const anthropicBody = { ...body, system: enrichedSystem };
+  const anthropicBody = { ...body, system: enrichedSystem, stream: isStreaming };
+
+  const anthropicHeaders = {
+    'Content-Type':      'application/json',
+    'x-api-key':         apiKey,
+    'anthropic-version': '2023-06-01',
+    ...(Array.isArray(body.tools) && body.tools.some(t => t.type === 'web_search_20250305')
+      ? { 'anthropic-beta': 'web-search-2025-03-05' }
+      : {}),
+  };
 
   let anthropicRes;
   try {
     anthropicRes = await fetch(ANTHROPIC_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type':      'application/json',
-        'x-api-key':         apiKey,
-        'anthropic-version': '2023-06-01',
-        ...(Array.isArray(body.tools) && body.tools.some(t => t.type === 'web_search_20250305') ? { 'anthropic-beta': 'web-search-2025-03-05' } : {}),
-      },
+      headers: anthropicHeaders,
       body: JSON.stringify(anthropicBody),
     });
   } catch {
@@ -217,6 +222,28 @@ export default async function handler(request) {
     });
   }
 
+  // ── STREAMING PATH ──
+  // Pipes Anthropic SSE straight to the browser.
+  // Vercel's 25s limit applies to time-to-FIRST-byte only when streaming.
+  // Anthropic starts sending tokens in ~1-2s, so this never times out.
+  if (isStreaming) {
+    Promise.all([
+      logToSheets({ ts, client_id: clientId, origin, event: 'generation_stream', model: body.model || 'unknown', has_system: !!body.system }),
+      logToSupabase({ ts, client_id: clientId, origin, event: 'generation_stream', model: body.model || 'unknown', has_system: !!body.system }),
+    ]).catch(() => {});
+
+    return new Response(anthropicRes.body, {
+      status: anthropicRes.status,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'X-Accel-Buffering': 'no',
+      },
+    });
+  }
+
+  // ── NON-STREAMING PATH (Carl, IEP workflow, etc.) ──
   const responseData = await anthropicRes.json();
   const responseText = responseData?.content?.[0]?.text || '';
   const inputTokens = responseData?.usage?.input_tokens || 0;
