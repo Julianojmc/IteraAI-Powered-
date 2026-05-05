@@ -17,7 +17,7 @@
 }
 </style>
 <style>
-:root{--teal:#00C9A7;--teal-light:#e8f4f1;--teal-mid:#007A66;--orange:#e8601c;--orange-light:#fff3ed;--gold:#FFB627;--gold-light:#fdf3dc;--purple:#5c3d8f;--purple-light:#f0ebfb;--ink:#0A0E1A;--slate:#1C2333;--muted:#5a6070;--border:#d8dde6;--bg:#f0f7f5;--white:#ffffff;--radius:14px;--shadow:0 4px 24px rgba(0,201,167,.12);--shadow-sm:0 2px 10px rgba(0,201,167,.08)}
+:root{--teal:#00C9A7;--teal-light:#e8f4f1;--teal-mid:#007A66;--orange:#e8601c;--orange-light:#fff3ed;--gold:#FFB627;--gold-light:#fdf3dc;--purple:#8B6FD4;--purple-light:#f0ebfb;--ink:#0A0E1A;--slate:#1C2333;--muted:#5a6070;--border:#d8dde6;--bg:#f0f7f5;--white:#ffffff;--radius:14px;--shadow:0 4px 24px rgba(0,201,167,.12);--shadow-sm:0 2px 10px rgba(0,201,167,.08)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-sans);background:var(--bg);color:var(--ink);min-height:100vh}
 header{background:linear-gradient(135deg,#040d0b 0%,#003d35 50%,#00C9A7 100%);padding:36px 40px 32px;position:relative;overflow:hidden}
@@ -573,14 +573,14 @@ textarea{resize:vertical;min-height:78px;line-height:1.5}
 .dev-admin-pin-label{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;text-align:center}
 .dev-admin-dots{display:flex;justify-content:center;gap:10px;margin:0 0 14px}
 .dev-admin-dot{width:16px;height:16px;border-radius:50%;border:2.5px solid var(--border);background:white;transition:all .15s;display:block}
-.dev-admin-dot.filled{background:#1a1a2e;border-color:#1a1a2e;transform:scale(1.15)}
+.dev-admin-dot.filled{background:#3C3465;border-color:#3C3465;transform:scale(1.15)}
 #dev-admin-error{color:#c0392b;font-size:12px;text-align:center;margin-bottom:10px;display:none}
 .dev-admin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .dev-admin-btn{padding:14px 8px;border:2px solid var(--border);border-radius:10px;background:white;font-size:18px;font-weight:600;color:var(--ink);cursor:pointer;transition:all .15s;line-height:1;font-family:var(--font-sans)}
-.dev-admin-btn:hover{border-color:#1a1a2e;background:#f0f0f5;color:#1a1a2e}
+.dev-admin-btn:hover{border-color:#3C3465;background:#f0f0f5;color:#3C3465}
 .dev-admin-clr{font-family:var(--font-sans);font-size:16px;color:var(--muted)}
 .dev-admin-clr:hover{border-color:var(--orange)!important;background:var(--orange-light)!important;color:var(--orange)!important}
-.dev-admin-go{background:#1a1a2e;border-color:#1a1a2e;color:white;font-family:var(--font-sans);font-size:18px}
+.dev-admin-go{background:#3C3465;border-color:#3C3465;color:white;font-family:var(--font-sans);font-size:18px}
 .dev-admin-go:hover{background:#0d2218!important;border-color:#0d2218!important;color:white!important}
 .dev-admin-close-row{text-align:center}
 .dev-admin-close-lnk{font-size:12px;color:var(--muted);cursor:pointer;text-decoration:underline}
@@ -997,7 +997,7 @@ header { margin-top: 58px !important; }
 .it-coach-btn:hover { background:#00b096;transform:scale(1.04); }
 
 /* Scaffolds */
-#it-page-scaffolds .it-page-hero { background:linear-gradient(135deg,#2d1a4e,#5c3d8f,#7b52ab); }
+#it-page-scaffolds .it-page-hero { background:linear-gradient(135deg,#6B50C0,#8B6FD4,#B09AE8); }
 
 /* ── Global File Context Tray ── */
 #itera-file-tray{position:fixed;top:58px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;overflow:hidden;max-height:0;transition:max-height .35s ease,padding .35s ease;box-shadow:0 4px 12px rgba(0,0,0,.08);z-index:10001}
@@ -1104,15 +1104,15 @@ header { margin-top: 58px !important; }
 /* ── 1. COLOR SYSTEM OVERRIDE ── */
 :root {
   /* Primary: rich purple */
-  --purple:       #6741D9;
-  --purple-deep:  #4A2BAF;
-  --purple-mid:   #7C55E8;
-  --purple-light: #EDE8FF;
-  --purple-xlight:#F7F5FF;
+  --purple:       #8B6FD4;
+  --purple-deep:  #6B50C0;
+  --purple-mid:   #9E85E0;
+  --purple-light: #EEE8FA;
+  --purple-xlight:#F6F4FD;
 
   /* Accent: warm lavender */
-  --lavender:     #B8A9F8;
-  --lavender-mid: #9B87F5;
+  --lavender:     #C9BCFA;
+  --lavender-mid: #B3A2F2;
 
   /* Keep teal as secondary accent only */
   --teal:         #00C9A7;
@@ -1120,11 +1120,11 @@ header { margin-top: 58px !important; }
   --teal-mid:     #00A88C;
 
   /* Neutrals */
-  --ink:          #0D0A1E;
-  --slate:        #1C1735;
-  --muted:        #64607A;
-  --border:       #E2DCFC;
-  --bg:           #F7F5FF;
+  --ink:          #2D2650;
+  --slate:        #3C3465;
+  --muted:        #7A7595;
+  --border:       #DDD8F5;
+  --bg:           #F5F3FD;
   --white:        #FFFFFF;
 
   /* Gold accent */
@@ -1135,9 +1135,9 @@ header { margin-top: 58px !important; }
 
   /* Radii & shadows */
   --radius:       16px;
-  --shadow:       0 4px 28px rgba(103,65,217,.13);
-  --shadow-sm:    0 2px 12px rgba(103,65,217,.08);
-  --shadow-lg:    0 12px 48px rgba(103,65,217,.18);
+  --shadow:       0 4px 28px rgba(139,111,212,.13);
+  --shadow-sm:    0 2px 12px rgba(139,111,212,.08);
+  --shadow-lg:    0 12px 48px rgba(139,111,212,.18);
 }
 
 /* ── 2. BASE ── */
@@ -1194,7 +1194,7 @@ h1,h2,h3,h4,h5,h6 {
 
 /* ── 4. HOME OVERLAY ── */
 #it-page-home {
-  background: linear-gradient(160deg, #0D0A1E 0%, #1A0F3C 28%, #2D1A6E 58%, #4A2BAF 100%) !important;
+  background: linear-gradient(160deg, #3D3272 0%, #5448A0 28%, #5448A0 58%, #6B50C0 100%) !important;
 }
 
 .it-home-grid-bg {
@@ -1300,7 +1300,7 @@ h1,h2,h3,h4,h5,h6 {
 
 /* ── 7. PAGE HERO SECTIONS ── */
 .it-page-hero {
-  background: linear-gradient(135deg, #0D0A1E 0%, #1A0F3C 50%, #2D1A6E 100%) !important;
+  background: linear-gradient(135deg, #3D3272 0%, #5448A0 50%, #5448A0 100%) !important;
   text-align: center !important;
   padding: 60px 40px 52px !important;
   position: relative;
@@ -1324,7 +1324,7 @@ h1,h2,h3,h4,h5,h6 {
 
 /* Scaffolds hero stays purple */
 #it-page-scaffolds .it-page-hero {
-  background: linear-gradient(135deg, #1A0D3C, #2D1A6E, #4A2BAF) !important;
+  background: linear-gradient(135deg, #1A0D3C, #5448A0, #6B50C0) !important;
 }
 
 /* ── 8. APP SHELL — FBAR / TABS ── */
@@ -1416,7 +1416,7 @@ select, input[type=text], textarea {
 
 /* Sidebar prompt card */
 .pcard { background: var(--slate) !important; }
-.pcardh { background: linear-gradient(135deg, #1A0F3C, var(--purple-deep)) !important; }
+.pcardh { background: linear-gradient(135deg, #5448A0, var(--purple-deep)) !important; }
 .lbadge { background: rgba(103,65,217,0.2) !important; border-color: rgba(103,65,217,0.3) !important; }
 .ldot { background: var(--lavender) !important; }
 
@@ -1440,7 +1440,7 @@ select, input[type=text], textarea {
   box-shadow: 0 6px 24px rgba(103,65,217,0.42) !important;
 }
 #carl-fab:hover { box-shadow: 0 8px 32px rgba(103,65,217,0.58) !important; }
-.carl-hdr { background: linear-gradient(135deg, #0D0A1E, var(--purple-deep)) !important; }
+.carl-hdr { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 .carl-msg.bot .carl-bubble { background: var(--purple-xlight) !important; border-color: rgba(103,65,217,0.18) !important; }
 .carl-msg.user .carl-bubble { background: var(--purple) !important; }
 .carl-q-btn { border-color: var(--purple) !important; color: var(--purple) !important; }
@@ -1451,7 +1451,7 @@ select, input[type=text], textarea {
 .carl-dot { background: var(--purple) !important; }
 
 /* ── 15. LIBRARY PANEL ── */
-.lib-header { background: linear-gradient(135deg, #1A0F3C, var(--purple), var(--purple-mid)) !important; }
+.lib-header { background: linear-gradient(135deg, #5448A0, var(--purple), var(--purple-mid)) !important; }
 .lib-card:hover { border-color: var(--purple) !important; box-shadow: 0 6px 24px rgba(103,65,217,0.14) !important; }
 .lib-card-tag { background: var(--purple-light) !important; color: var(--purple) !important; }
 .lib-card-btn:hover { border-color: var(--purple) !important; color: var(--purple) !important; background: var(--purple-xlight) !important; }
@@ -1467,7 +1467,7 @@ select, input[type=text], textarea {
 .modal-hdr { background: linear-gradient(135deg, var(--purple-deep), var(--purple)) !important; }
 
 /* ── 18. CONNECT PAGE ── */
-.connect-hero { background: linear-gradient(135deg, #0D0A1E, var(--purple)) !important; }
+.connect-hero { background: linear-gradient(135deg, #3D3272, var(--purple)) !important; }
 .connect-card-hdr { background: var(--purple-xlight) !important; border-bottom-color: var(--border) !important; }
 .connect-card-hdr h3 { color: var(--purple) !important; }
 .connect-field input:focus, .connect-field select:focus, .connect-field textarea:focus {
@@ -1502,25 +1502,25 @@ select, input[type=text], textarea {
 .it-plan-feats li::before { color: var(--purple) !important; }
 
 /* Access box */
-.it-access-hdr { background: linear-gradient(135deg, #0D0A1E, var(--purple-deep)) !important; }
+.it-access-hdr { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 
 /* ── 20. HELP PAGE ── */
 .it-help-card:hover { border-color: var(--purple) !important; box-shadow: 0 4px 18px rgba(103,65,217,0.1) !important; }
 .it-faq-q:hover, .it-faq-q.open { background: var(--purple-xlight) !important; color: var(--purple) !important; }
-.it-coach-cta { background: linear-gradient(135deg, #0D0A1E, var(--purple-deep)) !important; }
+.it-coach-cta { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 .it-coach-btn { background: var(--purple) !important; }
 .it-coach-btn:hover { background: var(--purple-deep) !important; }
 
 /* ── 21. ABOUT PAGE ── */
 .it-about-label { color: var(--purple) !important; }
 .it-val-card:hover { border-color: var(--purple-light) !important; }
-.it-creator { background: linear-gradient(135deg, #0D0A1E, var(--purple-deep)) !important; }
+.it-creator { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 .it-creator .it-creator-role { color: var(--lavender) !important; }
 
 /* ── 22. FOOTER ── */
-.it-footer { background: #07050F !important; border-top: 1px solid rgba(103,65,217,0.14) !important; }
+.it-footer { background: #2D2650 !important; border-top: 1px solid rgba(103,65,217,0.14) !important; }
 .it-footer-links a:hover { color: var(--lavender) !important; }
-.site-footer { background: #07050F !important; border-top: 3px solid var(--purple) !important; }
+.site-footer { background: #2D2650 !important; border-top: 3px solid var(--purple) !important; }
 
 /* ── 23. IEP PAGE ── */
 .iep-spinner { border-top-color: var(--purple) !important; }
@@ -1536,10 +1536,10 @@ select, input[type=text], textarea {
 .kb-save-btn.saved { background: var(--purple) !important; color: white !important; border-color: var(--purple) !important; }
 
 /* ── 25. ACCESS BANNER ── */
-#access-banner { background: linear-gradient(135deg, #0D0A1E, var(--purple-deep)) !important; }
+#access-banner { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 
 /* ── 26. LOCKOUT SCREEN ── */
-.lockout-hdr { background: linear-gradient(135deg, #0D0A1E, var(--purple-deep)) !important; }
+.lockout-hdr { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 .lockout-connect-btn {
   background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important;
   box-shadow: 0 4px 16px rgba(103,65,217,0.3) !important;
@@ -1547,16 +1547,16 @@ select, input[type=text], textarea {
 .lockout-connect-btn:hover { box-shadow: 0 6px 22px rgba(103,65,217,0.42) !important; }
 
 /* ── 27. DEV ADMIN ── */
-.dev-admin-hdr { background: linear-gradient(135deg, #0D0A1E 0%, #1A0F3C 100%) !important; }
-.dev-dash-hdr { background: linear-gradient(135deg, #0D0A1E, var(--purple-deep)) !important; }
-.dev-ext-pin-card { background: linear-gradient(135deg, #07050F, #1A0F3C) !important; }
+.dev-admin-hdr { background: linear-gradient(135deg, #3D3272 0%, #5448A0 100%) !important; }
+.dev-dash-hdr { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
+.dev-ext-pin-card { background: linear-gradient(135deg, #2D2650, #5448A0) !important; }
 
 /* ── 28. PW-GATE LANDING PAGE ── */
-#pw-gate .pg-hero { background: linear-gradient(160deg, #0D0A1E 0%, #1A0F3C 28%, #2D1A6E 62%, #4A2BAF 100%) !important; }
+#pw-gate .pg-hero { background: linear-gradient(160deg, #3D3272 0%, #5448A0 28%, #7060C0 62%, #8B6FD4 100%) !important; }
 #pw-gate .pg-eyebrow { background: rgba(184,169,248,0.15) !important; border-color: rgba(184,169,248,0.28) !important; color: var(--lavender) !important; }
 #pw-gate h1.pg-h1 { font-family: var(--font-display) !important; letter-spacing: -0.03em !important; font-weight: 900 !important; }
 #pw-gate h1.pg-h1 em { color: var(--lavender) !important; }
-#pw-gate .pg-card-top { background: linear-gradient(135deg, #1A0F3C, var(--purple)) !important; }
+#pw-gate .pg-card-top { background: linear-gradient(135deg, #5448A0, var(--purple)) !important; }
 #pw-gate .pg-btn { background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important; box-shadow: 0 4px 18px rgba(103,65,217,0.32) !important; }
 #pw-gate .pg-btn:hover { box-shadow: 0 8px 26px rgba(103,65,217,0.44) !important; }
 #pw-gate .pg-role-btn:hover { background: rgba(103,65,217,0.08) !important; color: var(--purple) !important; }
@@ -1570,7 +1570,7 @@ select, input[type=text], textarea {
 #pw-gate .pg-feat-card:hover { box-shadow: 0 16px 48px rgba(103,65,217,0.12) !important; border-color: rgba(103,65,217,0.25) !important; }
 #pw-gate .pg-feat-tag { background: var(--purple-xlight) !important; color: var(--purple) !important; }
 #pw-gate .pg-plan.feat { border-color: var(--purple) !important; box-shadow: 0 8px 40px rgba(103,65,217,0.18) !important; }
-#pw-gate .pg-plan.feat .pg-plan-hdr { background: linear-gradient(135deg, #1A0F3C, var(--purple-deep)) !important; }
+#pw-gate .pg-plan.feat .pg-plan-hdr { background: linear-gradient(135deg, #5448A0, var(--purple-deep)) !important; }
 #pw-gate .pg-plan-cta { border-color: var(--purple) !important; }
 #pw-gate .pg-plan-cta.solid { background: linear-gradient(135deg, var(--purple-deep), var(--purple)) !important; }
 #pw-gate .pg-plan-cta.out { color: var(--purple) !important; }
@@ -1578,9 +1578,9 @@ select, input[type=text], textarea {
 #pw-gate .pg-plan-feats li::before { background: var(--purple-xlight) !important; color: var(--purple) !important; }
 #pw-gate .pg-success h3 { color: var(--purple) !important; }
 #pw-gate .pg-success-icon { background: var(--purple-light) !important; }
-#pw-gate .pg-cta-strip { background: linear-gradient(135deg, #0D0A1E, var(--purple-deep) 60%, var(--purple)) !important; }
+#pw-gate .pg-cta-strip { background: linear-gradient(135deg, #3D3272, var(--purple-deep) 60%, var(--purple)) !important; }
 #pw-gate .pg-cta-btn { color: var(--purple-deep) !important; }
-#pw-gate footer.pg-footer { background: #07050F !important; }
+#pw-gate footer.pg-footer { background: #2D2650 !important; }
 #pw-gate .pg-footer-links a:hover { color: var(--lavender) !important; }
 #pw-gate .pg-o1 { background: radial-gradient(circle, rgba(103,65,217,0.18), transparent 70%) !important; }
 #pw-gate .pg-success-share { color: var(--purple) !important; background: var(--purple-xlight) !important; }
@@ -1610,7 +1610,7 @@ select { background-color: var(--white) !important; }
 
 /* ── 33. REFINED HEADER (app area) ── */
 header {
-  background: linear-gradient(150deg, #0D0A1E 0%, #1A0F3C 40%, #2D1A6E 75%, #4A2BAF 100%) !important;
+  background: linear-gradient(150deg, #3D3272 0%, #5448A0 40%, #5448A0 75%, #6B50C0 100%) !important;
 }
 header h1 { font-family: var(--font-display) !important; font-weight: 800 !important; letter-spacing: -0.03em !important; }
 header h1 span { color: var(--lavender) !important; }
@@ -1626,7 +1626,7 @@ header h1 span { color: var(--lavender) !important; }
 /* (keeps existing logic but purple-accented interactions) */
 
 /* ── 36. EXT PIN ── */
-.ext-pin-banner { background: linear-gradient(135deg, #07050F, #1A0F3C) !important; }
+.ext-pin-banner { background: linear-gradient(135deg, #2D2650, #5448A0) !important; }
 .ext-pin-submit { background: var(--lavender) !important; color: var(--purple-deep) !important; }
 .ext-pin-submit:hover { background: white !important; }
 .ext-pin-input:focus { border-color: rgba(184,169,248,0.6) !important; }
@@ -2231,11 +2231,11 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
       <h2 class="it-section-h">Every Educator in the CTE Ecosystem</h2>
       <p class="it-section-sub">From classroom teachers to district leaders, IteraAI adapts to your role and amplifies your impact on multilingual CTE learners.</p>
       <div class="it-for-grid">
-        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span><h4>CTE Classroom Teachers</h4><p>Build differentiated lessons, scaffolded activities, and multilingual resources tailored to your pathway and students' ELD levels.</p></div>
-        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></span><h4>Admin &amp; District Leaders</h4><p>Generate Perkins V reports, LCAP-aligned documents, program quality reviews, and stakeholder communications with AI.</p></div>
+        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span><h4>CTE Classroom Teachers</h4><p>Build differentiated lessons, scaffolded activities, and multilingual resources tailored to your pathway and students' ELD levels.</p></div>
+        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></span><h4>Admin &amp; District Leaders</h4><p>Generate Perkins V reports, LCAP-aligned documents, program quality reviews, and stakeholder communications with AI.</p></div>
         <div class="it-for-card" onclick="itNav('scaffolds')"><span class="it-for-card-icon" style="background:rgba(0,168,140,0.12);border:1.5px solid rgba(0,168,140,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00A88C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span><h4>EL Specialists &amp; TOSAs</h4><p>Access SIOP/SDAIE-aligned resources, translanguaging supports, and multilingual scaffolds embedded in every prompt.</p></div>
-        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><h4>Instructional Coaches</h4><p>Design PD tools, coaching templates, and observation protocols grounded in California CTE and ELD frameworks.</p></div>
-        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span><h4>CTE Coordinators</h4><p>Streamline curriculum alignment, articulation agreements, advisory committee prep, and sector-wide planning docs.</p></div>
+        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><h4>Instructional Coaches</h4><p>Design PD tools, coaching templates, and observation protocols grounded in California CTE and ELD frameworks.</p></div>
+        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span><h4>CTE Coordinators</h4><p>Streamline curriculum alignment, articulation agreements, advisory committee prep, and sector-wide planning docs.</p></div>
         <div class="it-for-card" onclick="itNav('connect')"><span class="it-for-card-icon" style="background:rgba(240,180,41,0.12);border:1.5px solid rgba(240,180,41,0.22);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B08000" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/></svg></span><h4>Educators Everywhere</h4><p>Share feedback, suggest features, and shape the future of IteraAI — every voice helps build better tools for learners.</p></div>
       </div>
     </div>
@@ -2248,20 +2248,20 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 
 <!-- ══ SCAFFOLDS OVERLAY ══ -->
 <div class="it-overlay" id="it-page-scaffolds">
-  <div class="it-page-hero" style="background:linear-gradient(135deg,#2d1a4e,#5c3d8f,#7b52ab)">
+  <div class="it-page-hero" style="background:linear-gradient(135deg,#6B50C0,#8B6FD4,#B09AE8)">
     <h1> Supports &amp; Scaffolds</h1>
     <p>EL instructional strategies, SIOP techniques, translanguaging resources, and differentiation supports built into every IteraAI prompt.</p>
   </div>
   <div class="it-page-body">
     <div class="it-help-grid" style="grid-template-columns:repeat(2,1fr)">
-      <div class="it-help-card" style="border-left:3px solid var(--purple)"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="12,2 2,7 12,12 22,7"/><polyline points="2,17 12,22 22,17"/><polyline points="2,12 12,17 22,12"/></svg></span><h3>SIOP / SDAIE Integration</h3><p>Content Objectives, Language Objectives, and comprehensible input strategies woven into every prompt. Activate in Steps R and T.</p></div>
+      <div class="it-help-card" style="border-left:3px solid var(--purple)"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="12,2 2,7 12,12 22,7"/><polyline points="2,17 12,22 22,17"/><polyline points="2,12 12,17 22,12"/></svg></span><h3>SIOP / SDAIE Integration</h3><p>Content Objectives, Language Objectives, and comprehensible input strategies woven into every prompt. Activate in Steps R and T.</p></div>
       <div class="it-help-card" style="border-left:3px solid var(--teal)"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A88C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span><h3>Translanguaging Supports</h3><p>Select home languages in Step R (Recipients) to generate bilingual glossaries, parallel translations, and home-language preview notes.</p></div>
       <div class="it-help-card" style="border-left:3px solid var(--orange)"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8601C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 2l10 6.5v7L12 22 2 15.5v-7z"/><path d="M12 22V15.5"/><path d="M22 8.5L12 15.5 2 8.5"/></svg></span><h3>3-Tiered Differentiation</h3><p>Request Emerging / Expanding-Bridging / Fluent English versions in the Structure step — every EL student gets an accessible entry point.</p></div>
       <div class="it-help-card" style="border-left:3px solid var(--gold)"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B08000" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span><h3>Sentence Frames &amp; Vocabulary</h3><p>Pre-taught vocabulary with cognates, visuals, and bilingual sentence frames available in the Structure step of every prompt.</p></div>
       <div class="it-help-card" style="border-left:3px solid var(--teal)"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A88C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M9 2H5a2 2 0 00-2 2v16a2 2 0 002 2h14a2 2 0 002-2V4a2 2 0 00-2-2h-4"/><rect x="9" y="2" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></span><h3>Formative Language Checks</h3><p>Exit tickets, whiteboard responses, and language-focused observations alongside content checks — built into Theme step strategies.</p></div>
-      <div class="it-help-card" style="border-left:3px solid var(--purple)"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span><h3>Family &amp; Community Connection</h3><p>Generate family engagement materials with home-language versions via the Family/Home Connection component in Structure step.</p></div>
+      <div class="it-help-card" style="border-left:3px solid var(--purple)"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span><h3>Family &amp; Community Connection</h3><p>Generate family engagement materials with home-language versions via the Family/Home Connection component in Structure step.</p></div>
     </div>
-    <div class="it-coach-cta" style="background:linear-gradient(135deg,#2d1a4e,#5c3d8f)">
+    <div class="it-coach-cta" style="background:linear-gradient(135deg,#6B50C0,#8B6FD4)">
       <div class="it-coach-cta-icon" style="width:52px;height:52px;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.22);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M19 3l.75 2.25L22 6l-2.25.75L19 9l-.75-2.25L16 6l2.25-.75z"/></svg></div>
       <div><h3>Ask IteraAI Coach About EL Supports</h3><p>Get instant answers about SIOP, translanguaging, ELD standards, LTEL strategies, and more.</p></div>
       <button class="it-coach-btn" onclick="itNav('tool');setTimeout(function(){if(typeof toggleCarl==='function')toggleCarl();},400)">Ask Coach →</button>
@@ -2347,12 +2347,12 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
   <div class="it-page-hero" style="background:linear-gradient(135deg,#040d0b,#003d35)"><h1>Help &amp; Getting Started</h1><p>Everything you need to get the most out of IteraAI — from your first prompt to advanced CTE enhancements.</p></div>
   <div class="it-page-body">
     <div class="it-help-grid">
-      <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><h3>Quick Start: Prompt Builder</h3><p>Open Prompt Builder and follow P.A.R.T.S. — Persona, Aim, Recipients, Theme, Structure. Each step guides you with CTE-specific choices.</p></div>
+      <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><h3>Quick Start: Prompt Builder</h3><p>Open Prompt Builder and follow P.A.R.T.S. — Persona, Aim, Recipients, Theme, Structure. Each step guides you with CTE-specific choices.</p></div>
       <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8601C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M19 3l.75 2.25L22 6l-2.25.75L19 9l-.75-2.25L16 6l2.25-.75z"/></svg></span><h3>Generating AI Documents</h3><p>After completing your prompt, click "Generate with AI" to send it to Claude. Review, copy, or save the generated document to your library.</p></div>
       <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B08000" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span><h3>Using My Library</h3><p>All saved prompts appear in My Library. Search by keyword, filter by type, and reopen any prompt to regenerate or copy it at any time.</p></div>
-      <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></span><h3>Admin / District Mode</h3><p>Switch using "I am a:" toggle in the header. Activates an A.R.T. framework for district leadership and Perkins V documentation.</p></div>
+      <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></span><h3>Admin / District Mode</h3><p>Switch using "I am a:" toggle in the header. Activates an A.R.T. framework for district leadership and Perkins V documentation.</p></div>
       <div class="it-help-card" onclick="itNav('scaffolds')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A88C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span><h3>EL Supports &amp; Scaffolds</h3><p>Visit Supports page to see how SIOP, translanguaging, and differentiation are embedded. Use Step R to activate multilingual features.</p></div>
-      <div class="it-help-card" onclick="itNav('connect')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><h3>Contact &amp; Feedback</h3><p>Use Connect to rate IteraAI, share your story, or suggest a feature. Juliano reads every message personally and responds to feedback.</p></div>
+      <div class="it-help-card" onclick="itNav('connect')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><h3>Contact &amp; Feedback</h3><p>Use Connect to rate IteraAI, share your story, or suggest a feature. Juliano reads every message personally and responds to feedback.</p></div>
     </div>
     <div class="it-faq-title">Frequently Asked Questions</div>
     <div class="it-faq-item"><div class="it-faq-q" onclick="itFaq(this)">What is the P.A.R.T.S. Framework? <span class="it-faq-arr">▾</span></div><div class="it-faq-a">P.A.R.T.S. stands for Persona, Aim, Recipients, Theme, and Structure. It's IteraAI's guided 5-step prompt engineering framework that helps CTE educators build powerful, standards-aligned AI prompts. Each step builds on the last to produce a complete, contextual prompt ready for Claude AI.</div></div>
@@ -2570,11 +2570,11 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
     <h2 class="pg-sec">Everything a CTE educator serving<br><em>multilingual students needs</em></h2>
     <p class="pg-sec-sub">Built for classrooms where Spanish, Vietnamese, Tagalog, Somali, and dozens of other languages are spoken every day.</p>
     <div class="pg-feat-grid">
-      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="pg-feat-title">P.A.R.T.S. Prompt Builder</div><p class="pg-feat-desc">A guided 5-step framework — Persona, Aim, Recipients, Theme &amp; Style, Structure — that builds professional AI prompts in minutes.</p><span class="pg-feat-tag">Teacher Mode</span></div>
+      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="pg-feat-title">P.A.R.T.S. Prompt Builder</div><p class="pg-feat-desc">A guided 5-step framework — Persona, Aim, Recipients, Theme &amp; Style, Structure — that builds professional AI prompts in minutes.</p><span class="pg-feat-tag">Teacher Mode</span></div>
       <div class="pg-feat-card"><div class="pg-feat-icon" style="background:#FFF3ED;border:1.5px solid rgba(232,96,28,0.2)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8601C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div><div class="pg-feat-title">Multilingual Learner Engine</div><p class="pg-feat-desc">SIOP, SDAIE, translanguaging, sentence frames, ELD scaffolds, and 40+ home language options — baked into every prompt you generate.</p><span class="pg-feat-tag">EL Specialist</span></div>
-      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></div><div class="pg-feat-title">Admin &amp; District Mode</div><p class="pg-feat-desc">Generate Perkins V action plans, LCAP documents, board presentations, compliance reports, and strategic planning tools — all AI-powered.</p><span class="pg-feat-tag">Admin Mode</span></div>
+      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></div><div class="pg-feat-title">Admin &amp; District Mode</div><p class="pg-feat-desc">Generate Perkins V action plans, LCAP documents, board presentations, compliance reports, and strategic planning tools — all AI-powered.</p><span class="pg-feat-tag">Admin Mode</span></div>
       <div class="pg-feat-card"><div class="pg-feat-icon" style="background:#FDF3DC;border:1.5px solid rgba(240,180,41,0.25)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B08000" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div><div class="pg-feat-title">Spreadsheet Prompt Builder</div><p class="pg-feat-desc">Get complete, working spreadsheet code for EL monitoring, grade trackers, Perkins budgets, and more. Describe it — the AI builds it.</p><span class="pg-feat-tag">Data Tools</span></div>
-      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M19 3l.75 2.25L22 6l-2.25.75L19 9l-.75-2.25L16 6l2.25-.75z"/></svg></div><div class="pg-feat-title">Ask Carl — AI Coach</div><p class="pg-feat-desc">A CTE expert chatbot trained on Perkins V, 11 Elements of HQ CTE, LCAP, Title III, and CA ELD standards. Available 24/7.</p><span class="pg-feat-tag">Always On</span></div>
+      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M19 3l.75 2.25L22 6l-2.25.75L19 9l-.75-2.25L16 6l2.25-.75z"/></svg></div><div class="pg-feat-title">Ask Carl — AI Coach</div><p class="pg-feat-desc">A CTE expert chatbot trained on Perkins V, 11 Elements of HQ CTE, LCAP, Title III, and CA ELD standards. Available 24/7.</p><span class="pg-feat-tag">Always On</span></div>
       <div class="pg-feat-card"><div class="pg-feat-icon" style="background:#FFF3ED;border:1.5px solid rgba(232,96,28,0.2)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8601C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div><div class="pg-feat-title">Personal Prompt Library</div><p class="pg-feat-desc">Save, tag, search, and reuse your best prompts. Filter by sector, ELD level, or grade. Export your entire library anytime.</p><span class="pg-feat-tag">All Plans</span></div>
     </div>
   </div>
@@ -2872,7 +2872,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 
 <!-- STEP 0 — PERSONA -->
 <div class="sp active" id="step-0">
-<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="ch-text"><h2>P — Persona <span class="hbtn" onclick="showTT('persona')">?</span></h2><p>Tell the AI who you are — your role, experience level, and teaching context.</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="ch-text"><h2>P — Persona <span class="hbtn" onclick="showTT('persona')">?</span></h2><p>Tell the AI who you are — your role, experience level, and teaching context.</p></div></div>
 <div class="cb">
   <div class="fr"><label>Your Role <span class="req">*</span></label>
     <select id="persona-sel" onchange="updatePersona()">
@@ -3205,7 +3205,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 
 <!-- STEP 3 — THEME -->
 <div class="sp" id="step-3">
-<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="12,2 2,7 12,12 22,7"/><polyline points="2,17 12,22 22,17"/><polyline points="2,12 12,17 22,12"/></svg></div><div class="ch-text"><h2>T — Theme <span class="hbtn" onclick="showTT('theme')">?</span></h2><p>Define the instructional style, pedagogical approach, and ML/EL strategies to embed.</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="12,2 2,7 12,12 22,7"/><polyline points="2,17 12,22 22,17"/><polyline points="2,12 12,17 22,12"/></svg></div><div class="ch-text"><h2>T — Theme <span class="hbtn" onclick="showTT('theme')">?</span></h2><p>Define the instructional style, pedagogical approach, and ML/EL strategies to embed.</p></div></div>
 <div class="cb">
   <div class="fr"><label>Instructional Approach <span class="hint">select all that reflect your goals</span></label>
     <div class="cg">
@@ -3246,7 +3246,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
   <div class="fr" style="margin-top:14px"><label>Additional Style Notes <span class="hint">optional</span></label>
     <textarea id="theme-notes" placeholder="e.g. I want activities that honor students' immigrant identities. Use real industry job titles and authentic workplace scenarios that reflect our community..." oninput="rebuildPrompt()"></textarea>
   </div>
-  <button class="gbtn" style="background:linear-gradient(135deg,#3d2460,#5c3d8f)" onclick="goToStep(4)">Next: Define Structure →</button>
+  <button class="gbtn" style="background:linear-gradient(135deg,#3d2460,#8B6FD4)" onclick="goToStep(4)">Next: Define Structure →</button>
 </div></div>
 </div>
 
@@ -3702,7 +3702,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 
 <!-- ADMIN STEP 0 — PURPOSE -->
 <div class="asp active" id="astep-0">
-<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6741D9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></div><div class="ch-text"><h2>P — Purpose: Your Leadership Role <span class="hbtn" onclick="showTT('admin_purpose')">?</span></h2><p>Tell the AI who you are and what kind of leader you are in your district or school system.</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></div><div class="ch-text"><h2>P — Purpose: Your Leadership Role <span class="hbtn" onclick="showTT('admin_purpose')">?</span></h2><p>Tell the AI who you are and what kind of leader you are in your district or school system.</p></div></div>
 <div class="cb">
   <div class="fr"><label>Your Leadership Role <span class="req">*</span></label>
     <select id="a-role" onchange="handleCustomOrSel('a-role','a-role-custom','a-role-custom-row');aRebuild()">
@@ -3762,7 +3762,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
       <input type="text" id="a-goal-custom" placeholder="Describe what you need the AI to create..." oninput="aRebuild()">
     </div>
   </div>
-  <button class="gbtn" style="background:linear-gradient(135deg,#3d2460,#5c3d8f)" onclick="goToAdminStep(1)">Next: Define Audience →</button>
+  <button class="gbtn" style="background:linear-gradient(135deg,#3d2460,#8B6FD4)" onclick="goToAdminStep(1)">Next: Define Audience →</button>
 </div></div>
 </div>
 
@@ -5003,7 +5003,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 <!-- ═══ ADD STUDENT MODAL ═══ -->
 <div id="cm-add-student-modal" style="display:none;position:fixed;inset:0;background:rgba(26,26,46,.52);z-index:9100;align-items:center;justify-content:center;padding:20px">
   <div style="background:white;border-radius:18px;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.22);overflow:hidden;animation:popIn .2s ease">
-    <div style="background:linear-gradient(135deg,#5c3d8f,#7b52ab);padding:18px 22px;display:flex;align-items:center;justify-content:space-between">
+    <div style="background:linear-gradient(135deg,#8B6FD4,#B09AE8);padding:18px 22px;display:flex;align-items:center;justify-content:space-between">
       <div>
         <h3 style="color:white;font-family:var(--font-sans);font-size:17px;font-weight:700;letter-spacing:-0.01em">Add Student</h3>
         <div id="cm-add-student-class-label" style="color:rgba(255,255,255,.75);font-size:12px;margin-top:2px"></div>
@@ -5055,7 +5055,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
       </div>
       <div style="display:flex;gap:10px;margin-top:18px">
         <button onclick="cmCloseAddStudentModal()" style="flex:1;padding:11px;background:white;border:1.5px solid var(--border);border-radius:10px;font-family:var(--font-sans);font-size:14px;color:var(--muted);cursor:pointer">Cancel</button>
-        <button onclick="cmSubmitAddStudent()" style="flex:2;padding:11px;background:linear-gradient(135deg,#5c3d8f,#7b52ab);color:white;border:none;border-radius:10px;font-family:var(--font-sans);font-size:14px;font-weight:700;cursor:pointer">Add to Roster →</button>
+        <button onclick="cmSubmitAddStudent()" style="flex:2;padding:11px;background:linear-gradient(135deg,#8B6FD4,#B09AE8);color:white;border:none;border-radius:10px;font-family:var(--font-sans);font-size:14px;font-weight:700;cursor:pointer">Add to Roster →</button>
       </div>
     </div>
   </div>
@@ -7079,12 +7079,12 @@ function printDocumentAsPDF(title, text){
     '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">' +
     '<style>' +
     '* { box-sizing: border-box; margin: 0; padding: 0; }' +
-    'body { font-family: "DM Sans", sans-serif; font-size: 13px; line-height: 1.8; color: #0D0A1E; padding: 48px 56px; max-width: 760px; margin: 0 auto; }' +
-    '.doc-header { border-bottom: 3px solid #6741D9; padding-bottom: 16px; margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }' +
-    '.doc-brand { font-family: "Outfit", sans-serif; font-size: 13px; font-weight: 700; color: #6741D9; letter-spacing: 0.04em; text-transform: uppercase; }' +
+    'body { font-family: "DM Sans", sans-serif; font-size: 13px; line-height: 1.8; color: #3D3272; padding: 48px 56px; max-width: 760px; margin: 0 auto; }' +
+    '.doc-header { border-bottom: 3px solid #8B6FD4; padding-bottom: 16px; margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }' +
+    '.doc-brand { font-family: "Outfit", sans-serif; font-size: 13px; font-weight: 700; color: #8B6FD4; letter-spacing: 0.04em; text-transform: uppercase; }' +
     '.doc-date { font-size: 11px; color: #64607A; margin-top: 3px; }' +
-    'h2 { font-family: "Outfit", sans-serif; font-size: 17px; font-weight: 700; color: #0D0A1E; margin: 22px 0 7px; padding-bottom: 5px; border-bottom: 1.5px solid #E2DCFC; letter-spacing: -0.015em; }' +
-    'h3 { font-family: "Outfit", sans-serif; font-size: 14px; font-weight: 700; color: #0D0A1E; margin: 18px 0 5px; }' +
+    'h2 { font-family: "Outfit", sans-serif; font-size: 17px; font-weight: 700; color: #3D3272; margin: 22px 0 7px; padding-bottom: 5px; border-bottom: 1.5px solid #E2DCFC; letter-spacing: -0.015em; }' +
+    'h3 { font-family: "Outfit", sans-serif; font-size: 14px; font-weight: 700; color: #3D3272; margin: 18px 0 5px; }' +
     'h4 { font-size: 10px; font-weight: 700; color: #64607A; text-transform: uppercase; letter-spacing: 0.1em; margin: 14px 0 4px; }' +
     'strong { font-weight: 600; }' +
     'hr { border: none; border-top: 1px solid #E2DCFC; margin: 16px 0; }' +
@@ -8814,7 +8814,7 @@ function ikLoadDashboard() {
         var pct = Math.round((s[1] / sMax) * 100);
         return '<div class="kb-strat-bar">' +
           '<div class="kb-strat-label">' + s[0] + '</div>' +
-          '<div class="kb-strat-track"><div class="kb-strat-fill" style="width:' + pct + '%;background:linear-gradient(90deg,var(--purple),#7b52ab)"></div></div>' +
+          '<div class="kb-strat-track"><div class="kb-strat-fill" style="width:' + pct + '%;background:linear-gradient(90deg,var(--purple),#B09AE8)"></div></div>' +
           '<div style="font-size:11px;color:var(--muted);min-width:24px;text-align:right">' + s[1] + '</div>' +
           '</div>';
       }).join('');
@@ -9527,7 +9527,7 @@ function cmRenderDashboard() {
 
 function cmClassRowHTML(cls) {
   const count = (cmStore.rosters[cls.id] || []).length;
-  const colors = ['#00C9A7','#e8601c','#5c3d8f','#FFB627','#1976d2','#00897b'];
+  const colors = ['#00C9A7','#e8601c','#8B6FD4','#FFB627','#1976d2','#00897b'];
   const color = colors[Math.abs(cls.code.charCodeAt(0)) % colors.length];
   return `
     <div style="display:flex;align-items:center;gap:14px;padding:14px 4px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;border-radius:8px" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''" onclick="cmOpenRoster('${cls.id}')">
@@ -9557,7 +9557,7 @@ function cmRenderClassesTab() {
     return;
   }
   empty.style.display = 'none';
-  const colors = ['#00C9A7','#e8601c','#5c3d8f','#FFB627','#1976d2','#00897b'];
+  const colors = ['#00C9A7','#e8601c','#8B6FD4','#FFB627','#1976d2','#00897b'];
   grid.innerHTML = classes.map(cls => {
     const count = (cmStore.rosters[cls.id] || []).length;
     const color = colors[Math.abs(cls.code.charCodeAt(0)) % colors.length];
