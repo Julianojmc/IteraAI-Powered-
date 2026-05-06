@@ -1,6 +1,7 @@
 {
-  "rewrites": [
-    { "source": "/api/claude", "destination": "/api/claude" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "src": "/api/claude", "dest": "/api/claude" },
+    { "src": "/iteraai-crm", "dest": "/iteraai-crm.html" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
