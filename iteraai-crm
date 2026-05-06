@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IteraAI CRM</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1630;--ink2:#3d3760;--muted:#7a75a0;--border:#e4e1f5;
+  --bg:#f5f3fd;--white:#ffffff;--purple:#7c5cbf;--purple-d:#5a3fa0;
+  --purple-l:#ede8fa;--teal:#00C9A7;--teal-d:#00a88c;--teal-l:#e0faf5;
+  --gold:#f0a500;--gold-l:#fff8e1;--red:#e05252;--red-l:#fdeaea;
+  --green:#2ecc87;--green-l:#e6faf3;--orange:#f07050;--orange-l:#fff0ec;
+  --shadow:0 2px 16px rgba(100,80,180,.10);--shadow-lg:0 8px 40px rgba(100,80,180,.16);
+  --radius:14px;--sidebar-w:220px;--font:'Outfit',sans-serif;--mono:'DM Mono',monospace;
+}
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--ink)}
+
+/* LOGIN */
+#crm-login{position:fixed;inset:0;background:linear-gradient(135deg,#1a1630 0%,#2d1f6e 50%,#4a3a9a 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.15);border-radius:24px;padding:48px 44px;width:100%;max-width:400px;backdrop-filter:blur(20px);text-align:center}
+.login-logo{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#00C9A7;margin-bottom:8px}
+.login-title{font-size:28px;font-weight:800;color:white;letter-spacing:-.03em;margin-bottom:6px}
+.login-sub{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:32px}
+.login-input{width:100%;padding:13px 16px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;color:white;font-size:15px;font-family:var(--font);outline:none;margin-bottom:12px;transition:border-color .2s}
+.login-input::placeholder{color:rgba(255,255,255,.35)}
+.login-input:focus{border-color:#00C9A7}
+.login-btn{width:100%;padding:13px;background:#00C9A7;color:#0d2e28;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer}
+.login-btn:hover{background:#00a88c}
+.login-err{color:#ff8080;font-size:13px;margin-top:10px;display:none}
+
+/* APP */
+#crm-app{display:none;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.crm-sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--ink);display:flex;flex-direction:column;z-index:100}
+.crm-sidebar-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.wordmark{font-size:17px;font-weight:800;color:white;letter-spacing:-.02em}
+.wordmark span{color:#00C9A7}
+.crm-badge-sub{display:inline-block;margin-top:4px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.crm-nav{flex:1;padding:12px 10px;overflow-y:auto}
+.crm-nav-section{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:14px 10px 6px}
+.crm-nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;background:none;border:none;border-radius:10px;color:rgba(255,255,255,.6);font-size:13.5px;font-weight:500;font-family:var(--font);cursor:pointer;text-align:left;transition:all .15s;margin-bottom:2px}
+.crm-nav-btn:hover{background:rgba(255,255,255,.07);color:white}
+.crm-nav-btn.active{background:var(--purple);color:white}
+.crm-sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.08);font-size:11.5px;color:rgba(255,255,255,.3)}
+
+/* MAIN */
+.crm-main{margin-left:var(--sidebar-w);height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.crm-topbar{position:sticky;top:0;background:rgba(245,243,253,.95);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;z-index:50}
+.crm-topbar-title{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+.crm-topbar-actions{display:flex;gap:10px;align-items:center}
+.crm-content{padding:28px;flex:1}
+
+/* PANELS */
+.crm-panel{display:none}
+.crm-panel.active{display:block}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:20px;border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.stat-val{font-size:34px;font-weight:900;letter-spacing:-.04em;color:var(--purple);line-height:1}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:5px;font-weight:500}
+
+/* CARDS */
+.crm-card{background:var(--white);border-radius:var(--radius);border:1.5px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}
+.crm-card-hdr{padding:16px 20px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.crm-card-title{font-size:14px;font-weight:700;color:var(--ink)}
+.crm-card-body{padding:20px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--purple);color:white}
+.btn-primary:hover{background:var(--purple-d);transform:translateY(-1px)}
+.btn-teal{background:var(--teal);color:#0d2e28}
+.btn-teal:hover{background:var(--teal-d)}
+.btn-ghost{background:var(--purple-l);color:var(--purple-d)}
+.btn-ghost:hover{background:var(--border)}
+.btn-danger{background:var(--red-l);color:var(--red)}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:7px}
+
+/* TABLE */
+.crm-table{width:100%;border-collapse:collapse;font-size:13px}
+.crm-table th{text-align:left;padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px solid var(--border);background:var(--bg)}
+.crm-table td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:middle}
+.crm-table tr:last-child td{border-bottom:none}
+.crm-table tr:hover td{background:var(--bg);cursor:pointer}
+
+/* FILTERS */
+.crm-filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.crm-search{flex:1;min-width:200px;padding:9px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13.5px;font-family:var(--font);background:var(--white);color:var(--ink);outline:none}
+.crm-search:focus{border-color:var(--purple)}
+.crm-select{padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:var(--font);background:var(--white);color:var(--ink);outline:none;cursor:pointer}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-lead{background:var(--gold-l);color:#a07000}
+.badge-pilot{background:var(--purple-l);color:var(--purple-d)}
+.badge-active{background:var(--green-l);color:#1a8a5a}
+.badge-churned{background:var(--red-l);color:var(--red)}
+.badge-none{background:var(--bg);color:var(--muted)}
+.badge-gen{background:var(--green-l);color:#1a8a5a}
+.badge-stream{background:var(--purple-l);color:var(--purple-d)}
+
+/* DRAWER */
+#contact-drawer{position:fixed;top:0;right:-520px;bottom:0;width:500px;background:var(--white);border-left:1.5px solid var(--border);box-shadow:-8px 0 40px rgba(0,0,0,.12);z-index:200;transition:right .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+#contact-drawer.open{right:0}
+.drawer-hdr{padding:20px 22px 16px;border-bottom:1.5px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between}
+.drawer-body{flex:1;overflow-y:auto;padding:20px 22px}
+.drawer-close{background:var(--bg);border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.drawer-avatar{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--purple),var(--purple-d));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:white;margin-bottom:10px}
+.drawer-name{font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+.drawer-meta{font-size:13px;color:var(--muted);margin-top:2px}
+.drawer-section{margin-bottom:20px}
+.drawer-section-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.drawer-field{display:flex;gap:8px;margin-bottom:8px;font-size:13px}
+.drawer-field-lbl{color:var(--muted);min-width:90px;flex-shrink:0}
+.drawer-field-val{color:var(--ink);font-weight:500}
+
+/* NOTES */
+.note-item{background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:13px;color:var(--ink);border-left:3px solid var(--purple)}
+.note-ts{font-size:11px;color:var(--muted);margin-top:6px}
+.note-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:var(--font);resize:vertical;min-height:72px;outline:none;color:var(--ink)}
+.note-input:focus{border-color:var(--purple)}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:var(--purple-l);color:var(--purple-d);font-size:11.5px;font-weight:600;margin:2px}
+.tag-remove{cursor:pointer;font-size:13px;opacity:.6;background:none;border:none;color:inherit;padding:0}
+.tag-remove:hover{opacity:1}
+.tag-input{padding:4px 10px;border:1.5px dashed var(--border);border-radius:20px;font-size:12px;font-family:var(--font);outline:none;width:100px;color:var(--ink);background:transparent}
+.tag-input:focus{border-color:var(--purple)}
+
+/* KANBAN */
+.kanban-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kanban-col{background:var(--bg);border-radius:var(--radius);padding:14px;min-height:400px;border:1.5px solid var(--border)}
+.kanban-col-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.kanban-col-title{font-size:13px;font-weight:700;color:var(--ink)}
+.kanban-count{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--muted)}
+.kanban-card{background:var(--white);border-radius:10px;padding:12px 14px;margin-bottom:10px;border:1.5px solid var(--border);cursor:pointer;box-shadow:var(--shadow);transition:all .15s}
+.kanban-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.kanban-card-name{font-size:13.5px;font-weight:700;color:var(--ink)}
+.kanban-card-org{font-size:12px;color:var(--muted);margin-top:2px}
+.kanban-card-date{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* FORMS */
+.form-label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px;display:block;letter-spacing:.04em;text-transform:uppercase}
+.form-input,.form-select,.form-textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:13.5px;font-family:var(--font);color:var(--ink);outline:none;background:var(--white)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple)}
+.form-textarea{resize:vertical;min-height:120px}
+.outreach-preview{background:var(--bg);border-radius:12px;padding:16px 18px;border:1.5px solid var(--border);font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-wrap;min-height:120px}
+
+/* BACKDROP */
+.drawer-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:190}
+.drawer-backdrop.open{display:block}
+
+/* TOAST */
+#crm-toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:white;padding:12px 20px;border-radius:12px;font-size:13.5px;font-weight:500;box-shadow:var(--shadow-lg);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1)}
+#crm-toast.show{transform:translateY(0);opacity:1}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="crm-login">
+  <div class="login-box">
+    <div class="login-logo">IteraAI</div>
+    <div class="login-title">CRM Dashboard</div>
+    <div class="login-sub">Restricted access · Admin only</div>
+    <input class="login-input" type="password" id="login-pw" placeholder="Enter password">
+    <button class="login-btn" onclick="crmAuth()">Access Dashboard</button>
+    <div class="login-err" id="login-err">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="crm-app">
+  <aside class="crm-sidebar">
+    <div class="crm-sidebar-logo">
+      <div class="wordmark">Itera<span>AI</span></div>
+      <div class="crm-badge-sub">CRM · Admin</div>
+    </div>
+    <nav class="crm-nav">
+      <div class="crm-nav-section">Overview</div>
+      <button class="crm-nav-btn active" onclick="crmNav('dashboard')" id="nav-dashboard">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <div class="crm-nav-section">Contacts</div>
+      <button class="crm-nav-btn" onclick="crmNav('contacts')" id="nav-contacts">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        All Contacts
+      </button>
+      <button class="crm-nav-btn" onclick="crmNav('pipeline')" id="nav-pipeline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M22 12H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
+        Pipeline
+      </button>
+      <div class="crm-nav-section">Engage</div>
+      <button class="crm-nav-btn" onclick="crmNav('outreach')" id="nav-outreach">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Outreach
+      </button>
+      <button class="crm-nav-btn" onclick="crmNav('activity')" id="nav-activity">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Activity Log
+      </button>
+    </nav>
+    <div class="crm-sidebar-footer">IteraAI CRM v1.0</div>
+  </aside>
+
+  <main class="crm-main">
+    <div class="crm-topbar">
+      <div class="crm-topbar-title" id="crm-page-title">Dashboard</div>
+      <div class="crm-topbar-actions">
+        <button class="btn btn-ghost btn-sm" onclick="loadAll()">↻ Refresh</button>
+        <button class="btn btn-danger btn-sm" onclick="crmLogout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="crm-content">
+
+      <!-- DASHBOARD -->
+      <div class="crm-panel active" id="panel-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-val" id="d-total">—</div><div class="stat-lbl">Total Contacts</div></div>
+          <div class="stat-card"><div class="stat-val" id="d-leads" style="color:var(--gold)">—</div><div class="stat-lbl">Leads</div></div>
+          <div class="stat-card"><div class="stat-val" id="d-pilots" style="color:var(--purple)">—</div><div class="stat-lbl">Pilots</div></div>
+          <div class="stat-card"><div class="stat-val" id="d-active" style="color:var(--green)">—</div><div class="stat-lbl">Active</div></div>
+          <div class="stat-card"><div class="stat-val" id="d-gens" style="color:var(--teal)">—</div><div class="stat-lbl">AI Generations</div></div>
+          <div class="stat-card"><div class="stat-val" id="d-tokens" style="color:var(--teal)">—</div><div class="stat-lbl">Tokens Used</div></div>
+        </div>
+        <div class="two-col">
+          <div class="crm-card">
+            <div class="crm-card-hdr">
+              <div class="crm-card-title">Recent Registrations</div>
+              <button class="btn btn-ghost btn-sm" onclick="crmNav('contacts')">View all</button>
+            </div>
+            <div class="crm-card-body" style="padding:0">
+              <table class="crm-table"><thead><tr><th>Name</th><th>School</th><th>Date</th><th>Status</th></tr></thead><tbody id="dash-recent-body"></tbody></table>
+            </div>
+          </div>
+          <div class="crm-card">
+            <div class="crm-card-hdr"><div class="crm-card-title">Recent API Activity</div></div>
+            <div class="crm-card-body" style="padding:0">
+              <table class="crm-table"><thead><tr><th>Time</th><th>Event</th><th>Tokens</th><th>Status</th></tr></thead><tbody id="dash-activity-body"></tbody></table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACTS -->
+      <div class="crm-panel" id="panel-contacts">
+        <div class="crm-filters">
+          <input class="crm-search" id="contacts-search" placeholder="Search name, email, school..." oninput="contactsFilter()">
+          <select class="crm-select" id="contacts-status-filter" onchange="contactsFilter()">
+            <option value="">All Statuses</option>
+            <option value="lead">Lead</option>
+            <option value="pilot">Pilot</option>
+            <option value="active">Active</option>
+            <option value="churned">Churned</option>
+          </select>
+          <button class="btn btn-teal btn-sm" onclick="exportCSV()">Export CSV</button>
+        </div>
+        <div class="crm-card">
+          <div class="crm-card-body" style="padding:0">
+            <table class="crm-table">
+              <thead><tr><th>Name</th><th>Email</th><th>School/Org</th><th>Role</th><th>Status</th><th>Signed Up</th><th>Tags</th></tr></thead>
+              <tbody id="contacts-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIPELINE -->
+      <div class="crm-panel" id="panel-pipeline">
+        <div class="kanban-grid">
+          <div class="kanban-col">
+            <div class="kanban-col-hdr"><span class="kanban-col-title">Lead</span><span class="kanban-count" id="k-count-lead">0</span></div>
+            <div id="k-lead"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-hdr"><span class="kanban-col-title">Pilot</span><span class="kanban-count" id="k-count-pilot">0</span></div>
+            <div id="k-pilot"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-hdr"><span class="kanban-col-title">Active</span><span class="kanban-count" id="k-count-active">0</span></div>
+            <div id="k-active"></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-hdr"><span class="kanban-col-title">Churned</span><span class="kanban-count" id="k-count-churned">0</span></div>
+            <div id="k-churned"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OUTREACH -->
+      <div class="crm-panel" id="panel-outreach">
+        <div class="two-col">
+          <div class="crm-card">
+            <div class="crm-card-hdr"><div class="crm-card-title">Compose Email</div></div>
+            <div class="crm-card-body" style="display:grid;gap:14px">
+              <div>
+                <label class="form-label">Recipient Segment</label>
+                <select class="form-select" id="out-segment" onchange="outToggleSingle();outUpdatePreview()">
+                  <option value="all">All Contacts</option>
+                  <option value="lead">Leads only</option>
+                  <option value="pilot">Pilots only</option>
+                  <option value="active">Active only</option>
+                  <option value="single">Single contact</option>
+                </select>
+              </div>
+              <div id="out-single-wrap" style="display:none">
+                <label class="form-label">Recipient Email</label>
+                <input class="form-input" id="out-single-email" placeholder="educator@school.edu" oninput="outUpdatePreview()">
+              </div>
+              <div>
+                <label class="form-label">Subject</label>
+                <input class="form-input" id="out-subject" placeholder="Subject line" oninput="outUpdatePreview()">
+              </div>
+              <div>
+                <label class="form-label">Message</label>
+                <textarea class="form-textarea" id="out-message" style="min-height:160px" placeholder="Write your message..." oninput="outUpdatePreview()"></textarea>
+              </div>
+              <div>
+                <label class="form-label">Reply-To</label>
+                <input class="form-input" id="out-reply" value="jmj.juliano@gmail.com">
+              </div>
+              <button class="btn btn-teal" onclick="outSend()" id="out-send-btn">Send Email</button>
+              <div id="out-status" style="font-size:13px;color:var(--muted)"></div>
+            </div>
+          </div>
+          <div class="crm-card">
+            <div class="crm-card-hdr"><div class="crm-card-title">Preview</div></div>
+            <div class="crm-card-body">
+              <div style="margin-bottom:12px;font-size:13px;color:var(--muted);line-height:1.8">
+                <strong>To:</strong> <span id="out-preview-to">—</span><br>
+                <strong>Subject:</strong> <span id="out-preview-subject">—</span>
+              </div>
+              <div class="outreach-preview" id="out-preview-body">Your message will appear here...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTIVITY -->
+      <div class="crm-panel" id="panel-activity">
+        <div class="crm-card">
+          <div class="crm-card-hdr"><div class="crm-card-title">Full Activity Log</div></div>
+          <div class="crm-card-body" style="padding:0;overflow-x:auto">
+            <table class="crm-table">
+              <thead><tr><th>Time</th><th>Event</th><th>Model</th><th>Input Tokens</th><th>Output Tokens</th><th>Status</th></tr></thead>
+              <tbody id="activity-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawer()"></div>
+
+<!-- CONTACT DRAWER -->
+<div id="contact-drawer">
+  <div class="drawer-hdr">
+    <div>
+      <div class="drawer-avatar" id="d-avatar">—</div>
+      <div class="drawer-name" id="d-name">—</div>
+      <div class="drawer-meta" id="d-meta">—</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">x</button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-section">
+      <div class="drawer-section-title">Pipeline Status</div>
+      <select class="form-select" id="d-status-sel" onchange="saveContactStatus()" style="max-width:200px">
+        <option value="lead">Lead</option>
+        <option value="pilot">Pilot</option>
+        <option value="active">Active</option>
+        <option value="churned">Churned</option>
+      </select>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">Contact Info</div>
+      <div class="drawer-field"><span class="drawer-field-lbl">Email</span><span class="drawer-field-val" id="d-email">—</span></div>
+      <div class="drawer-field"><span class="drawer-field-lbl">Organization</span><span class="drawer-field-val" id="d-org">—</span></div>
+      <div class="drawer-field"><span class="drawer-field-lbl">Role</span><span class="drawer-field-val" id="d-role">—</span></div>
+      <div class="drawer-field"><span class="drawer-field-lbl">Signed Up</span><span class="drawer-field-val" id="d-signed">—</span></div>
+      <div class="drawer-field"><span class="drawer-field-lbl">Source</span><span class="drawer-field-val" id="d-source">—</span></div>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">Tags</div>
+      <div id="d-tags-wrap" style="margin-bottom:8px"></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="tag-input" id="d-tag-input" placeholder="Add tag" onkeydown="if(event.key==='Enter'){event.preventDefault();addTag()}">
+        <button class="btn btn-ghost btn-sm" onclick="addTag()">Add</button>
+      </div>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">Quick Email</div>
+      <input class="form-input" id="d-email-subject" placeholder="Subject" style="margin-bottom:8px">
+      <textarea class="form-textarea" id="d-email-body" placeholder="Message..." style="min-height:80px;margin-bottom:8px"></textarea>
+      <button class="btn btn-teal btn-sm" onclick="sendQuickEmail()">Send Email</button>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-section-title">Notes</div>
+      <div id="d-notes-list" style="margin-bottom:10px"></div>
+      <textarea class="note-input" id="d-note-input" placeholder="Add a note..."></textarea>
+      <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="addNote()">Save Note</button>
+    </div>
+  </div>
+</div>
+
+<div id="crm-toast"></div>
+
+<script>
+const CRM_PASSWORD  = 'Iteraaicrm2026';
+const SUPA_URL      = 'https://igesutfxmzidtudbbltb.supabase.co';
+const SUPA_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlnZXN1dGZ4bXppZHR1ZGJibHRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4OTE2OTEsImV4cCI6MjA4ODQ2NzY5MX0.GkpR1Lwz1nbbkCUVu62yo_QBFloMUMSw-BwxpUd4DsU';
+const EMAILJS_PK    = '8G-ODFfDC27VFK4lj';
+const EMAILJS_SVC   = 'service_2w7f3w9';
+const EMAILJS_TPL   = 'template_fhqyqcs';
+
+let sb, _allContacts=[], _contactMeta={}, _currentContact=null;
+
+// AUTH
+function crmAuth(){
+  if(document.getElementById('login-pw').value===CRM_PASSWORD){
+    document.getElementById('crm-login').style.display='none';
+    document.getElementById('crm-app').style.display='block';
+    sb=supabase.createClient(SUPA_URL,SUPA_ANON_KEY);
+    emailjs.init({publicKey:EMAILJS_PK});
+    loadAll();
+  } else {
+    document.getElementById('login-err').style.display='block';
+    document.getElementById('login-pw').value='';
+  }
+}
+document.getElementById('login-pw').addEventListener('keydown',e=>{if(e.key==='Enter')crmAuth()});
+function crmLogout(){
+  document.getElementById('crm-login').style.display='flex';
+  document.getElementById('crm-app').style.display='none';
+}
+
+// NAV
+const PAGE_TITLES={dashboard:'Dashboard',contacts:'All Contacts',pipeline:'Pipeline',outreach:'Outreach',activity:'Activity Log'};
+function crmNav(page){
+  document.querySelectorAll('.crm-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.crm-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+page).classList.add('active');
+  const nb=document.getElementById('nav-'+page);
+  if(nb)nb.classList.add('active');
+  document.getElementById('crm-page-title').textContent=PAGE_TITLES[page]||page;
+}
+
+// LOAD
+async function loadAll(){
+  await Promise.all([loadContacts(),loadLogs()]);
+}
+
+async function loadContacts(){
+  const{data,error}=await sb.from('iteraai_registrations').select('*').order('created_at',{ascending:false});
+  if(error){console.warn(error);return;}
+  _allContacts=data||[];
+  if(_allContacts.length){
+    const ids=_allContacts.map(c=>c.id);
+    const{data:meta}=await sb.from('iteraai_crm_meta').select('*').in('contact_id',ids);
+    _contactMeta={};
+    (meta||[]).forEach(m=>{_contactMeta[m.contact_id]=m;});
+  }
+  renderDashStats();
+  renderDashContacts();
+  renderContactsTable(_allContacts);
+  renderPipeline();
+}
+
+async function loadLogs(){
+  const{data}=await sb.from('iteraai_logs').select('*').order('ts',{ascending:false}).limit(100);
+  const logs=data||[];
+  const gens=logs.filter(l=>l.event&&l.event.includes('generation')).length;
+  const tokens=logs.reduce((s,l)=>s+(l.input_tokens||0)+(l.output_tokens||0),0);
+  document.getElementById('d-gens').textContent=gens;
+  document.getElementById('d-tokens').textContent=tokens>999?(tokens/1000).toFixed(1)+'k':tokens;
+  renderDashActivity(logs);
+  renderActivityFull(logs);
+}
+
+// DASHBOARD
+function renderDashStats(){
+  const total=_allContacts.length;
+  const leads=_allContacts.filter(c=>getStatus(c.id)==='lead').length;
+  const pilots=_allContacts.filter(c=>getStatus(c.id)==='pilot').length;
+  const actives=_allContacts.filter(c=>getStatus(c.id)==='active').length;
+  document.getElementById('d-total').textContent=total;
+  document.getElementById('d-leads').textContent=leads;
+  document.getElementById('d-pilots').textContent=pilots;
+  document.getElementById('d-active').textContent=actives;
+}
+function renderDashContacts(){
+  document.getElementById('dash-recent-body').innerHTML=_allContacts.slice(0,8).map(c=>`
+    <tr onclick="openDrawer('${c.id}')">
+      <td><strong>${c.first_name} ${c.last_name}</strong></td>
+      <td>${c.organization||'—'}</td>
+      <td>${fmtDate(c.created_at)}</td>
+      <td>${statusBadge(getStatus(c.id))}</td>
+    </tr>`).join('');
+}
+function renderDashActivity(logs){
+  document.getElementById('dash-activity-body').innerHTML=logs.slice(0,10).map(l=>`
+    <tr>
+      <td>${fmtDateTime(l.ts)}</td>
+      <td><span class="badge ${eventBadge(l.event)}">${l.event||'—'}</span></td>
+      <td>${((l.input_tokens||0)+(l.output_tokens||0)).toLocaleString()}</td>
+      <td style="color:${l.status>=400?'var(--red)':'var(--green)'}">${l.status||'—'}</td>
+    </tr>`).join('');
+}
+
+// CONTACTS TABLE
+function renderContactsTable(contacts){
+  const tbody=document.getElementById('contacts-body');
+  if(!contacts.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)">No contacts yet</td></tr>';return;}
+  tbody.innerHTML=contacts.map(c=>{
+    const meta=_contactMeta[c.id]||{};
+    const tags=(meta.tags||[]).map(t=>`<span class="tag" style="font-size:10px;padding:2px 7px">${t}</span>`).join('');
+    return`<tr onclick="openDrawer('${c.id}')">
+      <td><strong>${c.first_name} ${c.last_name}</strong></td>
+      <td style="font-size:12px;color:var(--muted)">${c.email}</td>
+      <td>${c.organization||'—'}</td>
+      <td>${c.role||'—'}</td>
+      <td>${statusBadge(meta.crm_status||'lead')}</td>
+      <td>${fmtDate(c.created_at)}</td>
+      <td>${tags||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+function contactsFilter(){
+  const q=document.getElementById('contacts-search').value.toLowerCase();
+  const st=document.getElementById('contacts-status-filter').value;
+  const filtered=_allContacts.filter(c=>{
+    const meta=_contactMeta[c.id]||{};
+    const matchQ=!q||[c.first_name,c.last_name,c.email,c.organization||''].join(' ').toLowerCase().includes(q);
+    const matchS=!st||(meta.crm_status||'lead')===st;
+    return matchQ&&matchS;
+  });
+  renderContactsTable(filtered);
+}
+
+// PIPELINE
+function renderPipeline(){
+  const cols={lead:[],pilot:[],active:[],churned:[]};
+  _allContacts.forEach(c=>{
+    const s=getStatus(c.id);
+    if(cols[s])cols[s].push(c); else cols.lead.push(c);
+  });
+  ['lead','pilot','active','churned'].forEach(col=>{
+    document.getElementById('k-count-'+col).textContent=cols[col].length;
+    document.getElementById('k-'+col).innerHTML=cols[col].map(c=>`
+      <div class="kanban-card" onclick="openDrawer('${c.id}')">
+        <div class="kanban-card-name">${c.first_name} ${c.last_name}</div>
+        <div class="kanban-card-org">${c.organization||c.email}</div>
+        <div class="kanban-card-date">${fmtDate(c.created_at)}</div>
+      </div>`).join('')||'<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">Empty</div>';
+  });
+}
+
+// ACTIVITY
+function renderActivityFull(logs){
+  document.getElementById('activity-body').innerHTML=logs.map(l=>`
+    <tr>
+      <td>${fmtDateTime(l.ts)}</td>
+      <td><span class="badge ${eventBadge(l.event)}">${l.event||'—'}</span></td>
+      <td style="font-size:12px;color:var(--muted)">${l.model||'—'}</td>
+      <td>${(l.input_tokens||0).toLocaleString()}</td>
+      <td>${(l.output_tokens||0).toLocaleString()}</td>
+      <td style="color:${l.status>=400?'var(--red)':'var(--green)'}">${l.status||'—'}</td>
+    </tr>`).join('');
+}
+
+// DRAWER
+function openDrawer(id){
+  const c=_allContacts.find(x=>x.id===id);
+  if(!c)return;
+  _currentContact=c;
+  const meta=_contactMeta[id]||{};
+  document.getElementById('d-avatar').textContent=((c.first_name[0]||'')+(c.last_name[0]||'')).toUpperCase();
+  document.getElementById('d-name').textContent=c.first_name+' '+c.last_name;
+  document.getElementById('d-meta').textContent=c.email+(c.organization?' · '+c.organization:'');
+  document.getElementById('d-email').textContent=c.email;
+  document.getElementById('d-org').textContent=c.organization||'—';
+  document.getElementById('d-role').textContent=c.role||'—';
+  document.getElementById('d-signed').textContent=fmtDate(c.created_at);
+  document.getElementById('d-source').textContent=c.source||'iteraai-landing';
+  document.getElementById('d-status-sel').value=meta.crm_status||'lead';
+  renderDrawerTags(meta.tags||[]);
+  renderDrawerNotes(meta.notes||[]);
+  document.getElementById('d-email-subject').value='';
+  document.getElementById('d-email-body').value='';
+  document.getElementById('contact-drawer').classList.add('open');
+  document.getElementById('drawer-backdrop').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('contact-drawer').classList.remove('open');
+  document.getElementById('drawer-backdrop').classList.remove('open');
+  _currentContact=null;
+}
+function renderDrawerTags(tags){
+  document.getElementById('d-tags-wrap').innerHTML=tags.map((t,i)=>
+    `<span class="tag">${t}<button class="tag-remove" onclick="removeTag(${i})">x</button></span>`).join('');
+}
+function renderDrawerNotes(notes){
+  const list=document.getElementById('d-notes-list');
+  if(!notes.length){list.innerHTML='<div style="color:var(--muted);font-size:13px">No notes yet</div>';return;}
+  list.innerHTML=[...notes].reverse().map(n=>`
+    <div class="note-item">${n.text}<div class="note-ts">${fmtDateTime(n.ts)}</div></div>`).join('');
+}
+
+// CONTACT META
+async function saveContactStatus(){
+  if(!_currentContact)return;
+  await upsertMeta(_currentContact.id,{crm_status:document.getElementById('d-status-sel').value});
+  toast('Status updated');renderPipeline();renderDashContacts();renderDashStats();
+}
+async function addTag(){
+  if(!_currentContact)return;
+  const input=document.getElementById('d-tag-input');
+  const tag=input.value.trim().replace(',','');
+  if(!tag)return;
+  const meta=_contactMeta[_currentContact.id]||{};
+  const tags=[...(meta.tags||[])];
+  if(!tags.includes(tag))tags.push(tag);
+  await upsertMeta(_currentContact.id,{tags});
+  renderDrawerTags(tags);input.value='';toast('Tag added');
+}
+async function removeTag(idx){
+  if(!_currentContact)return;
+  const meta=_contactMeta[_currentContact.id]||{};
+  const tags=[...(meta.tags||[])];
+  tags.splice(idx,1);
+  await upsertMeta(_currentContact.id,{tags});
+  renderDrawerTags(tags);toast('Tag removed');
+}
+async function addNote(){
+  if(!_currentContact)return;
+  const text=document.getElementById('d-note-input').value.trim();
+  if(!text)return;
+  const meta=_contactMeta[_currentContact.id]||{};
+  const notes=[...(meta.notes||[]),{text,ts:new Date().toISOString()}];
+  await upsertMeta(_currentContact.id,{notes});
+  renderDrawerNotes(notes);document.getElementById('d-note-input').value='';toast('Note saved');
+}
+async function upsertMeta(contactId,patch){
+  const existing=_contactMeta[contactId]||{contact_id:contactId};
+  const updated={...existing,...patch,contact_id:contactId};
+  _contactMeta[contactId]=updated;
+  await sb.from('iteraai_crm_meta').upsert([updated],{onConflict:'contact_id'});
+  renderContactsTable(_allContacts);
+}
+function getStatus(id){return(_contactMeta[id]||{}).crm_status||'lead';}
+
+// QUICK EMAIL
+async function sendQuickEmail(){
+  if(!_currentContact)return;
+  const subject=document.getElementById('d-email-subject').value.trim();
+  const body=document.getElementById('d-email-body').value.trim();
+  if(!subject||!body){toast('Subject and message required');return;}
+  try{
+    await emailjs.send(EMAILJS_SVC,EMAILJS_TPL,{
+      to_email:_currentContact.email,name:_currentContact.first_name,
+      subject,message:body,reply_to:'jmj.juliano@gmail.com'
+    });
+    toast('Email sent to '+_currentContact.email);
+    document.getElementById('d-email-subject').value='';
+    document.getElementById('d-email-body').value='';
+  }catch(e){toast('Email failed: '+(e.text||e.message||'unknown error'));}
+}
+
+// OUTREACH
+function outToggleSingle(){
+  document.getElementById('out-single-wrap').style.display=
+    document.getElementById('out-segment').value==='single'?'block':'none';
+}
+function outUpdatePreview(){
+  const seg=document.getElementById('out-segment').value;
+  const subject=document.getElementById('out-subject').value||'(no subject)';
+  const body=document.getElementById('out-message').value||'(no message)';
+  const single=document.getElementById('out-single-email').value;
+  let toLabel='';
+  if(seg==='single') toLabel=single||'single email';
+  else if(seg==='all') toLabel='All contacts ('+_allContacts.length+')';
+  else{const count=_allContacts.filter(c=>getStatus(c.id)===seg).length;toLabel=seg+' ('+count+')';}
+  document.getElementById('out-preview-to').textContent=toLabel;
+  document.getElementById('out-preview-subject').textContent=subject;
+  document.getElementById('out-preview-body').textContent=body;
+}
+async function outSend(){
+  const seg=document.getElementById('out-segment').value;
+  const subject=document.getElementById('out-subject').value.trim();
+  const body=document.getElementById('out-message').value.trim();
+  const reply=document.getElementById('out-reply').value.trim();
+  const single=document.getElementById('out-single-email').value.trim();
+  if(!subject||!body){toast('Subject and message required');return;}
+  let recipients=[];
+  if(seg==='single'){if(!single){toast('Enter a recipient email');return;}recipients=[{email:single,first_name:''}];}
+  else if(seg==='all') recipients=_allContacts;
+  else recipients=_allContacts.filter(c=>getStatus(c.id)===seg);
+  if(!recipients.length){toast('No contacts in this segment');return;}
+  const btn=document.getElementById('out-send-btn');
+  btn.textContent='Sending...';btn.disabled=true;
+  const statusEl=document.getElementById('out-status');
+  let sent=0,failed=0;
+  for(const r of recipients){
+    try{
+      await emailjs.send(EMAILJS_SVC,EMAILJS_TPL,{
+        to_email:r.email,name:r.first_name||'',subject,message:body,reply_to:reply
+      });
+      sent++;
+    }catch(e){failed++;}
+    statusEl.textContent='Sent: '+sent+' / Failed: '+failed+' of '+recipients.length;
+    await new Promise(r=>setTimeout(r,350));
+  }
+  btn.textContent='Send Email';btn.disabled=false;
+  toast('Done — '+sent+' sent, '+failed+' failed');
+}
+
+// EXPORT
+function exportCSV(){
+  const rows=[['First Name','Last Name','Email','Organization','Role','Status','Signed Up','Tags']];
+  _allContacts.forEach(c=>{
+    const meta=_contactMeta[c.id]||{};
+    rows.push([c.first_name,c.last_name,c.email,c.organization||'',c.role||'',
+      meta.crm_status||'lead',fmtDate(c.created_at),(meta.tags||[]).join('; ')]);
+  });
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='iteraai-contacts.csv';a.click();
+  URL.revokeObjectURL(url);toast('CSV exported');
+}
+
+// HELPERS
+function fmtDate(ts){if(!ts)return'—';return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function fmtDateTime(ts){if(!ts)return'—';return new Date(ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+function statusBadge(s){const m={lead:'badge-lead',pilot:'badge-pilot',active:'badge-active',churned:'badge-churned'};return'<span class="badge '+(m[s]||'badge-none')+'">'+(s||'lead')+'</span>';}
+function eventBadge(e){if(!e)return'badge-none';if(e.includes('stream'))return'badge-stream';if(e.includes('generation'))return'badge-gen';return'badge-none';}
+function toast(msg,ms=3000){const el=document.getElementById('crm-toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),ms);}
+</script>
+</body>
+</html>
