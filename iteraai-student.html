@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IteraAI Student Portal</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1630;--muted:#7a75a0;--border:#e4e1f5;--bg:#f5f3fd;
+  --white:#fff;--purple:#7c5cbf;--purple-d:#5a3fa0;--purple-l:#ede8fa;
+  --teal:#00C9A7;--teal-d:#00a88c;--teal-l:#e0faf5;
+  --gold:#f0a500;--gold-l:#fff8e1;--green:#2ecc87;--green-l:#e6faf3;
+  --orange:#f07050;--red:#e05252;--red-l:#fdeaea;
+  --shadow:0 2px 16px rgba(100,80,180,.10);
+  --shadow-lg:0 8px 40px rgba(100,80,180,.18);
+  --font:'Outfit',sans-serif;
+}
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--ink)}
+
+/* ── LOGIN ── */
+#st-login{position:fixed;inset:0;background:linear-gradient(160deg,#1a1630 0%,#2d1f6e 40%,#3d3290 70%,#5448a0 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.st-login-box{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:24px;padding:44px 40px;width:100%;max-width:420px;backdrop-filter:blur(20px)}
+.st-logo{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.st-logo svg{flex-shrink:0}
+.st-login-title{font-size:26px;font-weight:800;color:white;letter-spacing:-.03em;margin-bottom:4px}
+.st-login-sub{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:28px}
+.st-input{width:100%;padding:12px 16px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:11px;color:white;font-size:14px;font-family:var(--font);outline:none;margin-bottom:11px;transition:border-color .2s}
+.st-input::placeholder{color:rgba(255,255,255,.35)}
+.st-input:focus{border-color:var(--teal)}
+.st-login-btn{width:100%;padding:13px;background:var(--teal);color:#0d2e28;border:none;border-radius:11px;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;margin-top:4px;transition:background .2s}
+.st-login-btn:hover{background:var(--teal-d)}
+.st-login-err{color:#ff8080;font-size:13px;margin-top:8px;display:none}
+.st-lang-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.st-lang-btn{padding:5px 12px;border-radius:20px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);font-size:12px;font-family:var(--font);cursor:pointer;transition:all .15s}
+.st-lang-btn.active{background:var(--teal);border-color:var(--teal);color:#0d2e28;font-weight:700}
+
+/* ── APP ── */
+#st-app{display:none;min-height:100vh;max-width:780px;margin:0 auto;padding:24px 20px 60px}
+
+/* ── HEADER ── */
+.st-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:18px;border-bottom:1.5px solid var(--border)}
+.st-header-logo{font-size:16px;font-weight:800;color:var(--purple);letter-spacing:-.02em}
+.st-header-logo span{color:var(--teal)}
+.st-header-user{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.st-header-badge{background:var(--purple-l);color:var(--purple-d);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
+
+/* ── ASSIGNMENT PICKER ── */
+.st-section-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.st-asgn-card{background:var(--white);border-radius:16px;padding:20px;border:1.5px solid var(--border);box-shadow:var(--shadow);cursor:pointer;transition:all .18s;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.st-asgn-card:hover{border-color:var(--purple);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.st-asgn-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.st-asgn-meta{font-size:12.5px;color:var(--muted)}
+.st-asgn-arrow{color:var(--purple);font-size:20px;flex-shrink:0}
+.st-rigor-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-left:8px}
+.st-rigor-foundational{background:var(--teal-l);color:var(--teal-d)}
+.st-rigor-proficient{background:var(--purple-l);color:var(--purple-d)}
+.st-rigor-advanced{background:var(--gold-l);color:#a07000}
+
+/* ── LEARNING ASSISTANT ── */
+#st-assistant{display:none}
+
+/* Progress bar */
+.st-progress-wrap{margin-bottom:24px}
+.st-progress-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:13px}
+.st-progress-title{font-weight:700;color:var(--ink)}
+.st-progress-count{color:var(--muted)}
+.st-progress-track{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.st-progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--teal));border-radius:4px;transition:width .5s ease}
+
+/* Stage card */
+.st-stage-card{background:var(--white);border-radius:20px;padding:28px;border:1.5px solid var(--border);box-shadow:var(--shadow-lg);margin-bottom:20px}
+.st-stage-num{display:inline-flex;align-items:center;gap:8px;margin-bottom:16px}
+.st-stage-num-badge{background:var(--purple);color:white;border-radius:9px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.st-stage-label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.st-final-badge{background:var(--green-l);color:#1a8a5a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:8px}
+
+.st-inquiry{background:linear-gradient(135deg,var(--purple-l),#f0ecff);border-radius:14px;padding:18px 20px;margin-bottom:20px;border-left:4px solid var(--purple)}
+.st-inquiry-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);margin-bottom:8px}
+.st-inquiry-q{font-size:17px;font-weight:700;color:var(--ink);line-height:1.45}
+
+.st-task{font-size:14px;color:var(--ink);line-height:1.7;margin-bottom:20px;padding:14px 16px;background:var(--bg);border-radius:12px}
+
+/* Vocab */
+.st-vocab-wrap{margin-bottom:20px}
+.st-vocab-title{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.st-vocab-list{display:flex;flex-wrap:wrap;gap:8px}
+.st-vocab-chip{background:var(--purple-l);border-radius:10px;padding:8px 14px;font-size:12.5px}
+.st-vocab-term{font-weight:700;color:var(--purple-d)}
+.st-vocab-def{color:var(--ink);margin-top:2px}
+
+/* Starters */
+.st-starters{margin-bottom:20px}
+.st-starters-title{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.st-starter-row{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.st-starter{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:7px 12px;font-size:12.5px;color:var(--ink);cursor:pointer;transition:all .15s}
+.st-starter:hover{border-color:var(--purple);background:var(--purple-l);color:var(--purple-d)}
+
+/* UDL */
+.st-udl-wrap{margin-bottom:16px}
+.st-udl-title{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.st-udl-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.st-udl-btn{padding:8px 16px;border-radius:22px;border:1.5px solid var(--border);background:var(--white);color:var(--ink);font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;transition:all .15s}
+.st-udl-btn.active{background:var(--purple);border-color:var(--purple);color:white}
+.st-udl-btn:hover:not(.active){border-color:var(--purple);color:var(--purple)}
+
+/* Response */
+.st-response-wrap{position:relative}
+.st-response{width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:14px;font-size:14px;font-family:var(--font);resize:vertical;min-height:120px;outline:none;color:var(--ink);background:var(--white);transition:border-color .2s;line-height:1.6}
+.st-response:focus{border-color:var(--purple)}
+.st-char-count{font-size:11.5px;color:var(--muted);text-align:right;margin-top:5px}
+
+/* Submit */
+.st-submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--purple),var(--purple-d));color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;margin-top:14px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.st-submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 20px rgba(124,92,191,.35)}
+.st-submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* AI Feedback */
+.st-feedback{background:var(--white);border-radius:16px;padding:20px;border:1.5px solid var(--border);box-shadow:var(--shadow);margin-top:16px;display:none}
+.st-feedback-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.st-feedback-icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;font-size:14px}
+.st-feedback-label{font-size:13px;font-weight:700;color:var(--ink)}
+.st-feedback-text{font-size:14px;color:var(--ink);line-height:1.7}
+.st-feedback-advance{display:none;margin-top:14px}
+.st-advance-btn{padding:11px 24px;background:var(--teal);color:#0d2e28;border:none;border-radius:11px;font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;transition:all .18s}
+.st-advance-btn:hover{background:var(--teal-d);transform:translateY(-1px)}
+.st-try-again{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* L2 scaffold toggle */
+.st-l2-toggle{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--muted);cursor:pointer}
+.st-l2-toggle input{width:16px;height:16px;accent-color:var(--purple);cursor:pointer}
+.st-l2-content{display:none;background:linear-gradient(135deg,var(--teal-l),#e8f9f5);border-radius:12px;padding:14px 16px;margin-bottom:16px;border-left:3px solid var(--teal);font-size:13px;color:var(--ink)}
+
+/* Completion screen */
+#st-completion{display:none;text-align:center;padding:48px 20px}
+.st-complete-icon{font-size:64px;margin-bottom:16px}
+.st-complete-title{font-size:28px;font-weight:800;color:var(--ink);letter-spacing:-.03em;margin-bottom:8px}
+.st-complete-sub{font-size:15px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.st-complete-card{background:var(--white);border-radius:18px;padding:24px;border:1.5px solid var(--border);box-shadow:var(--shadow);text-align:left;margin-bottom:16px}
+
+/* Toast */
+#st-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:white;padding:12px 22px;border-radius:12px;font-size:13.5px;font-weight:500;box-shadow:var(--shadow-lg);z-index:9999;opacity:0;transition:all .3s;white-space:nowrap}
+#st-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Empty state */
+.st-empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.st-empty-icon{font-size:40px;margin-bottom:12px}
+
+/* Loading */
+.st-loading{text-align:center;padding:32px;color:var(--muted);font-size:14px}
+.st-spinner{display:inline-block;width:20px;height:20px;border:2.5px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="st-login">
+  <div class="st-login-box">
+    <div class="st-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      IteraAI Student Portal
+    </div>
+    <div class="st-login-title">Welcome, Scholar</div>
+    <div class="st-login-sub">Sign in to access your assignments</div>
+
+    <input class="st-input" id="st-name-input" placeholder="Full Name" autocomplete="off">
+    <input class="st-input" id="st-id-input" placeholder="Student ID" autocomplete="off">
+    <input class="st-input" id="st-code-input" placeholder="Your Personal Access Code (STU-XXXXXX)" autocomplete="off" style="text-transform:uppercase">
+
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:8px">Language / Idioma</div>
+      <div class="st-lang-row" id="st-lang-row">
+        <button class="st-lang-btn active" data-lang="en" onclick="stSelectLang(this)">English</button>
+        <button class="st-lang-btn" data-lang="es" onclick="stSelectLang(this)">Español</button>
+        <button class="st-lang-btn" data-lang="pt" onclick="stSelectLang(this)">Português</button>
+        <button class="st-lang-btn" data-lang="fr" onclick="stSelectLang(this)">Français</button>
+        <button class="st-lang-btn" data-lang="it" onclick="stSelectLang(this)">Italiano</button>
+        <button class="st-lang-btn" data-lang="ru" onclick="stSelectLang(this)">Русский</button>
+        <button class="st-lang-btn" data-lang="hy" onclick="stSelectLang(this)">Հայերեն</button>
+        <button class="st-lang-btn" data-lang="ko" onclick="stSelectLang(this)">한국어</button>
+      </div>
+    </div>
+
+    <button class="st-login-btn" onclick="stLogin()">Enter →</button>
+    <div class="st-login-err" id="st-login-err">Please fill in all fields.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="st-app">
+  <div class="st-header">
+    <div class="st-header-logo">Itera<span>AI</span> · Student</div>
+    <div class="st-header-user">
+      <span id="st-user-display">—</span>
+      <span class="st-header-badge" id="st-code-display">——</span>
+      <button onclick="stLogout()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font)">Logout</button>
+    </div>
+  </div>
+
+  <!-- Assignment picker -->
+  <div id="st-picker">
+    <div class="st-section-title">Your Assignments</div>
+    <div id="st-asgn-list"><div class="st-loading"><span class="st-spinner"></span>Loading assignments...</div></div>
+  </div>
+
+  <!-- Learning assistant -->
+  <div id="st-assistant">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <button onclick="stBackToPicker()" style="background:var(--purple-l);border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--purple-d);cursor:pointer;font-family:var(--font)">← Assignments</button>
+      <div style="font-size:15px;font-weight:700;color:var(--ink)" id="st-asgn-title-display">—</div>
+    </div>
+
+    <!-- Progress -->
+    <div class="st-progress-wrap">
+      <div class="st-progress-label">
+        <span class="st-progress-title">Your Progress</span>
+        <span class="st-progress-count" id="st-progress-count">Stage 1 of —</span>
+      </div>
+      <div class="st-progress-track"><div class="st-progress-fill" id="st-progress-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- Stage display -->
+    <div id="st-stage-display"></div>
+
+    <!-- Completion -->
+    <div id="st-completion">
+      <div class="st-complete-icon">🎓</div>
+      <div class="st-complete-title">Assignment Complete!</div>
+      <div class="st-complete-sub">You have demonstrated mastery. Your teacher can now review your responses.</div>
+      <div class="st-complete-card" id="st-summary-card"></div>
+      <button onclick="stBackToPicker()" style="background:var(--purple);color:white;border:none;border-radius:12px;padding:13px 28px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);margin-top:8px">← Back to Assignments</button>
+    </div>
+  </div>
+</div>
+
+<div id="st-toast"></div>
+
+<script>
+const SUPA_URL  = 'https://igesutfxmzidtudbbltb.supabase.co';
+const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlnZXN1dGZ4bXppZHR1ZGJibHRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4OTE2OTEsImV4cCI6MjA4ODQ2NzY5MX0.GkpR1Lwz1nbbkCUVu62yo_QBFloMUMSw-BwxpUd4DsU';
+const API_URL   = '/api/claude';
+
+let sb, _stSession=null, _stAssignment=null, _stStages=[], _stCurrentStage=0, _stLang='en', _stUDLChoice='Written response', _stResponses=[];
+
+// ── LANGUAGE ──
+const LANG_LABELS = {
+  en:{scaffold:'Scaffold in your language',starters:'Sentence Starters',vocab:'Key Vocabulary',submit:'Submit Response',next:'Next Stage →',complete:'Complete Assignment',thinking:'Carl is thinking...',advance:'You may advance to the next stage!',tryagain:'Not quite yet — try to add more detail.'},
+  es:{scaffold:'Apoyo en tu idioma',starters:'Inicios de oraciones',vocab:'Vocabulario clave',submit:'Enviar respuesta',next:'Siguiente etapa →',complete:'Completar tarea',thinking:'Carl está pensando...',advance:'¡Puedes avanzar a la siguiente etapa!',tryagain:'Aún no — trata de agregar más detalles.'},
+  pt:{scaffold:'Suporte no seu idioma',starters:'Iniciadores de frases',vocab:'Vocabulário-chave',submit:'Enviar resposta',next:'Próxima etapa →',complete:'Concluir tarefa',thinking:'Carl está a pensar...',advance:'Podes avançar para a próxima etapa!',tryagain:'Ainda não — tenta adicionar mais detalhes.'},
+  fr:{scaffold:'Soutien dans votre langue',starters:'Amorces de phrases',vocab:'Vocabulaire clé',submit:'Soumettre la réponse',next:'Étape suivante →',complete:'Terminer le devoir',thinking:'Carl réfléchit...',advance:'Vous pouvez passer à l\'étape suivante!',tryagain:'Pas encore — essayez d\'ajouter plus de détails.'},
+  it:{scaffold:'Supporto nella tua lingua',starters:'Avviatori di frasi',vocab:'Vocabolario chiave',submit:'Invia risposta',next:'Fase successiva →',complete:'Completa il compito',thinking:'Carl sta pensando...',advance:'Puoi passare alla fase successiva!',tryagain:'Non ancora — prova ad aggiungere più dettagli.'},
+  ru:{scaffold:'Поддержка на вашем языке',starters:'Начало предложений',vocab:'Ключевые слова',submit:'Отправить ответ',next:'Следующий этап →',complete:'Завершить задание',thinking:'Карл думает...',advance:'Вы можете перейти к следующему этапу!',tryagain:'Пока нет — попробуйте добавить больше деталей.'},
+  hy:{scaffold:'Աջակցություն ձեր լեզվով',starters:'Նախադասության սկիզբ',vocab:'Հիմնական բառապաշար',submit:'Ուղարկել պատասխան',next:'Հաջորդ փուլ →',complete:'Ավարտել հանձնարարությունը',thinking:'Կարլը մտածում է...',advance:'Կարող ես անցնել հաջord փուլ!',tryagain:'Դեռ ոչ — փորձիր ավելի մանրամasn.'},
+  ko:{scaffold:'언어 지원',starters:'문장 시작어',vocab:'핵심 어휘',submit:'응답 제출',next:'다음 단계 →',complete:'과제 완료',thinking:'Carl이 생각 중...',advance:'다음 단계로 넘어갈 수 있습니다!',tryagain:'아직 아닙니다 — 더 자세한 내용을 추가해 보세요.'}
+};
+function t(key){return(LANG_LABELS[_stLang]||LANG_LABELS.en)[key]||key;}
+
+function stSelectLang(btn){
+  document.querySelectorAll('.st-lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  _stLang = btn.dataset.lang;
+}
+
+// ── AUTH ──
+async function stLogin(){
+  const name       = document.getElementById('st-name-input').value.trim();
+  const sid        = document.getElementById('st-id-input').value.trim();
+  const accessCode = document.getElementById('st-code-input').value.trim().toUpperCase();
+  const err        = document.getElementById('st-login-err');
+
+  if(!name||!sid||!accessCode){err.style.display='block';err.textContent='Please fill in all fields.';return;}
+  err.style.display='none';
+
+  const loginBtn = document.querySelector('.st-login-btn');
+  loginBtn.textContent='Verifying...';loginBtn.disabled=true;
+
+  sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+  // Validate access code against roster
+  const {data,error} = await sb
+    .from('iteraai_student_roster')
+    .select('*')
+    .eq('access_code', accessCode)
+    .eq('student_id', sid)
+    .single();
+
+  loginBtn.textContent='Enter →';loginBtn.disabled=false;
+
+  if(error||!data){
+    err.style.display='block';
+    err.textContent='Access code or Student ID not found. Please check and try again.';
+    return;
+  }
+
+  // Verify name matches (first name, case insensitive)
+  const nameMatch = data.first_name.toLowerCase()===name.split(' ')[0].toLowerCase()||
+                    (data.first_name+' '+data.last_name).toLowerCase()===name.toLowerCase();
+  if(!nameMatch){
+    err.style.display='block';
+    err.textContent='Name does not match our records. Please check your name.';
+    return;
+  }
+
+  err.style.display='none';
+  _stSession = {
+    name: data.first_name+' '+data.last_name,
+    sid,
+    code: data.class_code,
+    lang: _stLang,
+    rosterId: data.id
+  };
+  document.getElementById('st-login').style.display='none';
+  document.getElementById('st-app').style.display='block';
+  document.getElementById('st-user-display').textContent = _stSession.name;
+  document.getElementById('st-code-display').textContent = data.class_code;
+  stLoadAssignments();
+}
+function stLogout(){
+  _stSession=null;_stAssignment=null;_stStages=[];_stCurrentStage=0;_stResponses=[];
+  document.getElementById('st-login').style.display='flex';
+  document.getElementById('st-app').style.display='none';
+}
+
+// ── LOAD ASSIGNMENTS ──
+async function stLoadAssignments(){
+  const list = document.getElementById('st-asgn-list');
+  list.innerHTML='<div class="st-loading"><span class="st-spinner"></span>Loading...</div>';
+  const {data,error} = await sb.from('iteraai_assignments').select('*')
+    .eq('class_code',_stSession.code).eq('published',true).order('created_at',{ascending:false});
+  if(error||!data||!data.length){
+    list.innerHTML='<div class="st-empty"><div class="st-empty-icon">📋</div><div>No assignments available yet.<br>Check your class code or ask your teacher.</div></div>';
+    return;
+  }
+  list.innerHTML=data.map(a=>`
+    <div class="st-asgn-card" onclick="stOpenAssignment(${JSON.stringify(JSON.stringify(a))})">
+      <div>
+        <div class="st-asgn-title">${a.title||'Untitled Assignment'}
+          <span class="st-rigor-badge st-rigor-${a.rigor_level||'proficient'}">${(a.rigor_level||'proficient').charAt(0).toUpperCase()+(a.rigor_level||'proficient').slice(1)}</span>
+        </div>
+        <div class="st-asgn-meta">${(a.stages||[]).length} stages · Published ${new Date(a.created_at).toLocaleDateString()}</div>
+      </div>
+      <div class="st-asgn-arrow">→</div>
+    </div>`).join('');
+}
+
+function stOpenAssignment(jsonStr){
+  const a = JSON.parse(jsonStr);
+  _stAssignment = a;
+  _stStages = a.stages || [];
+  _stCurrentStage = 0;
+  _stResponses = [];
+  document.getElementById('st-picker').style.display='none';
+  document.getElementById('st-assistant').style.display='block';
+  document.getElementById('st-completion').style.display='none';
+  document.getElementById('st-asgn-title-display').textContent = a.title||'Assignment';
+  stRenderStage();
+}
+
+function stBackToPicker(){
+  document.getElementById('st-picker').style.display='block';
+  document.getElementById('st-assistant').style.display='none';
+  document.getElementById('st-stage-display').innerHTML='';
+  _stAssignment=null;_stStages=[];_stCurrentStage=0;_stResponses=[];
+}
+
+// ── RENDER STAGE ──
+function stRenderStage(){
+  const stage = _stStages[_stCurrentStage];
+  if(!stage){stShowCompletion();return;}
+
+  const total = _stStages.length;
+  const pct   = Math.round(_stCurrentStage/total*100);
+  document.getElementById('st-progress-fill').style.width = pct+'%';
+  document.getElementById('st-progress-count').textContent = 'Stage '+(_stCurrentStage+1)+' of '+total;
+
+  const isFinal = stage.is_final || _stCurrentStage===total-1;
+  const vocab   = (stage.vocabulary||[]).map(v=>`
+    <div class="st-vocab-chip">
+      <div class="st-vocab-term">${v.term}</div>
+      <div class="st-vocab-def">${v.definition}</div>
+    </div>`).join('');
+
+  const startersEN = (stage.sentence_starters_en||[]).map(s=>
+    `<div class="st-starter" onclick="stInsertStarter(this)">${s}</div>`).join('');
+  const startersL2 = (stage.sentence_starters_l2||[]).map(s=>
+    `<div class="st-starter" onclick="stInsertStarter(this)">${s}</div>`).join('');
+
+  const udlOptions = (stage.udl_options||['Written response','Bullet points','Diagram description','Questions I have'])
+    .map(o=>`<button class="st-udl-btn${o===_stUDLChoice?' active':''}" onclick="stSelectUDL(this,'${o}')">${o}</button>`).join('');
+
+  const finalOptions = `
+    <div style="display:grid;gap:10px;margin-bottom:16px">
+      ${['Written reflection','Real-world application plan','Letter to a future student','3 things I learned + 1 question I still have'].map(o=>
+        `<label style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border-radius:11px;border:1.5px solid var(--border);cursor:pointer;font-size:13.5px;font-weight:500;color:var(--ink)">
+          <input type="radio" name="final-format" value="${o}" style="accent-color:var(--purple);width:16px;height:16px"> ${o}
+        </label>`).join('')}
+    </div>`;
+
+  document.getElementById('st-stage-display').innerHTML = `
+    <div class="st-stage-card">
+      <div class="st-stage-num">
+        <div class="st-stage-num-badge">${_stCurrentStage+1}</div>
+        <div class="st-stage-label">${stage.title||'Stage '+(_stCurrentStage+1)}</div>
+        ${isFinal?'<span class="st-final-badge">Final Stage</span>':''}
+      </div>
+
+      <div class="st-inquiry">
+        <div class="st-inquiry-label">Think About This</div>
+        <div class="st-inquiry-q">${stage.inquiry_question||''}</div>
+      </div>
+
+      <div class="st-task">${stage.task_description||''}</div>
+
+      ${vocab?`<div class="st-vocab-wrap"><div class="st-vocab-title">${t('vocab')}</div><div class="st-vocab-list">${vocab}</div></div>`:''}
+
+      <label class="st-l2-toggle">
+        <input type="checkbox" onchange="document.getElementById('st-l2-box').style.display=this.checked?'block':'none'">
+        ${t('scaffold')}
+      </label>
+      <div class="st-l2-content" id="st-l2-box">
+        <div style="font-weight:700;margin-bottom:8px">${t('starters')}:</div>
+        <div class="st-starter-row">${startersL2}</div>
+      </div>
+
+      ${startersEN?`<div class="st-starters"><div class="st-starters-title">${t('starters')} (English)</div><div class="st-starter-row">${startersEN}</div></div>`:''}
+
+      <div class="st-udl-wrap">
+        <div class="st-udl-title">How do you want to respond?</div>
+        <div class="st-udl-options">${udlOptions}</div>
+      </div>
+
+      ${isFinal?finalOptions:''}
+
+      <div class="st-response-wrap">
+        <textarea class="st-response" id="st-response-input" placeholder="Type your response here..." oninput="document.getElementById('st-char-count').textContent=this.value.length+' characters'"></textarea>
+        <div class="st-char-count" id="st-char-count">0 characters</div>
+      </div>
+
+      <button class="st-submit-btn" id="st-submit-btn" onclick="stSubmitResponse()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        ${isFinal?t('complete'):t('submit')}
+      </button>
+
+      <div class="st-feedback" id="st-feedback">
+        <div class="st-feedback-hdr">
+          <div class="st-feedback-icon">⚡</div>
+          <div class="st-feedback-label">Carl's Feedback</div>
+        </div>
+        <div class="st-feedback-text" id="st-feedback-text"></div>
+        <div class="st-feedback-advance" id="st-feedback-advance">
+          <button class="st-advance-btn" onclick="stAdvance()">${t('next')}</button>
+        </div>
+        <div class="st-try-again" id="st-try-again"></div>
+      </div>
+    </div>`;
+}
+
+// ── UDL SELECTION ──
+function stSelectUDL(btn, choice){
+  document.querySelectorAll('.st-udl-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  _stUDLChoice = choice;
+  const input = document.getElementById('st-response-input');
+  if(!input)return;
+  const placeholders = {
+    'Written response':'Write your full response here...',
+    'Bullet points':'• Point 1\n• Point 2\n• Point 3...',
+    'Diagram description':'Describe your diagram or visual: what it shows, labels, connections...',
+    'Questions I have':'Q1: ...\nQ2: ...\nQ3: ...'
+  };
+  input.placeholder = placeholders[choice]||'Type your response...';
+}
+
+// ── SENTENCE STARTERS ──
+function stInsertStarter(el){
+  const input = document.getElementById('st-response-input');
+  if(!input)return;
+  if(input.value.trim())input.value+='\n'+el.textContent;
+  else input.value=el.textContent+' ';
+  input.focus();
+}
+
+// ── SUBMIT RESPONSE ──
+async function stSubmitResponse(){
+  const stage   = _stStages[_stCurrentStage];
+  const response= document.getElementById('st-response-input').value.trim();
+  const isFinal = stage.is_final||_stCurrentStage===_stStages.length-1;
+
+  if(response.length<20){stToast('Please write a bit more before submitting.');return;}
+
+  const btn = document.getElementById('st-submit-btn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="st-spinner"></span>'+t('thinking');
+
+  const feedbackEl = document.getElementById('st-feedback');
+  const feedbackText= document.getElementById('st-feedback-text');
+  const advanceEl  = document.getElementById('st-feedback-advance');
+  const tryAgainEl = document.getElementById('st-try-again');
+  feedbackEl.style.display='block';
+  feedbackText.innerHTML='<span class="st-spinner"></span> '+t('thinking');
+  advanceEl.style.display='none';
+  tryAgainEl.textContent='';
+
+  const rigorMap={
+    foundational:'Accept if student shows basic understanding and uses at least 1 key term. Be encouraging.',
+    proficient:'Accept if student explains reasoning and connects ideas. Push for one more layer of depth if shallow.',
+    advanced:'Accept only if student analyzes, evaluates, or challenges ideas. Require critical thinking evidence.'
+  };
+  const rigor=_stAssignment.rigor_level||'proficient';
+
+  const prompt=`You are Carl, a supportive AI learning assistant for a multilingual CTE classroom.
+
+Stage: ${stage.title}
+Inquiry Question: ${stage.inquiry_question}
+Task: ${stage.task_description}
+Advancement Criteria: ${stage.advancement_criteria}
+Rigor Level: ${rigor} — ${rigorMap[rigor]}
+Student UDL Format chosen: ${_stUDLChoice}
+${isFinal?'This is the FINAL mastery stage.':''}
+
+Student Response:
+"${response}"
+
+Evaluate this response. Be warm, encouraging, and specific. 
+
+Respond ONLY with a JSON object:
+{
+  "feedback": "2-3 sentences of specific, warm feedback addressing what they did well and what could be deeper",
+  "can_advance": true or false,
+  "push_question": "If cannot advance: one specific follow-up question to push their thinking. If can advance: empty string.",
+  "rigor_score": 1-3 (1=needs work, 2=meets criteria, 3=exceeds)
+}
+No markdown, just JSON.`;
+
+  try{
+    const res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:600,stream:false,
+      messages:[{role:'user',content:prompt}]
+    })});
+    const data=await res.json();
+    const raw=(data?.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
+    const result=JSON.parse(raw);
+
+    feedbackText.textContent=result.feedback;
+
+    // Save response to Supabase
+    if(_stSession.sessionId){
+      await sb.from('iteraai_student_responses').insert([{
+        session_id:_stSession.sessionId,
+        assignment_id:_stAssignment.id,
+        stage_index:_stCurrentStage,
+        stage_title:stage.title,
+        response_text:response,
+        udl_format:_stUDLChoice,
+        rigor_score:result.rigor_score,
+        ai_feedback:result.feedback,
+        advanced:result.can_advance
+      }]);
+    }
+
+    _stResponses.push({stage:stage.title,response,feedback:result.feedback,score:result.rigor_score});
+
+    if(result.can_advance||isFinal){
+      advanceEl.style.display='block';
+      tryAgainEl.textContent='';
+      if(isFinal){
+        document.querySelector('.st-advance-btn').textContent='Complete Assignment ✓';
+        document.querySelector('.st-advance-btn').onclick=stShowCompletion;
+      }
+    } else {
+      advanceEl.style.display='none';
+      tryAgainEl.textContent=(result.push_question?'Think about: '+result.push_question:'');
+    }
+  }catch(e){
+    feedbackText.textContent='Could not connect. Please check your internet and try again.';
+    console.warn(e);
+  }
+
+  btn.disabled=false;
+  btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Try Again';
+}
+
+// ── ADVANCE ──
+async function stAdvance(){
+  _stCurrentStage++;
+  document.getElementById('st-stage-display').innerHTML='';
+  document.getElementById('st-progress-fill').style.width=Math.round(_stCurrentStage/_stStages.length*100)+'%';
+  if(_stCurrentStage>=_stStages.length){stShowCompletion();return;}
+  stRenderStage();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── COMPLETION ──
+async function stShowCompletion(){
+  document.getElementById('st-progress-fill').style.width='100%';
+  document.getElementById('st-progress-count').textContent='Complete!';
+  document.getElementById('st-stage-display').innerHTML='';
+  document.getElementById('st-completion').style.display='block';
+
+  // Build summary
+  const summary=document.getElementById('st-summary-card');
+  summary.innerHTML='<div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Your Responses Summary</div>'+
+    _stResponses.map((r,i)=>`
+      <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+        <div style="font-size:12.5px;font-weight:700;color:var(--purple);margin-bottom:4px">Stage ${i+1}: ${r.stage}</div>
+        <div style="font-size:13px;color:var(--ink);margin-bottom:6px">${r.response.slice(0,200)}${r.response.length>200?'...':''}</div>
+        <div style="font-size:12px;color:var(--muted)">Carl: ${r.feedback}</div>
+      </div>`).join('');
+
+  // Save session completion
+  if(_stSession.sessionId){
+    await sb.from('iteraai_student_sessions').update({completed:true}).eq('id',_stSession.sessionId);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── CREATE SESSION ON FIRST STAGE ──
+async function stCreateSession(){
+  if(_stSession.sessionId)return;
+  const{data}=await sb.from('iteraai_student_sessions').insert([{
+    student_name:_stSession.name,
+    student_id:_stSession.sid,
+    class_code:_stSession.code,
+    assignment_id:_stAssignment?.id||null,
+    language:_stLang,
+    current_stage:0,
+    completed:false
+  }]).select().single();
+  if(data)_stSession.sessionId=data.id;
+}
+
+// Patch stSubmitResponse to create session first
+const _origSubmit=stSubmitResponse;
+window.stSubmitResponse=async function(){
+  await stCreateSession();
+  await _origSubmit();
+};
+
+// ── TOAST ──
+function stToast(msg,ms=3000){
+  const el=document.getElementById('st-toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),ms);
+}
+</script>
+</body>
+</html>
