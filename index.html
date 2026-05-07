@@ -4691,6 +4691,10 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
       <button class="cm-topbar-back" onclick="showClassroomManager=function(){};document.getElementById('classroom-panel').style.display='none';document.getElementById('teacher-main').style.display='grid';document.getElementById('main-fbar').style.display='flex';document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));document.getElementById('classroom-nav-tab').classList.remove('active');">
         ← Back to IteraAI
       </button>
+      <button class="cm-topbar-back" onclick="window.open('/iteraai-student.html','_blank')" style="background:rgba(0,201,167,.18);border-color:rgba(0,201,167,.4);color:#00C9A7;display:flex;align-items:center;gap:6px">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Student Portal
+      </button>
       <button class="cm-topbar-btn" onclick="cmOpenCreateClassModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         New Class
@@ -4959,6 +4963,10 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           New Assignment
         </button>
+        <button onclick="cmOpenAIAssignmentModal()" style="background:linear-gradient(135deg,var(--purple),var(--purple-deep));color:white;border:none;border-radius:10px;padding:9px 18px;font-family:var(--font-sans);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 4px 14px rgba(124,92,191,.28)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          AI Assignment
+        </button>
       </div>
 
       <div id="cm-asgn-list"><!-- populated by cmRenderAssignmentsTab() --></div>
@@ -5188,6 +5196,10 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
       </div>
       <div class="fr"><label>Notes <span style="font-weight:400;color:var(--muted);font-size:12px">optional</span></label>
         <input type="text" id="cm-s-notes" placeholder="e.g. IEP, 504, home language, accommodations…">
+      </div>
+      <div class="fr"><label>Student Email <span class="req">*</span></label>
+        <input type="email" id="cm-s-email" placeholder="student@school.edu">
+        <div style="font-size:11.5px;color:var(--muted);margin-top:4px">Access code will be emailed automatically when added</div>
       </div>
       <div style="display:flex;gap:10px;margin-top:18px">
         <button onclick="cmCloseAddStudentModal()" style="flex:1;padding:11px;background:white;border:1.5px solid var(--border);border-radius:10px;font-family:var(--font-sans);font-size:14px;color:var(--muted);cursor:pointer">Cancel</button>
@@ -9613,17 +9625,19 @@ async function cmDeleteClass(classId) {
  * Add a student to a class roster.
  * Mirrors POST /api/classes/:id/students on the backend.
  */
-async function cmAddStudentToClass(classId, { firstName, lastName, sid, grade, elStatus, eldLevel, notes }) {
+async function cmAddStudentToClass(classId, { firstName, lastName, sid, grade, elStatus, eldLevel, notes, email, accessCode }) {
   const student = {
-    id:        cmGenId(),
+    id:         cmGenId(),
     firstName,
     lastName,
-    sid:       sid || '',
-    grade:     grade || '',
-    elStatus:  elStatus || '',
-    eldLevel:  eldLevel || '',
-    notes:     notes || '',
-    addedAt:   new Date().toISOString()
+    sid:        sid || '',
+    grade:      grade || '',
+    elStatus:   elStatus || '',
+    eldLevel:   eldLevel || '',
+    notes:      notes || '',
+    email:      email || '',
+    accessCode: accessCode || '',
+    addedAt:    new Date().toISOString()
   };
   // Try backend
   await cmApiPost('/classes/' + classId + '/students', student);
@@ -10008,7 +10022,7 @@ function cmOpenAddStudentModal() {
   if (!cmActiveClassId) return;
   const cls = cmStore.classes.find(c => c.id === cmActiveClassId);
   document.getElementById('cm-add-student-class-label').textContent = cls ? cls.name : '';
-  ['cm-s-first','cm-s-last','cm-s-sid','cm-s-notes'].forEach(id => { document.getElementById(id).value = ''; });
+  ['cm-s-first','cm-s-last','cm-s-sid','cm-s-notes','cm-s-email'].forEach(id => { document.getElementById(id).value = ''; });
   document.getElementById('cm-s-grade').value = '';
   document.getElementById('cm-s-el').value    = '';
   document.getElementById('cm-s-eld').value   = '';
@@ -10026,14 +10040,63 @@ async function cmSubmitAddStudent() {
   const elStatus  = document.getElementById('cm-s-el').value;
   const eldLevel  = document.getElementById('cm-s-eld').value;
   const notes     = document.getElementById('cm-s-notes').value.trim();
+  const email     = document.getElementById('cm-s-email').value.trim().toLowerCase();
+
   if (!firstName) { cmToast('First name is required', 'error'); return; }
   if (!lastName)  { cmToast('Last name is required', 'error'); return; }
-  await cmAddStudentToClass(cmActiveClassId, { firstName, lastName, sid, grade, elStatus, eldLevel, notes });
+  if (!email)     { cmToast('Student email is required', 'error'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { cmToast('Please enter a valid email', 'error'); return; }
+
+  // Generate unique access code
+  const accessCode = 'STU-' + Math.random().toString(36).slice(2,5).toUpperCase() +
+                     Math.random().toString(36).slice(2,5).toUpperCase();
+
+  const cls = cmStore.classes.find(c => c.id === cmActiveClassId);
+  const classCode = cmActiveClassId.slice(-6).toUpperCase();
+
+  // Add to local roster with email + access code
+  await cmAddStudentToClass(cmActiveClassId, { firstName, lastName, sid, grade, elStatus, eldLevel, notes, email, accessCode });
+
+  // Save to Supabase
+  try {
+    const sb = getSupabase();
+    if (sb) {
+      await sb.from('iteraai_student_roster').insert([{
+        class_id    : cmActiveClassId,
+        class_code  : classCode,
+        first_name  : firstName,
+        last_name   : lastName,
+        student_id  : sid || '',
+        email       : email,
+        access_code : accessCode,
+        grade       : grade,
+        el_status   : elStatus,
+        eld_level   : eldLevel,
+        notes       : notes
+      }]);
+    }
+  } catch(e) { console.warn('Supabase roster save error:', e); }
+
+  // Send welcome email with access code
+  try {
+    await emailjs.send('service_2w7f3w9', 'template_4f9vzqq', {
+      to_email     : email,
+      student_name : firstName,
+      teacher_name : cmCurrentUser?.name || 'Your Teacher',
+      class_name   : cls?.name || 'your class',
+      access_code  : accessCode,
+      portal_url   : window.location.origin + '/iteraai-student',
+      reply_to     : 'jmj.juliano@gmail.com'
+    });
+    cmToast(`${firstName} ${lastName} added — access code emailed to ${email}`, 'success');
+  } catch(e) {
+    console.warn('Email send error:', e);
+    cmToast(`${firstName} added. Email failed — share code manually: ${accessCode}`, 'error');
+  }
+
   cmCloseAddStudentModal();
-  cmToast(`${firstName} ${lastName} added to roster`, 'success');
   cmRenderRosterTab(cmActiveClassId);
   cmRenderDashboard();
-  // Stay on students tab
   cmSwitchClassTab('students', null);
 }
 
@@ -10601,7 +10664,334 @@ window.addEventListener('load', function() {
 });
 
 console.log('IteraAI Classroom Manager module registered.');
+
+/* ═══════════════════════════════════════════════════════
+   AI ASSIGNMENT CREATOR — Teacher side
+   Creates staged, inquiry-based assignments from PDF/text
+   Saves to Supabase iteraai_assignments table
+═══════════════════════════════════════════════════════ */
+
+// ── Open modal ──
+function cmOpenAIAssignmentModal() {
+  document.getElementById('cm-ai-asgn-modal').style.display = 'flex';
+  document.getElementById('cm-ai-asgn-step1').style.display = 'block';
+  document.getElementById('cm-ai-asgn-step2').style.display = 'none';
+  document.getElementById('cm-ai-asgn-step3').style.display = 'none';
+  document.getElementById('cm-ai-asgn-title').value = '';
+  document.getElementById('cm-ai-asgn-text').value = '';
+  document.getElementById('cm-ai-stages-wrap').innerHTML = '';
+  document.getElementById('cm-ai-asgn-status').textContent = '';
+}
+function cmCloseAIAssignmentModal() {
+  document.getElementById('cm-ai-asgn-modal').style.display = 'none';
+}
+
+// ── PDF text extraction ──
+async function cmExtractPDF(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        // Use pdf.js from CDN if available, else fallback to raw text
+        const typedArr = new Uint8Array(e.target.result);
+        // Simple extraction: read as text
+        const decoder = new TextDecoder('utf-8');
+        let text = '';
+        try { text = decoder.decode(typedArr); } catch(ex) {}
+        // Strip PDF binary junk, keep readable text
+        text = text.replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s{3,}/g, '\n').trim();
+        resolve(text.slice(0, 8000)); // cap at 8k chars
+      } catch(err) { reject(err); }
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// ── Handle file upload ──
+document.addEventListener('DOMContentLoaded', function() {
+  const pdfInput = document.getElementById('cm-ai-pdf-input');
+  if (pdfInput) {
+    pdfInput.addEventListener('change', async function() {
+      const file = this.files[0];
+      if (!file) return;
+      const statusEl = document.getElementById('cm-ai-asgn-status');
+      statusEl.textContent = 'Reading PDF...';
+      try {
+        let text = '';
+        if (file.type === 'application/pdf') {
+          text = await cmExtractPDF(file);
+        } else {
+          // Plain text or docx fallback
+          text = await file.text();
+        }
+        document.getElementById('cm-ai-asgn-text').value = text.slice(0, 8000);
+        statusEl.textContent = '✓ Document loaded — ' + text.length + ' characters extracted';
+        statusEl.style.color = 'var(--teal)';
+      } catch(e) {
+        statusEl.textContent = 'Could not read file. Paste content manually below.';
+        statusEl.style.color = 'var(--orange)';
+      }
+    });
+  }
+});
+
+// ── Generate stages with AI ──
+async function cmGenerateStages() {
+  const title      = document.getElementById('cm-ai-asgn-title').value.trim();
+  const content    = document.getElementById('cm-ai-asgn-text').value.trim();
+  const rigor      = document.getElementById('cm-ai-asgn-rigor').value;
+  const langs      = Array.from(document.querySelectorAll('.cm-ai-lang-chk:checked')).map(c => c.value);
+  const statusEl   = document.getElementById('cm-ai-asgn-status');
+
+  if (!title)   { statusEl.textContent = 'Please enter an assignment title.'; statusEl.style.color = 'var(--orange)'; return; }
+  if (!content) { statusEl.textContent = 'Please upload a PDF or paste content.'; statusEl.style.color = 'var(--orange)'; return; }
+
+  statusEl.textContent = 'Generating stages with AI...';
+  statusEl.style.color = 'var(--muted)';
+  document.getElementById('cm-ai-gen-btn').disabled = true;
+
+  const rigorDesc = {
+    foundational: 'Students show basic understanding, use 1-2 key terms, give a simple example. Accept responses that show effort and basic comprehension.',
+    proficient:   'Students explain their reasoning, connect to prior knowledge, and ask at least one follow-up question. Push for depth before advancing.',
+    advanced:     'Students analyze, evaluate, make cross-concept connections, and challenge assumptions. Require evidence and critical thinking.'
+  };
+
+  const prompt = `You are an expert instructional designer for California CTE multilingual classrooms.
+
+Assignment Title: ${title}
+Rigor Level: ${rigor} — ${rigorDesc[rigor]}
+Languages for scaffolding: ${langs.join(', ')}
+
+Source Content:
+${content}
+
+Generate a structured inquiry-based assignment with 3-6 stages. Each stage must:
+1. Release ONE chunk of the task gradually
+2. Ask an open-ended inquiry question students must answer before advancing
+3. Include UDL options (written response, bullet points, diagram description, questions I have)
+4. Include vocabulary support (2-3 key terms with definitions)
+5. Include sentence starters in English AND ${langs[0] || 'Spanish'}
+6. Have a clear advancement criterion based on the rigor level
+
+The FINAL stage must always be a mastery demonstration where students choose:
+- Written reflection
+- Real-world application plan  
+- Letter to a future student
+- 3 learned + 1 question format
+
+Respond ONLY with a JSON array of stage objects. No markdown, no explanation, just the JSON array.
+
+Each stage object must have:
+{
+  "title": "Stage title",
+  "inquiry_question": "Open-ended question",
+  "task_description": "What student must do",
+  "vocabulary": [{"term": "word", "definition": "plain language definition"}],
+  "sentence_starters_en": ["starter 1", "starter 2"],
+  "sentence_starters_l2": ["starter in ${langs[0] || 'Spanish'} 1", "starter 2"],
+  "udl_options": ["Written response", "Bullet points", "Diagram description", "Questions I have"],
+  "advancement_criteria": "What AI checks before allowing next stage",
+  "is_final": false
+}`;
+
+  try {
+    const res = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2500,
+        stream: false,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const raw = data?.content?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const stages = JSON.parse(clean);
+
+    // Mark last stage as final
+    if (stages.length) stages[stages.length - 1].is_final = true;
+
+    cmRenderStageEditor(stages, title, rigor, langs);
+    document.getElementById('cm-ai-asgn-step1').style.display = 'none';
+    document.getElementById('cm-ai-asgn-step2').style.display = 'block';
+    statusEl.textContent = stages.length + ' stages generated — review and edit below';
+    statusEl.style.color = 'var(--teal)';
+  } catch(e) {
+    statusEl.textContent = 'Generation failed. Check your content and try again.';
+    statusEl.style.color = 'var(--red, #e05252)';
+    console.warn(e);
+  }
+  document.getElementById('cm-ai-gen-btn').disabled = false;
+}
+
+// ── Render stage editor ──
+function cmRenderStageEditor(stages, title, rigor, langs) {
+  window._cmAIStages = stages;
+  window._cmAITitle  = title;
+  window._cmAIRigor  = rigor;
+  window._cmAILangs  = langs;
+
+  const wrap = document.getElementById('cm-ai-stages-wrap');
+  wrap.innerHTML = stages.map((s, i) => `
+    <div style="background:var(--bg,#f5f3fd);border-radius:12px;padding:18px;margin-bottom:14px;border:1.5px solid var(--border,#e4e1f5)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="background:var(--purple,#7c5cbf);color:white;border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">${i+1}</div>
+        <input value="${s.title}" onchange="window._cmAIStages[${i}].title=this.value"
+          style="flex:1;padding:7px 12px;border:1.5px solid var(--border,#e4e1f5);border-radius:8px;font-size:14px;font-weight:700;font-family:inherit;background:white;color:var(--ink,#1a1630)">
+        ${s.is_final ? '<span style="background:#e6faf3;color:#1a8a5a;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px">Final Stage</span>' : ''}
+      </div>
+      <div style="margin-bottom:10px">
+        <label style="font-size:11px;font-weight:700;color:var(--muted,#7a75a0);text-transform:uppercase;letter-spacing:.05em">Inquiry Question</label>
+        <textarea onchange="window._cmAIStages[${i}].inquiry_question=this.value"
+          style="width:100%;margin-top:5px;padding:8px 12px;border:1.5px solid var(--border,#e4e1f5);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;min-height:56px;background:white;color:var(--ink,#1a1630)">${s.inquiry_question}</textarea>
+      </div>
+      <div style="margin-bottom:10px">
+        <label style="font-size:11px;font-weight:700;color:var(--muted,#7a75a0);text-transform:uppercase;letter-spacing:.05em">Task Description</label>
+        <textarea onchange="window._cmAIStages[${i}].task_description=this.value"
+          style="width:100%;margin-top:5px;padding:8px 12px;border:1.5px solid var(--border,#e4e1f5);border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;min-height:72px;background:white;color:var(--ink,#1a1630)">${s.task_description}</textarea>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--muted,#7a75a0);text-transform:uppercase;letter-spacing:.05em">Advancement Criteria</label>
+        <input value="${s.advancement_criteria}" onchange="window._cmAIStages[${i}].advancement_criteria=this.value"
+          style="width:100%;margin-top:5px;padding:7px 12px;border:1.5px solid var(--border,#e4e1f5);border-radius:8px;font-size:13px;font-family:inherit;background:white;color:var(--ink,#1a1630)">
+      </div>
+    </div>`).join('');
+}
+
+// ── Publish assignment to Supabase ──
+async function cmPublishAIAssignment() {
+  const stages    = window._cmAIStages || [];
+  const title     = window._cmAITitle  || '';
+  const rigor     = window._cmAIRigor  || 'proficient';
+  const langs     = window._cmAILangs  || ['es'];
+  const classCode = (cmStore.activeClassId || '').slice(-6).toUpperCase() || 'DEMO01';
+  const content   = document.getElementById('cm-ai-asgn-text').value;
+  const statusEl  = document.getElementById('cm-ai-asgn-status');
+
+  if (!stages.length) { statusEl.textContent = 'No stages to publish.'; return; }
+
+  statusEl.textContent = 'Publishing...';
+  document.getElementById('cm-ai-publish-btn').disabled = true;
+
+  try {
+    const sb = getSupabase();
+    const { error } = await sb.from('iteraai_assignments').insert([{
+      class_code    : classCode,
+      title,
+      description   : title,
+      extracted_text: content.slice(0, 10000),
+      stages        : stages,
+      rigor_level   : rigor,
+      languages     : langs,
+      published     : true
+    }]);
+
+    if (error) throw error;
+
+    statusEl.textContent = '✓ Published! Share class code ' + classCode + ' with students.';
+    statusEl.style.color = 'var(--teal)';
+    document.getElementById('cm-ai-asgn-step2').style.display = 'none';
+    document.getElementById('cm-ai-asgn-step3').style.display = 'block';
+    document.getElementById('cm-ai-class-code-display').textContent = classCode;
+  } catch(e) {
+    statusEl.textContent = 'Publish failed: ' + (e.message || e);
+    statusEl.style.color = 'var(--orange)';
+    console.warn(e);
+  }
+  document.getElementById('cm-ai-publish-btn').disabled = false;
+}
 </script>
+
+<!-- AI ASSIGNMENT MODAL -->
+<div id="cm-ai-asgn-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9500;align-items:center;justify-content:center;padding:20px">
+  <div style="background:white;border-radius:20px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)">
+
+    <!-- Header -->
+    <div style="padding:22px 24px 16px;border-bottom:1.5px solid #e4e1f5;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:2;border-radius:20px 20px 0 0">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple,#7c5cbf);margin-bottom:4px">AI Assignment Creator</div>
+        <div style="font-size:18px;font-weight:800;color:#1a1630;letter-spacing:-.02em">Build Inquiry-Based Assignment</div>
+      </div>
+      <button onclick="cmCloseAIAssignmentModal()" style="background:#f5f3fd;border:none;border-radius:8px;width:32px;height:32px;font-size:20px;cursor:pointer;color:#7a75a0;display:flex;align-items:center;justify-content:center">×</button>
+    </div>
+
+    <div style="padding:24px">
+      <div id="cm-ai-asgn-status" style="font-size:13px;color:#7a75a0;margin-bottom:14px;min-height:18px"></div>
+
+      <!-- STEP 1: Configure -->
+      <div id="cm-ai-asgn-step1">
+        <div style="margin-bottom:16px">
+          <label style="font-size:12px;font-weight:700;color:#7a75a0;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px">Assignment Title *</label>
+          <input id="cm-ai-asgn-title" placeholder="e.g. Entrepreneurship Business Plan — Unit 3" style="width:100%;padding:10px 14px;border:1.5px solid #e4e1f5;border-radius:10px;font-size:14px;font-family:inherit;color:#1a1630;outline:none">
+        </div>
+
+        <div style="margin-bottom:16px">
+          <label style="font-size:12px;font-weight:700;color:#7a75a0;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px">Upload PDF or Document</label>
+          <input id="cm-ai-pdf-input" type="file" accept=".pdf,.txt,.docx" style="width:100%;padding:10px;border:1.5px dashed #e4e1f5;border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;background:#f5f3fd">
+        </div>
+
+        <div style="margin-bottom:16px">
+          <label style="font-size:12px;font-weight:700;color:#7a75a0;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px">Or Paste Content Manually</label>
+          <textarea id="cm-ai-asgn-text" placeholder="Paste your lesson, reading, or assignment description here..." style="width:100%;padding:10px 14px;border:1.5px solid #e4e1f5;border-radius:10px;font-size:13px;font-family:inherit;resize:vertical;min-height:120px;color:#1a1630;outline:none"></textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#7a75a0;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px">Rigor Level</label>
+            <select id="cm-ai-asgn-rigor" style="width:100%;padding:10px 12px;border:1.5px solid #e4e1f5;border-radius:10px;font-size:13px;font-family:inherit;color:#1a1630;background:white;outline:none">
+              <option value="foundational">Foundational</option>
+              <option value="proficient" selected>Proficient</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:700;color:#7a75a0;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px">Language Scaffolds</label>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;padding:8px;border:1.5px solid #e4e1f5;border-radius:10px;background:white">
+              ${[['es','Spanish'],['pt','Portuguese'],['fr','French'],['it','Italian'],['ru','Russian'],['hy','Armenian'],['ko','Korean']].map(([v,l])=>
+                `<label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer;white-space:nowrap">
+                  <input type="checkbox" class="cm-ai-lang-chk" value="${v}" ${v==='es'?'checked':''}> ${l}
+                </label>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        <button id="cm-ai-gen-btn" onclick="cmGenerateStages()" style="width:100%;padding:13px;background:linear-gradient(135deg,#7c5cbf,#5a3fa0);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">
+          ⚡ Generate Stages with AI
+        </button>
+      </div>
+
+      <!-- STEP 2: Review stages -->
+      <div id="cm-ai-asgn-step2" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div style="font-size:15px;font-weight:700;color:#1a1630">Review & Edit Stages</div>
+          <button onclick="document.getElementById('cm-ai-asgn-step1').style.display='block';document.getElementById('cm-ai-asgn-step2').style.display='none'" style="background:#f5f3fd;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;color:#7a75a0;font-family:inherit">← Regenerate</button>
+        </div>
+        <div id="cm-ai-stages-wrap"></div>
+        <button id="cm-ai-publish-btn" onclick="cmPublishAIAssignment()" style="width:100%;padding:13px;background:linear-gradient(135deg,#00C9A7,#00a88c);color:#0d2e28;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:8px">
+          ✓ Publish Assignment to Student Portal
+        </button>
+      </div>
+
+      <!-- STEP 3: Success -->
+      <div id="cm-ai-asgn-step3" style="display:none;text-align:center;padding:32px 20px">
+        <div style="font-size:48px;margin-bottom:12px">✅</div>
+        <div style="font-size:20px;font-weight:800;color:#1a1630;margin-bottom:8px">Assignment Published!</div>
+        <div style="font-size:14px;color:#7a75a0;margin-bottom:20px">Share this class code with your students:</div>
+        <div style="background:#f5f3fd;border:2px solid #7c5cbf;border-radius:14px;padding:20px;margin-bottom:20px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7a75a0;margin-bottom:6px">Class Code</div>
+          <div id="cm-ai-class-code-display" style="font-size:36px;font-weight:900;color:#7c5cbf;letter-spacing:.1em;font-family:'DM Mono',monospace">——</div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button onclick="window.open('/iteraai-student.html','_blank')" style="background:#00C9A7;color:#0d2e28;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">Open Student Portal →</button>
+          <button onclick="cmCloseAIAssignmentModal()" style="background:#f5f3fd;color:#7a75a0;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
