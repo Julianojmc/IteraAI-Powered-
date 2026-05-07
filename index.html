@@ -10079,7 +10079,8 @@ async function cmSubmitAddStudent() {
 
   // Send welcome email with access code
   try {
-    await emailjs.send('service_2w7f3w9', 'template_4f9vzqq', {
+    if(typeof emailjs !== 'undefined') emailjs.init({ publicKey: '8G-ODFfDC27VFK4lj' });
+    const emailResult = await emailjs.send('service_2w7f3w9', 'template_4f9vzqq', {
       to_email     : email,
       student_name : firstName,
       teacher_name : cmCurrentUser?.name || 'Your Teacher',
@@ -10088,10 +10089,11 @@ async function cmSubmitAddStudent() {
       portal_url   : window.location.origin + '/iteraai-student',
       reply_to     : 'jmj.juliano@gmail.com'
     });
+    console.log('Student email sent:', emailResult);
     cmToast(`${firstName} ${lastName} added — access code emailed to ${email}`, 'success');
   } catch(e) {
-    console.warn('Email send error:', e);
-    cmToast(`${firstName} added. Email failed — share code manually: ${accessCode}`, 'error');
+    console.error('Student email error:', e);
+    cmToast(`${firstName} added. Email failed (${e.text||e.message||'unknown'}). Share code: ${accessCode}`, 'error');
   }
 
   cmCloseAddStudentModal();
