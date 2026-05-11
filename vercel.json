@@ -2,6 +2,7 @@
   "routes": [
     { "src": "/api/claude", "dest": "/api/claude" },
     { "src": "/iteraai-crm", "dest": "/iteraai-crm.html" },
+    { "src": "/iteraai-student", "dest": "/iteraai-student.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
