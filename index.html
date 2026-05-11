@@ -10688,22 +10688,35 @@ function cmCloseAIAssignmentModal() {
   document.getElementById('cm-ai-asgn-modal').style.display = 'none';
 }
 
-// ── PDF text extraction ──
+// ── PDF text extraction using pdf.js ──
 async function cmExtractPDF(file) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
       try {
-        // Use pdf.js from CDN if available, else fallback to raw text
-        const typedArr = new Uint8Array(e.target.result);
-        // Simple extraction: read as text
-        const decoder = new TextDecoder('utf-8');
+        // Load pdf.js if not already loaded
+        if (!window.pdfjsLib) {
+          await new Promise((res, rej) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
+            s.onload = res; s.onerror = rej;
+            document.head.appendChild(s);
+          });
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+        }
+        const pdf = await window.pdfjsLib.getDocument({ data: new Uint8Array(e.target.result) }).promise;
         let text = '';
-        try { text = decoder.decode(typedArr); } catch(ex) {}
-        // Strip PDF binary junk, keep readable text
-        text = text.replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s{3,}/g, '\n').trim();
-        resolve(text.slice(0, 8000)); // cap at 8k chars
-      } catch(err) { reject(err); }
+        for (let i = 1; i <= Math.min(pdf.numPages, 20); i++) {
+          const page    = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          text += content.items.map(item => item.str).join(' ') + '\n';
+        }
+        resolve(text.trim().slice(0, 8000));
+      } catch(err) {
+        console.warn('PDF extraction error:', err);
+        resolve('');
+      }
     };
     reader.readAsArrayBuffer(file);
   });
@@ -10758,43 +10771,22 @@ async function cmGenerateStages() {
     advanced:     'Students analyze, evaluate, make cross-concept connections, and challenge assumptions. Require evidence and critical thinking.'
   };
 
-  const prompt = `You are an expert instructional designer for California CTE multilingual classrooms.
+  const prompt=`You are a California CTE instructional designer. Create an inquiry-based assignment with 3-5 stages from this content.
 
-Assignment Title: ${title}
-Rigor Level: ${rigor} — ${rigorDesc[rigor]}
-Languages for scaffolding: ${langs.join(', ')}
+Title: ${title}
+Rigor: ${rigor} (foundational=basic understanding, proficient=reasoning+connections, advanced=analysis+critical thinking)
+Language scaffolds: ${langs.join(', ')}
+Content: ${content.slice(0,3000)}
 
-Source Content:
-${content}
+Rules:
+- Each stage releases ONE task chunk gradually
+- Student must respond to inquiry question before advancing
+- Final stage = mastery demonstration (student chooses: reflection, real-world plan, letter to future student, or 3 learned+1 question)
 
-Generate a structured inquiry-based assignment with 3-6 stages. Each stage must:
-1. Release ONE chunk of the task gradually
-2. Ask an open-ended inquiry question students must answer before advancing
-3. Include UDL options (written response, bullet points, diagram description, questions I have)
-4. Include vocabulary support (2-3 key terms with definitions)
-5. Include sentence starters in English AND ${langs[0] || 'Spanish'}
-6. Have a clear advancement criterion based on the rigor level
+Respond ONLY with a valid JSON array. No markdown. No explanation. Just the array.
 
-The FINAL stage must always be a mastery demonstration where students choose:
-- Written reflection
-- Real-world application plan  
-- Letter to a future student
-- 3 learned + 1 question format
-
-Respond ONLY with a JSON array of stage objects. No markdown, no explanation, just the JSON array.
-
-Each stage object must have:
-{
-  "title": "Stage title",
-  "inquiry_question": "Open-ended question",
-  "task_description": "What student must do",
-  "vocabulary": [{"term": "word", "definition": "plain language definition"}],
-  "sentence_starters_en": ["starter 1", "starter 2"],
-  "sentence_starters_l2": ["starter in ${langs[0] || 'Spanish'} 1", "starter 2"],
-  "udl_options": ["Written response", "Bullet points", "Diagram description", "Questions I have"],
-  "advancement_criteria": "What AI checks before allowing next stage",
-  "is_final": false
-}`;
+Each object:
+{"title":"","inquiry_question":"","task_description":"","vocabulary":[{"term":"","definition":""}],"sentence_starters_en":[""],"sentence_starters_l2":[""],"udl_options":["Written response","Bullet points","Diagram description","Questions I have"],"advancement_criteria":"","is_final":false}`;
 
   try {
     const res = await fetch('/api/claude', {
@@ -10802,7 +10794,7 @@ Each stage object must have:
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2500,
+        max_tokens: 1800,
         stream: false,
         messages: [{ role: 'user', content: prompt }]
       })
@@ -10951,10 +10943,13 @@ async function cmPublishAIAssignment() {
           <div>
             <label style="font-size:12px;font-weight:700;color:#7a75a0;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px">Language Scaffolds</label>
             <div style="display:flex;flex-wrap:wrap;gap:6px;padding:8px;border:1.5px solid #e4e1f5;border-radius:10px;background:white">
-              ${[['es','Spanish'],['pt','Portuguese'],['fr','French'],['it','Italian'],['ru','Russian'],['hy','Armenian'],['ko','Korean']].map(([v,l])=>
-                `<label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer;white-space:nowrap">
-                  <input type="checkbox" class="cm-ai-lang-chk" value="${v}" ${v==='es'?'checked':''}> ${l}
-                </label>`).join('')}
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" class="cm-ai-lang-chk" value="es" checked> Spanish</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" class="cm-ai-lang-chk" value="pt"> Portuguese</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" class="cm-ai-lang-chk" value="fr"> French</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" class="cm-ai-lang-chk" value="it"> Italian</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" class="cm-ai-lang-chk" value="ru"> Russian</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" class="cm-ai-lang-chk" value="hy"> Armenian</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="checkbox" class="cm-ai-lang-chk" value="ko"> Korean</label>
             </div>
           </div>
         </div>
