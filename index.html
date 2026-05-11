@@ -9493,7 +9493,7 @@ FUTURE PLUG-IN POINTS (designed in, not yet built):
 --------------------------------- */
 
 /* ── CONFIG ── */
-const CM_API_BASE    = 'http://localhost:3001/api';  // Node.js backend URL
+const CM_API_BASE    = '';  // Backend disabled — all data stored in localStorage + Supabase
 const CM_STORE_KEY   = 'iteraai_classroom_v1';       // localStorage key
 
 /* ── IN-MEMORY DATA STORE ── */
@@ -9570,30 +9570,13 @@ function cmGenCode(name, period) {
    When integrating Supabase or another DB, swap only these functions. */
 
 async function cmApiGet(path) {
-  try {
-    const r = await fetch(CM_API_BASE + path, { signal: AbortSignal.timeout(2000) });
-    if (!r.ok) throw new Error('non-ok');
-    return await r.json();
-  } catch(e) { return null; }  // fall through to local store
+  return null; // No backend — localStorage only
 }
 async function cmApiPost(path, body) {
-  try {
-    const r = await fetch(CM_API_BASE + path, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(2000)
-    });
-    if (!r.ok) throw new Error('non-ok');
-    return await r.json();
-  } catch(e) { return null; }
+  return null; // No backend — localStorage only
 }
 async function cmApiDelete(path) {
-  try {
-    const r = await fetch(CM_API_BASE + path, { method: 'DELETE', signal: AbortSignal.timeout(2000) });
-    if (!r.ok) throw new Error('non-ok');
-    return true;
-  } catch(e) { return false; }
+  return false; // No backend — localStorage only
 }
 
 /* ══ BUSINESS LOGIC — CLASSES ══ */
@@ -10011,14 +9994,7 @@ function showClassroomManager() {
 async function cmCheckApiStatus() {
   const el = document.getElementById('cm-api-status');
   if (!el) return;
-  try {
-    const r = await fetch(CM_API_BASE + '/health', { signal: AbortSignal.timeout(1500) });
-    if (r.ok) {
-      el.innerHTML = '<span style="width:8px;height:8px;border-radius:50%;background:#00C9A7;flex-shrink:0;animation:pulse 1.5s infinite"></span> Backend connected · <strong style="color:var(--teal)">localhost:3001</strong>';
-      return;
-    }
-  } catch(e) {}
-  el.innerHTML = '<span style="width:8px;height:8px;border-radius:50%;background:#FFB627;flex-shrink:0"></span> Offline mode — <span style="color:var(--muted)">localStorage only</span>';
+  el.innerHTML = '<span style="width:8px;height:8px;border-radius:50%;background:#00C9A7;flex-shrink:0;animation:pulse 1.5s infinite"></span> Connected · <strong style="color:var(--teal)">Supabase + localStorage</strong>';
 }
 
 /* ══ MODAL: CREATE CLASS ══ */
