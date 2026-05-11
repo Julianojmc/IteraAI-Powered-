@@ -5213,29 +5213,72 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 
 <!-- ═══ CREATE ASSIGNMENT MODAL (PART 2) ═══ -->
 <div id="cm-create-assignment-modal" style="display:none;position:fixed;inset:0;background:rgba(26,26,46,.52);z-index:9100;align-items:center;justify-content:center;padding:20px">
-  <div style="background:white;border-radius:18px;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.22);overflow:hidden;animation:popIn .2s ease">
-    <div style="background:linear-gradient(135deg,#e8601c,#c9820a);padding:18px 22px;display:flex;align-items:center;justify-content:space-between">
+  <div style="background:white;border-radius:18px;max-width:620px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.22);animation:popIn .2s ease">
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#e8601c,#c9820a);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2;border-radius:18px 18px 0 0">
       <div>
         <h3 style="color:white;font-family:var(--font-sans);font-size:17px;font-weight:700;letter-spacing:-0.01em">New Assignment</h3>
-        <div id="cm-create-asgn-class-label" style="color:rgba(255,255,255,.92);font-size:12px;margin-top:2px"></div>
+        <div id="cm-create-asgn-class-label" style="color:rgba(255,255,255,.85);font-size:12px;margin-top:2px"></div>
       </div>
       <button onclick="cmCloseCreateAssignmentModal()" style="background:rgba(255,255,255,.2);border:none;color:white;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center">×</button>
     </div>
+
     <div style="padding:22px 24px">
+      <div id="cm-manual-status" style="font-size:13px;color:var(--muted);margin-bottom:14px;min-height:16px"></div>
+
+      <!-- Title -->
       <div class="fr"><label>Assignment Title <span class="req">*</span></label>
-        <input type="text" id="cm-asgn-title" placeholder="e.g. HACCP Principles Quiz">
+        <input type="text" id="cm-asgn-title" placeholder="e.g. Professional Bio — Virtual Enterprise">
       </div>
-      <div class="fr"><label>Description <span style="font-weight:400;color:var(--muted);font-size:12px">optional</span></label>
-        <textarea id="cm-asgn-desc" placeholder="What should students do? Any special instructions…" style="min-height:72px"></textarea>
+
+      <!-- Description -->
+      <div class="fr"><label>Instructions for Students <span class="req">*</span></label>
+        <textarea id="cm-asgn-desc" placeholder="What should students do? Be specific about expectations, steps, and deliverables..." style="min-height:100px"></textarea>
       </div>
-      <div class="fr"><label>Due Date</label>
-        <input type="date" id="cm-asgn-due" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:white">
+
+      <!-- File upload -->
+      <div class="fr">
+        <label>Attach File <span style="font-weight:400;color:var(--muted);font-size:12px">optional — PDF, Word, or text</span></label>
+        <input type="file" id="cm-asgn-file" accept=".pdf,.txt,.docx"
+          style="width:100%;padding:10px;border:1.5px dashed var(--border);border-radius:9px;font-size:13px;cursor:pointer;background:#f9f8ff">
+        <div id="cm-asgn-file-status" style="font-size:12px;color:var(--muted);margin-top:4px"></div>
       </div>
-      <!-- Info callout: auto-generates submissions -->
-      <div style="background:var(--orange-light);border-left:3px solid var(--orange);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#7a3010;line-height:1.6;margin-top:4px">
-        Submissions will be auto-generated for all <strong id="cm-asgn-student-count">0</strong> students in this class with status <em>not started</em>.
+
+      <!-- Due date + Rigor -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="fr"><label>Due Date</label>
+          <input type="date" id="cm-asgn-due" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--font-sans);font-size:14px;color:var(--ink);background:white">
+        </div>
+        <div class="fr"><label>Rigor Level</label>
+          <select id="cm-asgn-rigor" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:var(--font-sans);font-size:13px;color:var(--ink);background:white">
+            <option value="foundational">Foundational</option>
+            <option value="proficient" selected>Proficient</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
       </div>
-      <div style="display:flex;gap:10px;margin-top:18px">
+
+      <!-- Stages -->
+      <div class="fr">
+        <label style="display:flex;align-items:center;justify-content:space-between">
+          <span>Assignment Stages <span style="font-weight:400;color:var(--muted);font-size:12px">break task into steps</span></span>
+          <button onclick="cmManualAddStage()" style="background:var(--purple-light,#ede8fa);color:var(--purple,#7c5cbf);border:none;border-radius:7px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">+ Add Stage</button>
+        </label>
+        <div id="cm-manual-stages" style="margin-top:8px"></div>
+      </div>
+
+      <!-- Publish toggle -->
+      <div style="background:#f0fdf8;border:1.5px solid #a7f3d0;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+        <input type="checkbox" id="cm-asgn-publish" checked style="width:16px;height:16px;accent-color:#00C9A7;cursor:pointer">
+        <label for="cm-asgn-publish" style="font-size:13px;font-weight:600;color:#065f46;cursor:pointer">Publish to Student Portal immediately</label>
+      </div>
+
+      <div style="background:var(--orange-light);border-left:3px solid var(--orange);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#7a3010;line-height:1.6;margin-bottom:16px">
+        Submissions will be auto-generated for all <strong id="cm-asgn-student-count">0</strong> students in this class.
+      </div>
+
+      <div style="display:flex;gap:10px">
         <button onclick="cmCloseCreateAssignmentModal()" style="flex:1;padding:11px;background:white;border:1.5px solid var(--border);border-radius:10px;font-family:var(--font-sans);font-size:14px;color:var(--muted);cursor:pointer">Cancel</button>
         <button onclick="cmSubmitCreateAssignment()" style="flex:2;padding:11px;background:linear-gradient(135deg,var(--orange),#c9820a);color:white;border:none;border-radius:10px;font-family:var(--font-sans);font-size:14px;font-weight:700;cursor:pointer">Create Assignment →</button>
       </div>
@@ -10622,28 +10665,121 @@ function cmOpenCreateAssignmentModal() {
   document.getElementById('cm-asgn-title').value = '';
   document.getElementById('cm-asgn-desc').value  = '';
   document.getElementById('cm-asgn-due').value   = '';
-  // Show current student count
+  document.getElementById('cm-asgn-rigor').value = 'proficient';
+  document.getElementById('cm-manual-stages').innerHTML = '';
+  document.getElementById('cm-manual-status').textContent = '';
+  document.getElementById('cm-asgn-file-status').textContent = '';
+  window._cmManualStages = [];
+  window._cmManualFileText = '';
   const count = cmGetRoster(cmActiveClassId).length;
   document.getElementById('cm-asgn-student-count').textContent = count;
+  // Wire file input
+  const fi = document.getElementById('cm-asgn-file');
+  fi.value = '';
+  fi.onchange = async function() {
+    const file = this.files[0];
+    if (!file) return;
+    const st = document.getElementById('cm-asgn-file-status');
+    st.textContent = 'Reading file...';
+    try {
+      let text = '';
+      if (file.type === 'application/pdf') {
+        text = await cmExtractPDF(file);
+      } else {
+        text = await file.text();
+      }
+      window._cmManualFileText = text.slice(0, 10000);
+      st.textContent = '✓ ' + file.name + ' loaded (' + text.length + ' chars)';
+      st.style.color = 'var(--teal)';
+    } catch(e) {
+      st.textContent = 'Could not read file. Paste content in the description instead.';
+      st.style.color = 'var(--orange)';
+    }
+  };
+  // Add one default stage
+  cmManualAddStage();
   document.getElementById('cm-create-assignment-modal').classList.add('open');
   setTimeout(() => document.getElementById('cm-asgn-title').focus(), 80);
 }
 
-function cmCloseCreateAssignmentModal() {
-  document.getElementById('cm-create-assignment-modal').classList.remove('open');
+function cmManualAddStage() {
+  if (!window._cmManualStages) window._cmManualStages = [];
+  const idx = window._cmManualStages.length;
+  window._cmManualStages.push({ title: '', inquiry_question: '', task_description: '', advancement_criteria: '', is_final: false });
+  const wrap = document.getElementById('cm-manual-stages');
+  const div = document.createElement('div');
+  div.id = 'cm-manual-stage-' + idx;
+  div.style.cssText = 'background:#f5f3fd;border-radius:12px;padding:14px;margin-bottom:10px;border:1.5px solid #e4e1f5';
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div style="background:#7c5cbf;color:white;border-radius:7px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0">${idx+1}</div>
+      <input placeholder="Stage title (e.g. Explore, Develop, Present)" oninput="window._cmManualStages[${idx}].title=this.value"
+        style="flex:1;padding:6px 10px;border:1.5px solid #e4e1f5;border-radius:7px;font-size:13px;font-weight:600;font-family:inherit;background:white;color:#1a1630">
+      <button onclick="document.getElementById('cm-manual-stage-${idx}').remove();window._cmManualStages.splice(${idx},1)"
+        style="background:#fdeaea;border:none;border-radius:7px;padding:4px 8px;font-size:12px;color:#e05252;cursor:pointer">✕</button>
+    </div>
+    <textarea placeholder="Inquiry question — what should students think about?" oninput="window._cmManualStages[${idx}].inquiry_question=this.value"
+      style="width:100%;padding:8px 10px;border:1.5px solid #e4e1f5;border-radius:7px;font-size:12.5px;font-family:inherit;resize:vertical;min-height:48px;background:white;color:#1a1630;margin-bottom:6px"></textarea>
+    <textarea placeholder="Task description — what must students do in this stage?" oninput="window._cmManualStages[${idx}].task_description=this.value"
+      style="width:100%;padding:8px 10px;border:1.5px solid #e4e1f5;border-radius:7px;font-size:12.5px;font-family:inherit;resize:vertical;min-height:48px;background:white;color:#1a1630;margin-bottom:6px"></textarea>
+    <input placeholder="Advancement criteria — what qualifies to move forward?" oninput="window._cmManualStages[${idx}].advancement_criteria=this.value"
+      style="width:100%;padding:6px 10px;border:1.5px solid #e4e1f5;border-radius:7px;font-size:12.5px;font-family:inherit;background:white;color:#1a1630">
+  `;
+  wrap.appendChild(div);
 }
 
 async function cmSubmitCreateAssignment() {
-  const title = document.getElementById('cm-asgn-title').value.trim();
-  const desc  = document.getElementById('cm-asgn-desc').value.trim();
-  const due   = document.getElementById('cm-asgn-due').value;
+  const title  = document.getElementById('cm-asgn-title').value.trim();
+  const desc   = document.getElementById('cm-asgn-desc').value.trim();
+  const due    = document.getElementById('cm-asgn-due').value;
+  const rigor  = document.getElementById('cm-asgn-rigor').value;
+  const publish= document.getElementById('cm-asgn-publish').checked;
+  const stages = (window._cmManualStages || []).filter(s => s.title || s.task_description);
+
   if (!title) { cmToast('Assignment title is required', 'error'); return; }
-  const asgn = await cmCreateAssignment({ classId: cmActiveClassId, title, description: desc, dueDate: due });
+
+  // Mark last stage as final
+  if (stages.length) stages[stages.length-1].is_final = true;
+
+  const classCode = cmActiveClassId.slice(-6).toUpperCase();
+  const cls = cmStore.classes.find(c => c.id === cmActiveClassId);
+
+  // Save to Supabase
+  try {
+    const sb = getSupabase();
+    if (sb && publish) {
+      await sb.from('iteraai_assignments').insert([{
+        class_code    : classCode,
+        title,
+        description   : desc,
+        extracted_text: window._cmManualFileText || desc,
+        stages        : stages.length ? stages : [{
+          title: 'Complete the Assignment',
+          inquiry_question: 'What did you learn and how does it connect to your life?',
+          task_description: desc,
+          advancement_criteria: 'Student demonstrates understanding of the main concepts.',
+          udl_options: ['Written response','Bullet points','Diagram description','Questions I have'],
+          sentence_starters_en: ['I think...','This connects to...','One thing I learned...'],
+          sentence_starters_l2: ['Yo pienso...','Esto se conecta con...','Una cosa que aprendí...'],
+          vocabulary: [],
+          is_final: true
+        }],
+        rigor_level   : rigor,
+        languages     : ['es'],
+        published     : publish
+      }]);
+    }
+  } catch(e) { console.warn('Supabase assignment save:', e); }
+
+  // Create in local classroom store
+  const asgn = await cmCreateAssignment({
+    classId: cmActiveClassId, title, description: desc, dueDate: due
+  });
+
   cmCloseCreateAssignmentModal();
-  cmToast(`"${asgn.title}" created for ${cmGetRoster(cmActiveClassId).length} students`, 'success');
+  cmToast(`"${asgn.title}" created${publish?' and published to Student Portal':''}`, 'success');
   cmRenderAssignmentsTab(cmActiveClassId);
-  cmRenderDashboard(); // Update total assignments stat
-  // Stay on assignments tab
+  cmRenderDashboard();
   cmSwitchClassTab('assignments', null);
 }
 
