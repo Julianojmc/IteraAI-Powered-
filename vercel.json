@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/claude.js": {
+      "maxDuration": 300
+    }
+  },
   "routes": [
     { "src": "/api/claude", "dest": "/api/claude" },
     { "src": "/iteraai-crm", "dest": "/iteraai-crm.html" },
