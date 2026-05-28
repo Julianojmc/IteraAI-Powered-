@@ -9202,113 +9202,192 @@ function resetDualWorkflow() {
 function iepMarkdown(text) {
   if (!text) return '';
 
-  // ── 1. Escape HTML ──
-  var s = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // ── 1. Escape HTML ──────────────────────────────────────────────
+  let s = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 
-  // ── 2. Pipe tables → real HTML tables ──
-  s = s.replace(/((?:^\|.+\|\s*\n)+)/gm, function(block) {
-    var rows = block.trim().split('\n').filter(function(r){ return r.trim(); });
+  // ── 2. Pipe tables → styled HTML tables ─────────────────────────
+  s = s.replace(/((?:^\|.+\|\s*\n)+)/gm, function (block) {
+    const rows = block.trim().split('\n').filter(r => r.trim());
     if (rows.length < 2) return block;
-    var html = '<div style="overflow-x:auto;margin:16px 0"><table style="width:100%;border-collapse:collapse;font-size:13px;border-radius:10px;overflow:hidden;box-shadow:0 1px 8px rgba(100,80,180,.08)">';
-    rows.forEach(function(row, i) {
-      if (/^\|[-:\s|]+\|$/.test(row.trim())) return; // skip separator row
-      var cells = row.split('|').filter(function(c,idx,arr){ return idx>0 && idx<arr.length; });
-      var isHeader = i === 0;
-      html += '<tr style="background:' + (isHeader ? 'linear-gradient(135deg,#5448a0,#7c5cbf)' : (i%2===0?'#f9f8ff':'#ffffff')) + '">';
-      cells.forEach(function(cell) {
-        var tag = isHeader ? 'th' : 'td';
-        var style = isHeader
-          ? 'padding:10px 14px;color:white;font-weight:700;font-size:12px;letter-spacing:.04em;text-align:left;text-transform:uppercase'
-          : 'padding:10px 14px;border-bottom:1px solid #e4e1f5;color:#1a1630;vertical-align:top;line-height:1.5';
-        html += '<' + tag + ' style="' + style + '">' + cell.trim().replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>') + '</' + tag + '>';
+
+    let html = `<div style="overflow-x:auto;margin:18px 0">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;font-family:'DM Sans',sans-serif">`;
+
+    rows.forEach((row, i) => {
+      if (/^\|[\s\-:]+\|$/.test(row.trim())) return; // skip separator
+      const cells = row.split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length);
+      const isHeader = i === 0;
+      const bg = isHeader ? '#1e1145' : (i % 2 === 0 ? '#ffffff' : '#f8f7fc');
+      const color = isHeader ? 'white' : '#2d2650';
+      const fw = isHeader ? '700' : '400';
+      const fs = isHeader ? '11px' : '13px';
+      const tt = isHeader ? 'uppercase' : 'none';
+      const ls = isHeader ? '0.06em' : 'normal';
+      html += `<tr>`;
+      cells.forEach(cell => {
+        const tag = isHeader ? 'th' : 'td';
+        const pad = isHeader ? '10px 14px' : '10px 14px';
+        const border = isHeader ? 'none' : '1px solid #e8e4f5';
+        const inner = cell.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        html += `<${tag} style="padding:${pad};background:${bg};color:${color};font-weight:${fw};font-size:${fs};text-transform:${tt};letter-spacing:${ls};border:${border};text-align:left;vertical-align:top;line-height:1.55">${inner}</${tag}>`;
       });
-      html += '</tr>';
+      html += `</tr>`;
     });
-    html += '</table></div>';
+
+    html += `</table></div>`;
     return html;
   });
 
-  // ── 3. Bold + italic ──
+  // ── 3. Inline formatting ─────────────────────────────────────────
   s = s.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
   s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  s = s.replace(/`(.+?)`/g, '<code style="background:#f0ecff;color:#5a3fa0;padding:2px 7px;border-radius:4px;font-size:12px;font-family:monospace">$1</code>');
 
-  // ── 4. Headers with colored accent bars ──
-  var sectionColors = {
-    'teacher': '#00C9A7', 'overview': '#00C9A7',
-    'student': '#7c5cbf', 'instruction': '#7c5cbf',
-    'learning support': '#f0a500', 'support': '#f0a500', 'vocabulary': '#f0a500',
-    'activity': '#e8601c', 'assignment': '#e8601c', 'phase': '#e8601c',
-    'rubric': '#5448a0', 'assessment': '#5448a0',
-    'exit': '#2ecc87', 'reflection': '#2ecc87',
-    'resource': '#3D3272', 'header': '#3D3272'
-  };
-  function getSectionColor(title) {
-    var t = title.toLowerCase();
-    for (var k in sectionColors) { if (t.indexOf(k) !== -1) return sectionColors[k]; }
-    return '#7c5cbf';
+  // ── 4. H1 — Document Title Header ───────────────────────────────
+  s = s.replace(/^# (.+)$/gm, function (_, title) {
+    return `<div style="background:#1e1145;border-radius:0;padding:28px 32px 24px;margin:0 0 0;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;right:0;width:200px;height:100%;background:linear-gradient(135deg,transparent 60%,rgba(139,111,212,0.25))"></div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:8px;font-family:'DM Sans',sans-serif">IteraAI · Instructional Resource</div>
+      <div style="font-size:22px;font-weight:800;color:#ffffff;line-height:1.25;letter-spacing:-0.02em;font-family:'Outfit',sans-serif;max-width:580px">${title}</div>
+      <div style="width:40px;height:3px;background:#8B6FD4;border-radius:2px;margin-top:14px"></div>
+    </div>`;
+  });
+
+  // ── 5. H2 — Section Headers (colored left-border style) ──────────
+  // Map section names to accent colors + labels
+  const sectionMap = [
+    { keys: ['teacher overview', 'teacher note', 'teacher move', 'facilitation', 'instructor'],        color: '#2e7d32', bg: '#f1f8f2', icon: '🎯', label: 'Teacher' },
+    { keys: ['student', 'student-facing', 'directions', 'instructions'],                               color: '#1565c0', bg: '#e8f0fe', icon: '📋', label: 'Student' },
+    { keys: ['learning support', 'support', 'scaffold', 'el support', 'eld support', 'language'],       color: '#6a1b9a', bg: '#f3e5f5', icon: '🌐', label: 'Language Support' },
+    { keys: ['vocabulary', 'key vocab', 'bilingual', 'glossary'],                                       color: '#0277bd', bg: '#e1f5fe', icon: '📖', label: 'Vocabulary' },
+    { keys: ['activity', 'task', 'workshop', 'project', 'practice', 'warm-up', 'warm up', 'opening'],   color: '#e65100', bg: '#fff3e0', icon: '⚡', label: 'Activity' },
+    { keys: ['assessment', 'rubric', 'evaluation', 'grading', 'scoring'],                               color: '#4527a0', bg: '#ede7f6', icon: '📊', label: 'Assessment' },
+    { keys: ['exit ticket', 'check-in', 'check in', 'formative', 'reflection'],                        color: '#00695c', bg: '#e0f2f1', icon: '✏️', label: 'Exit Ticket' },
+    { keys: ['objective', 'standard', 'alignment', 'goal'],                                             color: '#283593', bg: '#e8eaf6', icon: '🎓', label: 'Standards' },
+    { keys: ['material', 'resource', 'supply', 'supply list'],                                          color: '#37474f', bg: '#eceff1', icon: '📦', label: 'Materials' },
+    { keys: ['extension', 'enrichment', 'advanced', 'gate'],                                            color: '#558b2f', bg: '#f1f8e9', icon: '🚀', label: 'Extension' },
+    { keys: ['family', 'home', 'community', 'parent'],                                                  color: '#ad1457', bg: '#fce4ec', icon: '🏠', label: 'Family' },
+    { keys: ['differentiat', 'udl', 'modification', 'accommodation'],                                   color: '#4e342e', bg: '#efebe9', icon: '♿', label: 'Differentiation' },
+  ];
+
+  function getSectionStyle(title) {
+    const t = title.toLowerCase();
+    for (const s of sectionMap) {
+      if (s.keys.some(k => t.includes(k))) return s;
+    }
+    return { color: '#3D3272', bg: '#f5f3fd', icon: '📌', label: '' };
   }
 
-  s = s.replace(/^# (.+)$/gm, function(_, title) {
-    return '<div style="background:linear-gradient(135deg,#1a1630,#3D3272,#5448a0);border-radius:14px;padding:24px 26px;margin:0 0 20px;color:white">' +
-      '<div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:8px">IteraAI · Instructional Resource</div>' +
-      '<div style="font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.3">' + title + '</div>' +
-      '</div>';
+  s = s.replace(/^## (.+)$/gm, function (_, title) {
+    const st = getSectionStyle(title);
+    return `<div style="display:flex;align-items:center;gap:10px;margin:28px 0 10px;padding:11px 16px;background:${st.bg};border-left:4px solid ${st.color};border-radius:0 8px 8px 0">
+      <span style="font-size:17px;line-height:1">${st.icon}</span>
+      <span style="font-size:14px;font-weight:700;color:${st.color};letter-spacing:-0.01em;font-family:'Outfit',sans-serif">${title}</span>
+    </div>`;
   });
 
-  s = s.replace(/^## (.+)$/gm, function(_, title) {
-    var color = getSectionColor(title);
-    var icons = {
-      'Teacher Overview':'🎯', 'Student':'📋', 'Learning Support':'🌐',
-      'Activity':'⚡', 'Rubric':'📊', 'Assessment':'📊',
-      'Exit Ticket':'✏️', 'Reflection':'✏️', 'Resource':'📄', 'Vocabulary':'📖'
+  // ── 6. H3 — Sub-section labels ───────────────────────────────────
+  s = s.replace(/^### (.+)$/gm, function (_, title) {
+    return `<div style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6e6a8a;margin:18px 0 7px;padding-bottom:5px;border-bottom:1.5px solid #e8e4f5;font-family:'DM Sans',sans-serif">${title}</div>`;
+  });
+
+  // ── 7. H4 — Micro labels ─────────────────────────────────────────
+  s = s.replace(/^#### (.+)$/gm, function (_, title) {
+    return `<div style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9e99b8;margin:14px 0 5px;font-family:'DM Sans',sans-serif">${title}</div>`;
+  });
+
+  // ── 8. Blockquote → Teacher Note / Callout box ───────────────────
+  s = s.replace(/^&gt; (.+)$/gm, function (_, content) {
+    return `<div style="background:#fff8e1;border-left:4px solid #f9a825;border-radius:0 8px 8px 0;padding:12px 16px;margin:12px 0;font-size:13px;color:#5d4037;line-height:1.6;font-family:'DM Sans',sans-serif">
+      <span style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#f9a825;display:block;margin-bottom:4px">Teacher Note</span>
+      ${content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}
+    </div>`;
+  });
+
+  // ── 9. Special callout lines: lines starting with "Strategy:" or "Teacher Move" ──
+  s = s.replace(/^(Strategy|Teacher Move|Teacher Note|EL Strategy|EL Support|UDL Tip|CTSO Connection|Industry Connection|Pro Tip):\s*(.+)$/gm, function (_, label, content) {
+    const colors = {
+      'Strategy': ['#1565c0', '#e3f2fd'],
+      'Teacher Move': ['#2e7d32', '#f1f8f2'],
+      'Teacher Note': ['#f57f17', '#fffde7'],
+      'EL Strategy': ['#6a1b9a', '#f3e5f5'],
+      'EL Support': ['#6a1b9a', '#f3e5f5'],
+      'UDL Tip': ['#00695c', '#e0f2f1'],
+      'CTSO Connection': ['#ad1457', '#fce4ec'],
+      'Industry Connection': ['#e65100', '#fff3e0'],
+      'Pro Tip': ['#4527a0', '#ede7f6'],
     };
-    var icon = '📌';
-    for (var k in icons) { if (title.indexOf(k) !== -1) { icon = icons[k]; break; } }
-    return '<div style="display:flex;align-items:center;gap:10px;margin:24px 0 10px;padding:12px 16px;background:' + color + '18;border-radius:10px;border-left:4px solid ' + color + '">' +
-      '<span style="font-size:18px">' + icon + '</span>' +
-      '<span style="font-size:15px;font-weight:800;color:' + color + ';letter-spacing:-.01em">' + title + '</span>' +
-      '</div>';
+    const [c, bg] = colors[label] || ['#3D3272', '#f5f3fd'];
+    return `<div style="background:${bg};border-left:3px solid ${c};border-radius:0 8px 8px 0;padding:10px 14px;margin:8px 0;font-size:13px;color:#2d2650;line-height:1.6">
+      <span style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:${c};margin-right:8px">${label}:</span>${content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}
+    </div>`;
   });
 
-  s = s.replace(/^### (.+)$/gm, function(_, title) {
-    return '<div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7a75a0;margin:16px 0 6px;padding-bottom:4px;border-bottom:1px solid #e4e1f5">' + title + '</div>';
+  // ── 10. Sentence frames block (lines starting with "●" or bullet + quote marks) ──
+  // Detect sentence frames box pattern
+  s = s.replace(/^((?:[""][^""]+[""]|["'][^"']+["']|"[^"]+")[^\n]*\n?)+/gm, function (block) {
+    if (!block.trim().startsWith('"') && !block.trim().startsWith('"')) return block;
+    const lines = block.trim().split('\n').filter(Boolean);
+    if (lines.length < 1) return block;
+    const items = lines.map(l => `<div style="padding:6px 0;border-bottom:1px solid #e8e4f5;font-style:italic;color:#3D3272;font-size:13px">${l.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</div>`).join('');
+    return `<div style="background:#faf9ff;border:1.5px solid #ccc6ef;border-radius:8px;padding:12px 16px;margin:10px 0">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7c5cbf;margin-bottom:8px">Sentence Frames</div>
+      ${items}
+    </div>`;
   });
 
-  // ── 5. Blockquotes → callout boxes (EL strategy) ──
-  s = s.replace(/^&gt; (.+)$/gm, function(_, content) {
-    return '<div style="background:#e0faf5;border-left:4px solid #00C9A7;border-radius:0 10px 10px 0;padding:12px 16px;margin:10px 0;font-size:13px;color:#065f46"><strong>EL Strategy:</strong> ' + content + '</div>';
+  // ── 11. Checkboxes ────────────────────────────────────────────────
+  s = s.replace(/^- \[x\] (.+)$/gm, `<div style="display:flex;gap:8px;align-items:flex-start;margin:5px 0;font-family:'DM Sans',sans-serif"><span style="color:#2e7d32;font-size:15px;line-height:1.4;flex-shrink:0">✓</span><span style="font-size:13.5px;color:#2d2650;line-height:1.6">$1</span></div>`);
+  s = s.replace(/^- \[ \] (.+)$/gm, `<div style="display:flex;gap:8px;align-items:flex-start;margin:5px 0;font-family:'DM Sans',sans-serif"><span style="width:14px;height:14px;border:1.5px solid #bbb;border-radius:3px;flex-shrink:0;margin-top:3px;display:inline-block"></span><span style="font-size:13.5px;color:#2d2650;line-height:1.6">$1</span></div>`);
+
+  // ── 12. Unordered bullets ─────────────────────────────────────────
+  s = s.replace(/^[-•●] (.+)$/gm, `<div style="display:flex;gap:10px;align-items:flex-start;margin:5px 0;font-family:'DM Sans',sans-serif"><span style="width:5px;height:5px;border-radius:50%;background:#8B6FD4;flex-shrink:0;margin-top:8px;display:inline-block"></span><span style="font-size:13.5px;color:#2d2650;line-height:1.6">$1</span></div>`);
+
+  // ── 13. Ordered lists ─────────────────────────────────────────────
+  s = s.replace(/^(\d+)\. (.+)$/gm, function (_, n, content) {
+    return `<div style="display:flex;gap:10px;align-items:flex-start;margin:6px 0;font-family:'DM Sans',sans-serif">
+      <span style="background:#1e1145;color:white;border-radius:50%;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;line-height:1">${n}</span>
+      <span style="font-size:13.5px;color:#2d2650;line-height:1.6">${content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</span>
+    </div>`;
   });
 
-  // ── 6. Checkboxes ──
-  s = s.replace(/^- \[x\] (.+)$/gm, '<div style="display:flex;gap:8px;align-items:flex-start;margin:5px 0"><span style="color:#00C9A7;font-size:16px;line-height:1.3;flex-shrink:0">✓</span><span>$1</span></div>');
-  s = s.replace(/^- \[ \] (.+)$/gm, '<div style="display:flex;gap:8px;align-items:flex-start;margin:5px 0"><span style="color:#e4e1f5;font-size:16px;line-height:1.3;flex-shrink:0">☐</span><span>$1</span></div>');
+  // ── 14. Horizontal rules ──────────────────────────────────────────
+  s = s.replace(/^---+$/gm, `<div style="height:1px;background:linear-gradient(90deg,#e8e4f5,#ccc6ef,#e8e4f5);margin:22px 0"></div>`);
 
-  // ── 7. Bullets ──
-  s = s.replace(/^[-•] (.+)$/gm, '<div style="display:flex;gap:10px;align-items:flex-start;margin:5px 0"><span style="width:6px;height:6px;border-radius:50%;background:#7c5cbf;flex-shrink:0;margin-top:7px;display:inline-block"></span><span style="line-height:1.6">$1</span></div>');
-
-  // ── 8. Numbered lists ──
-  s = s.replace(/^(\d+)\. (.+)$/gm, '<div style="display:flex;gap:10px;align-items:flex-start;margin:5px 0"><span style="background:#7c5cbf;color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px">$1</span><span style="line-height:1.6">$2</span></div>');
-
-  // ── 9. Horizontal rules ──
-  s = s.replace(/^---+$/gm, '<div style="height:1.5px;background:linear-gradient(90deg,#7c5cbf22,#7c5cbf55,#7c5cbf22);margin:20px 0;border-radius:2px"></div>');
-
-  // ── 10. Inline code ──
-  s = s.replace(/`(.+?)`/g, '<code style="background:#f0ecff;color:#5a3fa0;padding:2px 6px;border-radius:4px;font-size:12px;font-family:monospace">$1</code>');
-
-  // ── 11. Key-value pairs (bold label: content) → info chips ──
-  s = s.replace(/^<strong>([^<]+):<\/strong> (.+)$/gm, function(_, label, val) {
-    return '<div style="display:flex;gap:8px;align-items:baseline;margin:6px 0;font-size:13.5px">' +
-      '<span style="color:#7a75a0;font-size:12px;font-weight:700;min-width:110px;flex-shrink:0">' + label + '</span>' +
-      '<span style="color:#1a1630;font-weight:500">' + val + '</span></div>';
+  // ── 15. Key: Value pattern → info row ────────────────────────────
+  s = s.replace(/^<strong>([^<:]+):<\/strong>\s*(.+)$/gm, function (_, label, val) {
+    return `<div style="display:flex;gap:12px;align-items:baseline;margin:7px 0;padding:6px 0;border-bottom:1px solid #f0edf9;font-family:'DM Sans',sans-serif">
+      <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#9e99b8;min-width:130px;flex-shrink:0">${label}</span>
+      <span style="font-size:13.5px;color:#2d2650;font-weight:500;line-height:1.5">${val}</span>
+    </div>`;
   });
 
-  // ── 12. Paragraph spacing ──
-  s = s.replace(/\n\n/g, '<div style="margin-bottom:12px"></div>');
+  // ── 16. Paragraph spacing ─────────────────────────────────────────
+  s = s.replace(/\n\n/g, '<div style="margin-bottom:10px"></div>');
   s = s.replace(/\n/g, '<br>');
 
-  // ── 13. Wrap in document container ──
-  return '<div style="font-family:\'Outfit\',sans-serif;font-size:14px;color:#1a1630;line-height:1.7;max-width:100%">' + s + '</div>';
+  // ── 17. Wrap in document shell ────────────────────────────────────
+  return `<div style="
+    font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size:14px;
+    color:#2d2650;
+    line-height:1.7;
+    max-width:100%;
+    background:#ffffff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 1px 12px rgba(61,50,114,0.08);
+  ">
+    ${s}
+    <div style="padding:16px 32px;background:#f8f7fc;border-top:1px solid #e8e4f5;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#9e99b8;font-family:'DM Sans',sans-serif">
+      <span style="font-weight:600">IteraAI · AI-Powered CTE Pathways</span>
+      <span>© 2026 Juliano Calvo · For Educational Use Only</span>
+    </div>
+  </div>`;
 }
 
 
