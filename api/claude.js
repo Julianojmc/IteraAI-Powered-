@@ -208,6 +208,7 @@ export default async function handler(request) {
   // Force the current model on every request, ignoring any stale model name
   // sent by the frontend. This is what makes a retired-model outage impossible.
   const model = process.env.AI_MODEL || DEFAULT_MODEL;
+     delete body.temperature;
   const anthropicBody = { ...body, model, system: enrichedSystem, stream: isStreaming };
 
   const anthropicHeaders = {
