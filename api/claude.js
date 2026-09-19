@@ -11,6 +11,12 @@ export const config = { runtime: 'edge' };
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 
+// ── Single source of truth for the AI model ──────────────────────────────
+// Every AI feature (generator, Carl, etc.) uses this one model.
+// To switch models later, set the AI_MODEL environment variable in Vercel —
+// no code change needed. Falls back to this default if the variable is unset.
+const DEFAULT_MODEL = 'claude-sonnet-5';
+
 const ITERAAI_SYSTEM_BASE = `You are IteraAI, an expert AI assistant for California CTE (Career and Technical Education) educators who serve multilingual and multicultural classrooms.
 
 Your knowledge is grounded in official California and federal education policy, standards, and research. When generating instructional materials, prompts, or guidance:
@@ -199,7 +205,10 @@ export default async function handler(request) {
     : (body.system || ITERAAI_SYSTEM_BASE);
   const enrichedSystem = baseSystem + ragContext;
 
-  const anthropicBody = { ...body, system: enrichedSystem, stream: isStreaming };
+  // Force the current model on every request, ignoring any stale model name
+  // sent by the frontend. This is what makes a retired-model outage impossible.
+  const model = process.env.AI_MODEL || DEFAULT_MODEL;
+  const anthropicBody = { ...body, model, system: enrichedSystem, stream: isStreaming };
 
   const anthropicHeaders = {
     'Content-Type':      'application/json',
