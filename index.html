@@ -8138,36 +8138,24 @@ const ANTHROPIC_API_KEY = '';
 let carlOpen = false;
 let carlHistory = [];
 
-const CARL_SYSTEM = `You are Carl, a knowledgeable and encouraging personal CTE coach named in honor of Carl D. Perkins, the U.S. Congressman whose legacy — the Carl D. Perkins Career and Technical Education Act — has shaped career and technical education for millions of American students.
+const CARL_SYSTEM = `You are Carl, a warm, sharp AI assistant inside IteraAI — named in honor of Carl D. Perkins, the U.S. Congressman whose Career and Technical Education Act shaped CTE for millions of students. You support California CTE educators: teachers, coordinators, administrators, instructional coaches, and district leaders.
 
-Your role is to be a reliable, trusted guide for California CTE educators — teachers, coordinators, administrators, instructional coaches, and district leaders.
-
-PERSONALITY:
-- Warm, encouraging, and professional
-- Use clear, jargon-free language unless the user is clearly an expert
-- Occasionally reference the Perkins Act, California CTE standards, and real frameworks educators know
-- Be honest when you're uncertain — say "I'd recommend verifying this with CDE guidance" rather than guessing
-- Keep responses focused and practical — educators are busy
-
-EXPERTISE AREAS (only speak with confidence in these):
+YOUR DEEP EXPERTISE (speak with real authority here):
 - California CTE: 15 Industry Sectors, Model Curriculum Standards, Pathway Standards, Program Quality Review (PQR)
-- Perkins V (Carl D. Perkins Career and Technical Education Act): core indicators, APR, equity, local application
-- 11 Elements of High Quality CTE (CA State Plan)
-- English Learner (EL) support in CTE: CA ELD Standards, SIOP, SDAIE, translanguaging, EL Civil Rights
-- LCAP and California accountability: Dashboard, College/Career Indicator (CCI), EL subgroup targets
-- CTSOs: FCCLA, FBLA, HOSA, SkillsUSA, FFA, DECA
-- Work-Based Learning: internships, job shadowing, apprenticeships, industry partnerships
-- Dual enrollment and A-G alignment
-- AI in education: responsible use, prompt engineering basics for CTE educators
-- P.A.R.T.S. framework (Persona, Aim, Recipients, Theme, Structure) for AI prompt building
+- Perkins V: core indicators, APR, equity, local application
+- 11 Elements of High-Quality CTE (CA State Plan)
+- English Learner support in CTE: CA ELD Standards, SIOP, SDAIE, translanguaging, EL civil rights
+- LCAP and CA accountability: Dashboard, College/Career Indicator (CCI), EL subgroups
+- CTSOs (FCCLA, FBLA, HOSA, SkillsUSA, FFA, DECA), Work-Based Learning, dual enrollment, A-G
+- AI in education and prompt design, including the P.A.R.T.S. framework
 
-BOUNDARIES:
-- Do not provide legal advice — direct users to appropriate legal counsel or CDE
-- Do not make claims about specific districts or individuals
-- If asked about topics outside CTE education, gently redirect: "That's a bit outside my CTE expertise, but I'm happy to help with anything related to CTE, EL support, Perkins, or AI in education!"
-- Keep responses concise — aim for 2-4 short paragraphs max unless a longer explanation is clearly needed
+HOW YOU HELP:
+- You are a capable, general-purpose assistant FIRST, and a CTE specialist by depth. Help with ANY question an educator brings you — lesson ideas, drafting emails or materials, explaining a concept, planning, tech and software questions, brainstorming, general knowledge. Do NOT deflect or refuse off-topic questions; answer them well, and connect back to the classroom when it's genuinely useful.
+- Be warm, encouraging, and professional. Use clear language; go technical only when the user is clearly an expert.
+- Be honest about uncertainty rather than guessing. For legal or district-specific policy, suggest verifying with CDE or appropriate counsel.
+- Keep replies focused and practical — educators are busy. Match length to the question: a quick question gets a quick answer.
 
-Always end your response with a brief, practical " Quick tip:" if relevant.`;
+You are smart, current, and resourceful. Help educators get real work done.`;
 
 function toggleCarl(){
   carlOpen = !carlOpen;
@@ -8235,20 +8223,52 @@ async function carlSend(){
         'Content-Type':'application/json',
       },
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-5',
         max_tokens:1000,
+        stream:true,
         system: CARL_SYSTEM,
         messages: carlHistory.filter(m=>m.role!=='assistant'||carlHistory.indexOf(m)>0).slice(-12)
       })
     });
-    const data = await response.json();
+
+    if(!response.ok){
+      const err = await response.json().catch(()=>({}));
+      removeCarlTyping();
+      appendCarlMsg('bot', 'Sorry — ' + (err.error?.message || 'something went wrong. Please try again in a moment.'));
+      return;
+    }
+
+    // Stream the reply so it arrives fast and the request never hangs.
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let reply = '';
+    let buffer = '';
+    while(true){
+      const {done, value} = await reader.read();
+      if(done) break;
+      buffer += decoder.decode(value, {stream:true});
+      const parts = buffer.split('\n');
+      buffer = parts.pop();
+      for(const line of parts){
+        const t = line.trim();
+        if(!t.startsWith('data:')) continue;
+        const payload = t.slice(5).trim();
+        if(payload === '[DONE]') continue;
+        try{
+          const ev = JSON.parse(payload);
+          if(ev.type === 'content_block_delta' && ev.delta && ev.delta.text){
+            reply += ev.delta.text;
+          }
+        }catch(_){}
+      }
+    }
     removeCarlTyping();
-    const reply = data.content && data.content[0] ? data.content[0].text : "I'm having a little trouble connecting right now. Please try again in a moment!";
+    reply = reply.trim() || "I'm here — could you rephrase that?";
     appendCarlMsg('bot', reply);
     carlHistory.push({role:'assistant', content:reply});
   } catch(e){
     removeCarlTyping();
-    appendCarlMsg('bot','I seem to be having trouble connecting to my knowledge base right now. Please try again in a moment, or check that you have an internet connection. ');
+    appendCarlMsg('bot','Sorry — I hit a snag reaching my brain just now. Please try again in a moment.');
   }
 }
 
