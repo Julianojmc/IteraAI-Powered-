@@ -2202,7 +2202,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 </div>
 
 <!-- ══ HOME OVERLAY ══ -->
-<div class="it-overlay" id="it-page-home">
+<div class="it-overlay" id="it-page-learn">
   <div class="it-home-grid-bg"></div>
   <div class="it-home-orb it-home-orb-1"></div>
   <div class="it-home-orb it-home-orb-2"></div>
@@ -5816,6 +5816,51 @@ Throughout the entire resource, please ensure:
 // ═══════════════════════════════════════════
 //  REBUILD
 // ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+//  TEACHER PROFILE — auto-remember stable context, pre-fill next visit
+// ═══════════════════════════════════════════
+const TEACHER_PROFILE_KEY = 'iteraai_teacher_profile_v1';
+function saveTeacherProfile(){
+  try{
+    const p = {
+      persona:gv('persona-sel'), personaCustom:gv('persona-custom'),
+      exp:gv('exp-sel'), expCustom:gv('exp-custom'),
+      ctx:gv('ctx-sel'), ctxCustom:gv('ctx-custom'),
+      sector:gv('sec-sel'), pathway:gv('pw-sel'),
+      grades:[...document.querySelectorAll('#grade-chips .chip.selected')].map(c=>c.textContent.trim()),
+      eld:[...document.querySelectorAll('.chip.go.selected[data-val]')].map(c=>c.getAttribute('data-val')),
+      langs:[...selectedLangs],
+      langPref:selectedLangPref
+    };
+    // never overwrite good defaults with an empty wizard (e.g. Library re-generate)
+    if(p.persona||p.sector||p.grades.length||p.langs.length){
+      localStorage.setItem(TEACHER_PROFILE_KEY, JSON.stringify(p));
+    }
+  }catch(e){}
+}
+function applyTeacherProfile(){
+  let p; try{ p=JSON.parse(localStorage.getItem(TEACHER_PROFILE_KEY)||'null'); }catch(e){ p=null; }
+  if(!p) return;
+  const setSel=(id,v)=>{const e=document.getElementById(id); if(e&&v) e.value=v;};
+  setSel('persona-sel',p.persona);
+  if(p.personaCustom){const e=document.getElementById('persona-custom'); if(e) e.value=p.personaCustom;}
+  if(typeof updatePersona==='function') updatePersona();
+  setSel('exp-sel',p.exp);
+  if(p.expCustom){const e=document.getElementById('exp-custom'); if(e) e.value=p.expCustom;}
+  handleCustomOrSel('exp-sel','exp-custom','exp-custom-row');
+  setSel('ctx-sel',p.ctx);
+  if(p.ctxCustom){const e=document.getElementById('ctx-custom'); if(e) e.value=p.ctxCustom;}
+  handleCustomOrSel('ctx-sel','ctx-custom','ctx-custom-row');
+  if(p.sector){ setSel('sec-sel',p.sector); if(typeof updatePathways==='function') updatePathways(); if(p.pathway){const ps=document.getElementById('pw-sel'); if(ps) ps.value=p.pathway;} }
+  if(Array.isArray(p.grades)) document.querySelectorAll('#grade-chips .chip').forEach(c=>{ if(p.grades.includes(c.textContent.trim())) c.classList.add('selected'); });
+  if(Array.isArray(p.eld)) document.querySelectorAll('.chip.go[data-val]').forEach(c=>{ if(p.eld.includes(c.getAttribute('data-val'))) c.classList.add('selected'); });
+  if(Array.isArray(p.langs)&&p.langs.length){ p.langs.forEach(l=>selectedLangs.add(l)); document.querySelectorAll('.ltag').forEach(el=>{ const t=el.textContent.trim().replace(/^[^\s]+\s/,''); if(selectedLangs.has(t)||selectedLangs.has(el.textContent.trim())) el.classList.add('picked'); }); if(typeof renderLangPills==='function') renderLangPills(); }
+  if(p.langPref){ selectedLangPref=p.langPref; document.querySelectorAll('#step-4 .chip').forEach(c=>{ const oc=c.getAttribute('onclick')||''; if(oc.indexOf('pickLangPref')===0 && oc.indexOf("'"+p.langPref+"'")>-1) c.classList.add('selected'); }); }
+  if(typeof rebuildPrompt==='function') rebuildPrompt();
+}
+// run after all other init so nothing clobbers the pre-fill
+window.addEventListener('load', applyTeacherProfile);
+
 function rebuildPrompt(){
   const s=collect();
   const txt=buildPrompt(s);
@@ -6710,6 +6755,12 @@ function pgDismiss() {
 
 // ── ON LOAD ──────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
+  // ── TEMP: registration/login landing disabled — open the app directly.
+  //    To restore the landing, delete this one block.
+  { var _g=document.getElementById('pw-gate'); if(_g) _g.style.display='none';
+    try{ sessionStorage.setItem('itera_passed_landing','1'); }catch(e){}
+    return; }
+
   // Permanently locked — skip landing, go to lockout
   if (isPermanentlyLocked()) {
     document.getElementById('pw-gate').style.display = 'none';
@@ -7641,6 +7692,7 @@ async function generateWithAI(promptSourceId){
     alert('Your prompt looks incomplete — please fill in more fields before generating.');
     return;
   }
+  saveTeacherProfile();   // auto-remember stable context for next visit
   return streamGenerate(cleaned);
 }
 
@@ -9159,5 +9211,167 @@ window.itNav = function(page) {
 </script>
 
 
+<script>
+/* ═══════════════════════════════════════════
+   NEW HOME + WELCOME  (app landing: Carl chat + profile confirm)
+   Carl stays as the floating companion; this reuses his persona front-and-center.
+   ═══════════════════════════════════════════ */
+(function(){
+  var TEAL='#2A7F7F', NAVY='#183B56', INK='#27313A', MUT='#5b6a73', BORD='#e6ebef', CARD='#fff';
+  var homeHistory=[];
+  function pname(){ try{ return (localStorage.getItem(REG_NAME_KEY)||'').split(' ')[0]; }catch(e){ return ''; } }
+  function readProfile(){ try{ return JSON.parse(localStorage.getItem('iteraai_teacher_profile_v1')||'null'); }catch(e){ return null; } }
+  function esc(t){ return (''+t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function fmt(t){ var e=esc(t); e=e.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>'); e=e.replace(/^\s*[-*]\s+(.+)$/gm,'&bull; $1'); return e.replace(/\n/g,'<br>'); }
+
+  function addHomeMsg(role,text){
+    var wrap=document.getElementById('home-chat-msgs'); if(!wrap) return;
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;margin:8px 0;'+(role==='user'?'justify-content:flex-end':'justify-content:flex-start');
+    var b=document.createElement('div');
+    b.style.cssText='max-width:82%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.55;'+(role==='user'?'background:'+TEAL+';color:#fff;border-bottom-right-radius:5px':'background:#f1f5f6;color:'+INK+';border-bottom-left-radius:5px');
+    b.innerHTML=fmt(text); row.appendChild(b); wrap.appendChild(row); wrap.scrollTop=wrap.scrollHeight;
+  }
+  function addHomeTyping(){
+    var wrap=document.getElementById('home-chat-msgs'); var row=document.createElement('div');
+    row.style.cssText='display:flex;justify-content:flex-start;margin:8px 0';
+    row.innerHTML='<div style="background:#f1f5f6;color:'+MUT+';padding:10px 14px;border-radius:14px;font-size:14px">Carl is thinking&hellip;</div>';
+    wrap.appendChild(row); wrap.scrollTop=wrap.scrollHeight; return row;
+  }
+  window.homeChatSend=async function(){
+    var inp=document.getElementById('home-chat-input'); if(!inp) return;
+    var text=(inp.value||'').trim(); if(!text) return;
+    inp.value=''; inp.style.height='auto';
+    var sg=document.getElementById('home-chat-sugg'); if(sg) sg.style.display='none';
+    addHomeMsg('user',text); homeHistory.push({role:'user',content:text});
+    var typing=addHomeTyping();
+    try{
+      var sys=(typeof CARL_SYSTEM!=='undefined')?CARL_SYSTEM:'You are Carl, a warm, knowledgeable IteraAI mentor for educators of multilingual and multicultural students.';
+      var r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-5',max_tokens:1000,stream:true,system:sys,messages:homeHistory.slice(-12)})});
+      if(!r.ok){ typing.remove(); addHomeMsg('bot','Sorry &mdash; something went wrong. Please try again.'); return; }
+      var reader=r.body.getReader(), dec=new TextDecoder(), reply='', buf='';
+      while(true){ var x=await reader.read(); if(x.done) break; buf+=dec.decode(x.value,{stream:true}); var parts=buf.split('\n'); buf=parts.pop();
+        for(var i=0;i<parts.length;i++){ var t=parts[i].trim(); if(t.indexOf('data:')!==0) continue; var p=t.slice(5).trim(); if(p==='[DONE]') continue; try{ var ev=JSON.parse(p); if(ev.type==='content_block_delta'&&ev.delta&&ev.delta.text) reply+=ev.delta.text; }catch(_){}} }
+      typing.remove(); reply=reply.trim()||"I'm here &mdash; could you say a bit more?";
+      addHomeMsg('bot',reply); homeHistory.push({role:'assistant',content:reply});
+    }catch(e){ typing.remove(); addHomeMsg('bot','Sorry &mdash; I hit a snag reaching my brain. Try again in a moment.'); }
+  };
+
+  function buildHomeUI(){
+    if(document.getElementById('it-page-home')) return;
+    var nm=pname();
+    var home=document.createElement('div'); home.className='it-overlay'; home.id='it-page-home';
+    home.innerHTML=
+      '<div style="max-width:880px;margin:0 auto;padding:38px 22px 60px;font-family:\'DM Sans\',sans-serif">'
+      + '<div style="text-align:center;margin-bottom:22px">'
+      +   '<div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:'+TEAL+';margin-bottom:8px">IteraAI</div>'
+      +   '<h1 style="font-family:\'Outfit\',sans-serif;font-size:30px;font-weight:800;color:'+NAVY+';margin:0 0 6px">Hi'+(nm?' '+esc(nm):'')+', how can I help today?</h1>'
+      +   '<div style="font-size:15px;color:'+MUT+'">Chat with <strong style="color:'+TEAL+'">Carl</strong>, your IteraAI mentor &mdash; or jump into a tool.</div>'
+      + '</div>'
+      + '<div style="background:'+CARD+';border:1px solid '+BORD+';border-radius:16px;box-shadow:0 6px 24px rgba(24,59,86,.06);overflow:hidden">'
+      +   '<div id="home-chat-msgs" style="padding:18px 18px 6px;max-height:340px;overflow-y:auto"></div>'
+      +   '<div id="home-chat-sugg" style="display:flex;flex-wrap:wrap;gap:8px;padding:4px 18px 12px"></div>'
+      +   '<div style="display:flex;gap:10px;align-items:flex-end;border-top:1px solid '+BORD+';padding:12px 14px;background:#fbfdfe">'
+      +     '<textarea id="home-chat-input" rows="1" placeholder="Ask Carl anything, or describe what you need to create&hellip;" style="flex:1;resize:none;border:1px solid '+BORD+';border-radius:12px;padding:11px 13px;font-size:14px;font-family:inherit;color:'+INK+';max-height:120px;outline:none"></textarea>'
+      +     '<button id="home-chat-send" title="Send" style="background:'+TEAL+';color:#fff;border:none;border-radius:12px;width:44px;height:44px;font-size:18px;cursor:pointer;flex-shrink:0">&uarr;</button>'
+      +   '</div>'
+      + '</div>'
+      + '<div style="margin:26px 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:'+MUT+'">Jump into a tool</div>'
+      + '<div id="home-tools" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px"></div>'
+      + '</div>';
+    document.body.appendChild(home);
+
+    var tools=[
+      ['Prompt Builder','Design a lesson, rubric, assessment or letter &mdash; scaffolded for multilingual learners.',"itNav('tool')"],
+      ['My Library','Reopen, regenerate or copy anything you have saved.',"itNav('tool')"],
+      ['Connect','Share feedback or request a feature.',"itNav('connect')"]
+    ];
+    var tw=home.querySelector('#home-tools');
+    tools.forEach(function(t){
+      var c=document.createElement('div');
+      c.style.cssText='background:'+CARD+';border:1px solid '+BORD+';border-radius:14px;padding:16px;cursor:pointer;transition:box-shadow .15s,transform .15s';
+      c.onmouseover=function(){ c.style.boxShadow='0 6px 18px rgba(24,59,86,.08)'; c.style.transform='translateY(-2px)'; };
+      c.onmouseout=function(){ c.style.boxShadow='none'; c.style.transform='none'; };
+      c.setAttribute('onclick',t[2]);
+      c.innerHTML='<div style="font-family:\'Outfit\',sans-serif;font-size:15px;font-weight:700;color:'+NAVY+';margin-bottom:5px">'+t[0]+'</div><div style="font-size:12.5px;color:'+MUT+';line-height:1.5">'+t[1]+'</div>';
+      tw.appendChild(c);
+    });
+
+    var sugg=['Draft a bell-ringer for newcomer students','Make a rubric for a group presentation','Parent letter in English and Spanish','Vocabulary set: word, definition, example'];
+    var sw=home.querySelector('#home-chat-sugg');
+    sugg.forEach(function(s){
+      var b=document.createElement('button'); b.textContent=s;
+      b.style.cssText='background:#eef6f5;border:1px solid '+BORD+';color:'+TEAL+';border-radius:20px;padding:7px 13px;font-size:12.5px;cursor:pointer;font-family:inherit';
+      b.onclick=function(){ document.getElementById('home-chat-input').value=s; window.homeChatSend(); };
+      sw.appendChild(b);
+    });
+
+    addHomeMsg('bot','Hi'+(nm?' '+nm:'')+"! I'm Carl. Tell me what you're planning &mdash; a lesson, a rubric, a family letter &mdash; or ask me anything about teaching multilingual and multicultural students. I'll help you build it.");
+
+    var inp=home.querySelector('#home-chat-input');
+    inp.addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'; });
+    inp.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); window.homeChatSend(); } });
+    home.querySelector('#home-chat-send').onclick=window.homeChatSend;
+
+    var m=document.createElement('div'); m.id='itw-modal';
+    m.style.cssText='display:none;position:fixed;inset:0;z-index:99998;background:rgba(16,32,40,.5);align-items:flex-start;justify-content:center;overflow-y:auto;font-family:\'DM Sans\',sans-serif';
+    m.innerHTML=
+      '<div style="background:'+CARD+';max-width:560px;width:calc(100% - 32px);margin:6vh auto;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden">'
+      + '<div style="padding:26px 28px 8px">'
+      +   '<h2 id="itw-title" style="font-family:\'Outfit\',sans-serif;font-size:24px;font-weight:800;color:'+NAVY+';margin:0 0 6px">Welcome back!</h2>'
+      +   '<div style="font-size:14px;color:'+MUT+';line-height:1.6">Your IteraAI workspace is personalized to how you teach. Check what I have below and update anything that changed.</div>'
+      + '</div>'
+      + '<div id="itw-cards" style="padding:14px 28px 4px"></div>'
+      + '<div style="display:flex;gap:10px;justify-content:flex-end;padding:16px 28px 24px">'
+      +   '<button id="itw-edit" style="background:#eef1f4;color:'+NAVY+';border:none;border-radius:11px;padding:11px 18px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit">Update in Prompt Builder</button>'
+      +   '<button id="itw-go" style="background:'+TEAL+';color:#fff;border:none;border-radius:11px;padding:11px 20px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit">Looks good, continue &rarr;</button>'
+      + '</div>'
+      + '</div>';
+    document.body.appendChild(m);
+    m.querySelector('#itw-edit').onclick=function(){ m.style.display='none'; itNav('tool'); };
+    m.querySelector('#itw-go').onclick=function(){ m.style.display='none'; if(!document.querySelector('.it-overlay.open')) itNav('home'); };
+  }
+
+  function populateWelcome(){
+    var p=readProfile()||{}, nm=pname();
+    document.getElementById('itw-title').textContent='Welcome back'+(nm?', '+nm:'')+'!';
+    function val(v){ return (v&&(''+v).trim())?(''+v).trim():'—'; }
+    var rows=[
+      ['Role', val(p.personaCustom||p.persona||'Educator')],
+      ['School / Context', val(p.ctxCustom||p.ctx)],
+      ['Grades', val((p.grades||[]).join(', '))],
+      ['Subjects / Focus', val(p.sector||'Multilingual instruction')],
+      ['Languages', val((p.langs||[]).join(', '))]
+    ];
+    var host=document.getElementById('itw-cards'); host.innerHTML='';
+    rows.forEach(function(r){
+      var d=document.createElement('div');
+      d.style.cssText='display:flex;align-items:center;gap:14px;border:1px solid '+BORD+';border-radius:12px;padding:12px 15px;margin-bottom:9px';
+      d.innerHTML='<div style="flex:1"><div style="font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:'+MUT+';margin-bottom:2px">'+r[0]+'</div><div style="font-size:14.5px;font-weight:600;color:'+NAVY+'">'+esc(r[1])+'</div></div>';
+      host.appendChild(d);
+    });
+  }
+  window.maybeShowWelcome=function(){
+    try{ if(sessionStorage.getItem('itera_welcome_v1')==='1') return; }catch(e){}
+    if(!(readProfile()||pname())) return;   // nothing to confirm yet
+    var m=document.getElementById('itw-modal'); if(!m) return;
+    populateWelcome(); m.style.display='flex';
+    try{ sessionStorage.setItem('itera_welcome_v1','1'); }catch(e){}
+  };
+
+  buildHomeUI();
+  function afterGate(){
+    var g=document.getElementById('pw-gate');
+    if(g && g.style.display!=='none') return false;
+    if(!document.querySelector('.it-overlay.open')) itNav('home');
+    window.maybeShowWelcome();
+    return true;
+  }
+  if(!afterGate()){
+    var g=document.getElementById('pw-gate');
+    if(g){ var obs=new MutationObserver(function(){ if(afterGate()) obs.disconnect(); }); obs.observe(g,{attributes:true,attributeFilter:['style']}); }
+  }
+})();
+</script>
 </body>
 </html>
