@@ -5606,9 +5606,11 @@ function pickLangPref(el, val) {
 // ═══════════════════════════════════════════
 //  CHIP / TOGGLE HELPERS
 // ═══════════════════════════════════════════
+let selectedOutputType = '';
 function pickOut(el, val) {
   document.querySelectorAll('#otyp-chips .chip').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
+  selectedOutputType = val || el.textContent.trim();  // use the rich descriptor, not just the label
   // Clear custom if chip selected
   document.getElementById('outputtype-custom').value='';
   rebuildPrompt();
@@ -5616,7 +5618,7 @@ function pickOut(el, val) {
 function handleCustomOutput(){
   // deselect chips if user types custom
   const v = document.getElementById('outputtype-custom').value.trim();
-  if(v) document.querySelectorAll('#otyp-chips .chip').forEach(c=>c.classList.remove('selected'));
+  if(v){ document.querySelectorAll('#otyp-chips .chip').forEach(c=>c.classList.remove('selected')); selectedOutputType=''; }
   rebuildPrompt();
 }
 function toggleChip(el){el.classList.toggle('selected');rebuildPrompt()}
@@ -5634,6 +5636,7 @@ function gcAct(sel){return[...document.querySelectorAll(sel+'.active')].map(c=>c
 function getOutputType() {
   const custom = gv('outputtype-custom');
   if (custom) return custom;
+  if (selectedOutputType) return selectedOutputType;
   const chip = document.querySelector('#otyp-chips .chip.selected');
   return chip ? (chip.getAttribute('data-val') || chip.textContent.trim()) : '';
 }
@@ -6528,35 +6531,8 @@ function generateFromView(){
   const promptText = document.getElementById('view-modal-text').value;
   if(!promptText || promptText.length < 40){ alert('This prompt looks empty.'); return; }
   closeViewModalBtn();
-  // Directly trigger the AI modal with the saved prompt text
-  const modal = document.getElementById('ai-modal');
-  const body = document.getElementById('ai-modal-body');
-  const copyBtn = document.getElementById('ai-copy-btn');
-  const subtitle = document.getElementById('ai-modal-subtitle');
-  aiResponseText = '';
-  body.style.whiteSpace = 'normal';
-  body.innerHTML = '<div class="ai-typing-wrap"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Claude is writing your document…</span></div>';
-  copyBtn.style.display = 'none';
-  subtitle.textContent = 'Powered by Claude · Generating your document…';
-  modal.classList.add('open');
-  fetch('/api/claude',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-    },
-    body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:2000, messages: iftBuildMessages(promptText) })
-  }).then(r=>r.json()).then(data=>{
-    if(data.error){ body.innerHTML='<div style="color:#c0392b;padding:10px;font-size:14px">!️ '+(data.error.message||'Something went wrong.')+'</div>'; subtitle.textContent='Error'; return; }
-    aiResponseText = data.content&&data.content[0] ? data.content[0].text : '';
-    body.style.whiteSpace='normal'; body.innerHTML=iepMarkdown(aiResponseText);
-    subtitle.textContent='Powered by Claude · Document ready ✓';
-    copyBtn.style.display='inline-flex';
-    document.getElementById('ai-pdf-btn').style.display='inline-flex';
-    document.getElementById('ai-save-btn').style.display='inline-flex';
-  }).catch(()=>{
-    body.innerHTML='<div style="color:#c0392b;padding:10px;font-size:14px">!️ Connection error. Please try again.</div>';
-    subtitle.textContent='Connection error';
-  });
+  // Reuse the same adaptive streaming generator as the wizard
+  streamGenerate(promptText);
 }
 function saveAIResponse(){
   if(!aiResponseText){ alert('Nothing to save yet.'); return; }
@@ -7665,7 +7641,11 @@ async function generateWithAI(promptSourceId){
     alert('Your prompt looks incomplete — please fill in more fields before generating.');
     return;
   }
+  return streamGenerate(cleaned);
+}
 
+// Shared adaptive streaming generation — used by the wizard AND regenerate-from-Library
+async function streamGenerate(cleaned){
   const modal = document.getElementById('ai-modal');
   const body = document.getElementById('ai-modal-body');
   const copyBtn = document.getElementById('ai-copy-btn');
