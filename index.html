@@ -7682,130 +7682,29 @@ async function generateWithAI(promptSourceId){
   modal.classList.add('open');
 
   // ── SYSTEM PROMPT: strict structure, textbook-quality, deterministic ──
-  const SYSTEM = `You are a senior instructional designer producing publication-quality CTE educational documents for California secondary and post-secondary classrooms. Your output must read like a chapter from a professional educator's resource guide or a Corwin Press publication — not a generic AI response.
+  const SYSTEM = `You are a senior CTE instructional designer who creates culturally responsive, publication-quality documents of ANY type for California multilingual classrooms. Write like an expert educator who knows these students personally — specific, warm, and grounded — never a generic AI.
 
-ABSOLUTE RULES:
-1. Follow the exact 7-section structure below. No deviations. No extra sections. No missing sections.
-2. Use ONLY information from the educator's prompt. Never invent facts, statistics, or standards not provided.
-3. Every sentence must be substantive and purposeful. No filler, no repetition.
-4. Student language is always simple, grade-appropriate, and jargon-free.
-5. Teacher language is professional and precise.
-6. Vocabulary terms must come directly from the CTE sector and topic provided — never generic.
-7. Sentence frames must be academically rigorous but linguistically scaffolded.
-8. The rubric must have exactly 4 criteria with exactly 4 performance levels each.
-9. Output clean markdown only: # for H1, ## for H2, ### for H3, **bold**, - bullets, 1. numbered, | tables |, > blockquotes for teacher callouts, --- for dividers.
-10. Never output meta-commentary, apologies, or notes about what you are doing.
+FIRST, identify what the educator is actually building from their inputs — e.g., a lesson, activity, worksheet, rubric, assessment, quiz, project/PBL, case study, syllabus, unit plan, study guide, vocabulary set, parent/family letter, newsletter, or anything else — and produce the sections that genuinely fit THAT document. Do NOT force a lesson structure onto a non-lesson.
 
-REQUIRED 7-SECTION STRUCTURE (use these exact ## headings):
+CULTURAL RESPONSIVENESS & ASSET-BASED DESIGN (every document):
+- Treat students' home languages, cultures, families, and community knowledge as ASSETS that strengthen learning — never as gaps or deficits.
+- Anchor ideas in relatable, universal, familiar experiences (food, family, money, work, markets, celebrations, the neighborhood) connected to students' lives and the communities named.
+- Use the selected home languages: cognates, bilingual sentence frames, and translanguaging; invite students to think or draft first in their home language.
+- Use asset-based language ("students bring...", "building on what students already know"). NEVER use deficit framing (struggling, low, lacking, at-risk, behind).
+- Keep examples concrete and culturally sustaining; honor immigrant, refugee, newcomer, and first-generation experiences with dignity; avoid stereotypes.
 
-# [Specific Document Title — not generic]
+UNIVERSAL ITERAAI FORMAT (so every output shares one look):
+- Begin with a single # title specific to the content. Use only ONE # in the whole document.
+- Use ## for each section, named naturally for the document type. Use ### for sub-labels, - for bullets, 1. for ordered steps, | markdown tables | for anything comparative or criteria-based, > for a short overview or callout, and - [ ] for checklists.
+- When students or multilingual learners are involved, include a section titled exactly "## Multilingual Learner Support" (language objective, sentence frames, vocabulary with cognates, one translanguaging move). Include "## UDL & Access" when accessibility choices matter. Use a heading beginning with "## Student-Facing" for anything given directly to students. Include these ONLY when they genuinely fit the document — never force them.
+- For any sequence, agenda, or set of phases, format each phase as a ### heading like "01 - LAUNCH — 5 min".
+- Include a compact metadata table (Course, Grade, CTE Sector, Time, ELD Levels, Home Languages) only when it adds value; skip it for short documents like a letter.
 
-## Resource Header
-| Field | Detail |
-|---|---|
-| Course | [from prompt] |
-| Grade Level | [from prompt] |
-| CTE Sector | [from prompt] |
-| Standards | [from prompt] |
-| Time Required | [from prompt] |
-| Primary Audience | [from prompt] |
-| ELD Levels Served | [from prompt] |
-| Home Languages | [from prompt] |
-
----
-
-## Teacher Overview
-### Purpose
-[2-3 sentences on exactly what this resource accomplishes and why.]
-
-### Learning Goals
-By the end of this activity, students will be able to:
-1. [Content goal — measurable, specific to the topic]
-2. [Language goal — tied to ELD standard and home languages]
-3. [Career goal — connection to industry pathway]
-
-### Materials & Preparation
-- [Specific material 1]
-- [Specific material 2]
-- [Specific material 3]
-
-> Teacher Note: [One concrete, actionable setup or facilitation tip specific to this content and student population.]
-
----
-
-## Student-Facing Instructions
-### What You Will Do
-[1 sentence framing the task in student-friendly language.]
-
-1. [Step 1 — simple, specific action]
-2. [Step 2]
-3. [Step 3]
-4. [Step 4]
-5. [Step 5]
-
-**Your final product:** [One sentence describing exactly what students will submit or demonstrate.]
-
----
-
-## Learning Supports
-### Key Vocabulary
-| Term | Definition | Example in Context |
-|---|---|---|
-| [Term 1] | [Plain-language definition] | [Sentence using it in the CTE context] |
-| [Term 2] | [Plain-language definition] | [Sentence using it in the CTE context] |
-| [Term 3] | [Plain-language definition] | [Sentence using it in the CTE context] |
-| [Term 4] | [Plain-language definition] | [Sentence using it in the CTE context] |
-| [Term 5] | [Plain-language definition] | [Sentence using it in the CTE context] |
-
-### Sentence Frames
-**To explain:** "This [concept] works by _______________."
-**To compare:** "One difference between ___ and ___ is _______________."
-**To argue:** "I believe ___ because the evidence shows _______________."
-**To reflect:** "Something I learned that surprised me was _______________."
-
-### Differentiation
-**Emerging ELD:** [Specific scaffold — e.g., word bank, sentence starters, visual support]
-**Expanding ELD:** [Specific scaffold — e.g., sentence frames, paragraph frames, partner structures]
-**Bridging ELD:** [Specific scaffold — e.g., academic discourse moves, peer feedback protocols]
-
----
-
-## Activity
-[This section contains the actual lesson/assignment/task body. Structure it clearly with ### subheadings for each phase: Opening, Main Task, Closing. Use tables, numbered steps, and [Student response here] placeholders where students write. Be specific to the topic — not generic.]
-
-### Opening (5–10 min)
-[Specific warm-up or hook tied to the topic and students' prior knowledge or lived experience.]
-
-### Main Task
-[The core activity, broken into clear phases with instructions, tables, or structured prompts as appropriate.]
-
-### Closing
-[Synthesis activity or discussion protocol that consolidates learning.]
-
----
-
-## Rubric
-| Criteria | Excellent (4) | Proficient (3) | Developing (2) | Beginning (1) |
-|---|---|---|---|---|
-| [Criterion 1 — content knowledge] | [Specific descriptor] | [Specific descriptor] | [Specific descriptor] | [Specific descriptor] |
-| [Criterion 2 — language use] | [Specific descriptor] | [Specific descriptor] | [Specific descriptor] | [Specific descriptor] |
-| [Criterion 3 — application/skill] | [Specific descriptor] | [Specific descriptor] | [Specific descriptor] | [Specific descriptor] |
-| [Criterion 4 — professional practice] | [Specific descriptor] | [Specific descriptor] | [Specific descriptor] | [Specific descriptor] |
-
-**Student Self-Check:** Before submitting, confirm:
-- [ ] I completed every section of the activity.
-- [ ] I used at least 3 vocabulary terms correctly.
-- [ ] My writing is clear and specific, not vague.
-- [ ] I reviewed my work for accuracy.
-
----
-
-## Exit Ticket
-**Student reflection (choose one):**
-1. [Specific reflection question tied to the learning goals]
-2. [Second option — different cognitive demand]
-
-**Teacher follow-up:** [One specific formative assessment action the teacher takes based on responses — e.g., "Sort exit tickets into three piles by readiness; use the 'Developing' pile to form tomorrow's small group."]`;
+WRITING RULES:
+- Use ONLY the educator's inputs. Never invent standards, statistics, or facts. If unsure of a code, write "per CA CTE Foundation Standards".
+- Be concise and paper-efficient: every line earns its place. No filler, repetition, meta-commentary, or apologies. Fit as few printed pages as possible while staying complete.
+- Student language is simple and grade-appropriate; teacher language is professional and precise.
+- Output clean markdown only, using the conventions above.`;
 
   try {
     const response = await fetch('/api/claude',{
@@ -8705,183 +8604,160 @@ function resetDualWorkflow() {
 ===================================================== */
 function iepMarkdown(text) {
   if (!text) return '';
+  // ── IteraAI visual system palette ──
+  var NAVY='#183B56', TEAL='#2A7F7F', GOLD='#B4791F', INK='#27313A',
+      SOFT='#F4F7F8', MLB='#EAF3F8', UDLB='#EDF5EF', TASKB='#FBF6EC',
+      LINE='#dbe3e7', MUT='#5b6a73';
+  var F = "font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif";
 
-  // ── 1. Escape HTML ──
-  let s = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
-  // ── 2. Pipe tables → clean publication-style tables ──
-  s = s.replace(/((?:^\|.+\|\s*\n)+)/gm, function(block) {
-    const rows = block.trim().split('\n').filter(r => r.trim());
-    if (rows.length < 1) return block;
-    let html = '<div style="margin:20px 0;overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;font-family:\'DM Sans\',sans-serif;border:1px solid #d0cce8">';
-    rows.forEach((row, i) => {
-      if (/^\|[\s\-:]+\|$/.test(row.trim())) return;
-      const cells = row.split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length);
-      const isHeader = i === 0;
-      html += '<tr>';
-      cells.forEach(cell => {
-        const tag = isHeader ? 'th' : 'td';
-        const inner = cell.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-        if (isHeader) {
-          html += `<th style="padding:9px 14px;background:#1e1145;color:white;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;text-align:left;border:1px solid #3a2a6a">${inner}</th>`;
-        } else {
-          const bg = (i % 2 === 0) ? '#ffffff' : '#f6f4fc';
-          html += `<td style="padding:9px 14px;background:${bg};color:#2d2650;font-size:13px;border:1px solid #e0daf0;vertical-align:top;line-height:1.55">${inner}</td>`;
-        }
-      });
-      html += '</tr>';
-    });
-    html += '</table></div>';
-    return html;
-  });
-
-  // ── 3. Inline formatting ──
-  s = s.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
-  s = s.replace(/`(.+?)`/g, '<code style="background:#f0ecff;color:#4527a0;padding:2px 6px;border-radius:3px;font-size:12px;font-family:monospace">$1</code>');
-
-  // ── 4. H1 — Document title block (publication masthead style) ──
-  s = s.replace(/^# (.+)$/gm, function(_, title) {
-    return `<div style="background:#1e1145;padding:32px 36px 28px;position:relative;overflow:hidden">
-      <div style="position:absolute;top:0;right:0;bottom:0;width:6px;background:#8B6FD4"></div>
-      <div style="font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:10px;font-family:'DM Sans',sans-serif">IteraAI  ·  CTE Instructional Resource  ·  For Educational Use</div>
-      <div style="font-size:24px;font-weight:800;color:#ffffff;line-height:1.2;letter-spacing:-0.02em;font-family:'Outfit',sans-serif;max-width:640px">${title}</div>
-      <div style="width:48px;height:3px;background:#8B6FD4;border-radius:2px;margin-top:16px"></div>
-    </div>`;
-  });
-
-  // ── 5. H2 — Section headers (left-rule, publication chapter style) ──
-  const SECTION_STYLES = {
-    'resource header':       { border: '#1e1145', label: 'RESOURCE HEADER',       bg: '#f5f4fc' },
-    'teacher overview':      { border: '#2e7d32', label: 'TEACHER OVERVIEW',       bg: '#f2f8f3' },
-    'teacher':               { border: '#2e7d32', label: 'TEACHER',                bg: '#f2f8f3' },
-    'student-facing':        { border: '#1565c0', label: 'STUDENT-FACING',         bg: '#f0f4fd' },
-    'student':               { border: '#1565c0', label: 'STUDENT',                bg: '#f0f4fd' },
-    'learning support':      { border: '#6a1b9a', label: 'LEARNING SUPPORTS',      bg: '#f7f0fc' },
-    'support':               { border: '#6a1b9a', label: 'SUPPORTS',               bg: '#f7f0fc' },
-    'vocabulary':            { border: '#0277bd', label: 'VOCABULARY',             bg: '#f0f8ff' },
-    'activity':              { border: '#bf360c', label: 'ACTIVITY',               bg: '#fff5f2' },
-    'task':                  { border: '#bf360c', label: 'TASK',                   bg: '#fff5f2' },
-    'rubric':                { border: '#4527a0', label: 'RUBRIC',                 bg: '#f3f0fb' },
-    'assessment':            { border: '#4527a0', label: 'ASSESSMENT',             bg: '#f3f0fb' },
-    'exit ticket':           { border: '#00695c', label: 'EXIT TICKET',            bg: '#f0faf8' },
-    'exit':                  { border: '#00695c', label: 'EXIT',                   bg: '#f0faf8' },
-    'differentiation':       { border: '#4e342e', label: 'DIFFERENTIATION',        bg: '#faf5f3' },
-    'standard':              { border: '#283593', label: 'STANDARDS',              bg: '#f0f2fb' },
-    'objective':             { border: '#283593', label: 'OBJECTIVES',             bg: '#f0f2fb' },
-    'material':              { border: '#37474f', label: 'MATERIALS',              bg: '#f4f6f7' },
-    'extension':             { border: '#558b2f', label: 'EXTENSION',              bg: '#f4f9ee' },
-    'family':                { border: '#ad1457', label: 'FAMILY',                 bg: '#fdf0f6' },
-  };
-  function getH2Style(title) {
-    const t = title.toLowerCase();
-    for (const [key, style] of Object.entries(SECTION_STYLES)) {
-      if (t.includes(key)) return style;
-    }
-    return { border: '#3D3272', label: '', bg: '#f5f3fd' };
+  function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function inl(t){
+    return t
+      .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
+      .replace(/\*\*(.+?)\*\*/g,'<strong style="color:'+NAVY+'">$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>')
+      .replace(/`(.+?)`/g,'<code style="background:'+SOFT+';color:'+NAVY+';padding:1px 5px;border-radius:3px;font-size:.9em;font-family:monospace">$1</code>');
   }
 
-  s = s.replace(/^## (.+)$/gm, function(_, title) {
-    const st = getH2Style(title);
-    const label = st.label || title.toUpperCase();
-    return `<div style="margin:32px 0 0">
-      <div style="display:flex;align-items:center;gap:0;margin-bottom:0">
-        <div style="width:4px;background:${st.border};align-self:stretch;border-radius:2px 0 0 2px;flex-shrink:0"></div>
-        <div style="background:${st.bg};padding:13px 20px;flex:1;border-top:1px solid ${st.border}22;border-bottom:1px solid ${st.border}22;border-right:1px solid ${st.border}22;border-radius:0 6px 6px 0">
-          <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:${st.border};font-family:'DM Sans',sans-serif;margin-bottom:1px">${label}</div>
-          <div style="font-size:15px;font-weight:700;color:#1e1145;font-family:'Outfit',sans-serif;letter-spacing:-0.01em;line-height:1.3">${title}</div>
-        </div>
-      </div>
-      <div style="height:1px;background:#e8e4f5;margin-bottom:16px"></div>
-    </div>`;
-  });
+  // Section accent + optional tinted box, keyed by heading text
+  function accentFor(title){
+    var t = title.toLowerCase();
+    if(/multiling|language support|\bel\b|\bell\b|scaffold/.test(t)) return {c:'#15618A', bg:MLB, box:true};
+    if(/udl|access/.test(t))                                        return {c:'#3C7D4F', bg:UDLB, box:true};
+    if(/student[- ]?facing|student task|your challenge/.test(t))    return {c:GOLD,     bg:TASKB, box:true};
+    if(/standard|alignment/.test(t))                                return {c:MUT,      bg:null,  box:false};
+    if(/rubric|assessment|evidence/.test(t))                        return {c:NAVY,     bg:null,  box:false};
+    if(/exit|reflect/.test(t))                                      return {c:TEAL,     bg:null,  box:false};
+    return {c:TEAL, bg:null, box:false};
+  }
 
-  // ── 6. H3 — Sub-section labels (small caps, ruled) ──
-  s = s.replace(/^### (.+)$/gm, function(_, title) {
-    return `<div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#3D3272;margin:20px 0 8px;padding-bottom:5px;border-bottom:2px solid #e8e4f5;font-family:'DM Sans',sans-serif">${title}</div>`;
-  });
+  // Compact table (navy header, zebra body)
+  function renderTable(rows){
+    var html='<table style="width:100%;border-collapse:collapse;font-size:12px;'+F+';margin:8px 0;border:1px solid '+LINE+'">';
+    var bi=0;
+    for(var i=0;i<rows.length;i++){
+      var row=rows[i];
+      if(/^\|[\s\-:]+\|$/.test(row.trim())) continue;
+      var cells=row.split('|').slice(1,-1);
+      var header=(i===0);
+      html+='<tr>';
+      for(var j=0;j<cells.length;j++){
+        var c=inl(cells[j].trim());
+        if(header) html+='<th style="padding:6px 9px;background:'+NAVY+';color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;text-align:left;border:1px solid '+NAVY+'">'+c+'</th>';
+        else { var bg=(bi%2)?'#f6fafb':'#fff'; html+='<td style="padding:5px 9px;background:'+bg+';color:'+INK+';font-size:12px;border:1px solid '+LINE+';vertical-align:top;line-height:1.4">'+c+'</td>'; }
+      }
+      html+='</tr>';
+      if(!header) bi++;
+    }
+    return html+'</table>';
+  }
 
-  // ── 7. H4 — Micro labels ──
-  s = s.replace(/^#### (.+)$/gm, function(_, title) {
-    return `<div style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#8B6FD4;margin:14px 0 5px;font-family:'DM Sans',sans-serif">${title}</div>`;
-  });
+  // Render the body lines of one section into compact HTML blocks
+  function renderBlocks(lines){
+    var out='', i=0;
+    while(i<lines.length){
+      var line=lines[i];
+      // group consecutive table rows
+      if(/^\s*\|.*\|\s*$/.test(line)){
+        var tb=[];
+        while(i<lines.length && /^\s*\|.*\|\s*$/.test(lines[i])){ tb.push(lines[i]); i++; }
+        out+=renderTable(tb); continue;
+      }
+      var t=line.trim();
+      if(t===''){ i++; continue; }
+      // horizontal rule
+      if(/^---+$/.test(t)){ out+='<div style="height:1px;background:'+LINE+';margin:12px 0"></div>'; i++; continue; }
+      // H3 — numbered sequence step ("01 • LAUNCH — 5 min") or plain sub-label
+      var h3=t.match(/^###\s+(.+)$/);
+      if(h3){
+        var st=h3[1].match(/^(\d+)\s*[•·.\-–]\s*(.+)$/);
+        if(st){
+          out+='<div style="display:flex;align-items:center;gap:9px;margin:12px 0 4px">'
+            +'<span style="background:'+NAVY+';color:#fff;font-size:11px;font-weight:800;'+F+';min-width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">'+st[1]+'</span>'
+            +'<span style="font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:'+NAVY+';'+F+'">'+inl(st[2])+'</span></div>';
+        } else {
+          out+='<div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:'+TEAL+';margin:12px 0 4px;'+F+'">'+inl(h3[1])+'</div>';
+        }
+        i++; continue;
+      }
+      // H4 — micro label
+      var h4=t.match(/^####\s+(.+)$/);
+      if(h4){ out+='<div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:'+MUT+';margin:8px 0 3px;'+F+'">'+inl(h4[1])+'</div>'; i++; continue; }
+      // blockquote → overview/teacher callout
+      var bq=t.match(/^&gt;\s*(.+)$/);
+      if(bq){
+        var inner=bq[1].replace(/^(Teacher Note|Note):\s*/i,'');
+        out+='<div style="background:'+SOFT+';border-left:3px solid '+GOLD+';border-radius:0 5px 5px 0;padding:9px 13px;margin:8px 0;font-size:12.5px;color:'+INK+';line-height:1.5;'+F+'">'+inl(inner)+'</div>';
+        i++; continue;
+      }
+      // checkboxes
+      var cbx=t.match(/^[-*]\s*\[x\]\s*(.+)$/i);
+      if(cbx){ out+='<div style="display:flex;gap:8px;align-items:flex-start;margin:3px 0;'+F+'"><span style="color:'+TEAL+';font-weight:800;font-size:13px;line-height:1.3;flex-shrink:0">✓</span><span style="font-size:12.5px;color:'+INK+';line-height:1.45">'+inl(cbx[1])+'</span></div>'; i++; continue; }
+      var cbe=t.match(/^[-*]\s*\[\s*\]\s*(.+)$/);
+      if(cbe){ out+='<div style="display:flex;gap:8px;align-items:flex-start;margin:3px 0;'+F+'"><span style="width:12px;height:12px;border:1.5px solid '+MUT+';border-radius:2px;flex-shrink:0;margin-top:2px;display:inline-block"></span><span style="font-size:12.5px;color:'+INK+';line-height:1.45">'+inl(cbe[1])+'</span></div>'; i++; continue; }
+      // labelled callout ("EL Strategy: ...")
+      var cal=t.match(/^(EL Strategy|EL Support|Teacher Move|Teacher Note|UDL Tip|Industry Connection|CTSO Connection|Pro Tip|Language Objective|Differentiation Tip):\s*(.+)$/);
+      if(cal){
+        out+='<div style="margin:5px 0;font-size:12.5px;color:'+INK+';line-height:1.5;'+F+'"><span style="font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:'+TEAL+';margin-right:7px">'+cal[1]+'</span>'+inl(cal[2])+'</div>';
+        i++; continue;
+      }
+      // ordered list
+      var ol=t.match(/^(\d+)\.\s+(.+)$/);
+      if(ol){ out+='<div style="display:flex;gap:9px;align-items:flex-start;margin:3px 0;'+F+'"><span style="color:'+TEAL+';font-weight:800;font-size:12px;flex-shrink:0;min-width:16px">'+ol[1]+'.</span><span style="font-size:12.5px;color:'+INK+';line-height:1.5">'+inl(ol[2])+'</span></div>'; i++; continue; }
+      // bullet
+      var bl=t.match(/^[-*•]\s+(.+)$/);
+      if(bl){ out+='<div style="display:flex;gap:9px;align-items:flex-start;margin:3px 0;'+F+'"><span style="width:4px;height:4px;border-radius:50%;background:'+TEAL+';flex-shrink:0;margin-top:7px;display:inline-block"></span><span style="font-size:12.5px;color:'+INK+';line-height:1.5">'+inl(bl[1])+'</span></div>'; i++; continue; }
+      // key: value (bold label)
+      var kv=t.match(/^\*\*([^:*]+):\*\*\s*(.+)$/);
+      if(kv){ out+='<div style="margin:3px 0;font-size:12.5px;line-height:1.5;'+F+'"><span style="font-weight:700;color:'+NAVY+'">'+esc(kv[1])+':</span> <span style="color:'+INK+'">'+inl(kv[2])+'</span></div>'; i++; continue; }
+      // paragraph
+      out+='<div style="font-size:12.5px;color:'+INK+';line-height:1.55;margin:4px 0;'+F+'">'+inl(t)+'</div>';
+      i++;
+    }
+    return out;
+  }
 
-  // ── 8. Blockquotes → Teacher callout (amber, professional) ──
-  s = s.replace(/^&gt; (.+)$/gm, function(_, content) {
-    const inner = content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    return `<div style="background:#fffbf0;border-left:4px solid #f9a825;border-radius:0 6px 6px 0;padding:12px 18px;margin:14px 0;font-family:'DM Sans',sans-serif">
-      <div style="font-size:9.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#f9a825;margin-bottom:5px">Teacher Note</div>
-      <div style="font-size:13px;color:#4a3800;line-height:1.65">${inner}</div>
-    </div>`;
-  });
+  var raw = esc(text).split('\n');
 
-  // ── 9. Labelled callouts: "EL Strategy: …" etc. ──
-  s = s.replace(/^(EL Strategy|EL Support|Teacher Move|Teacher Note|Strategy|UDL Tip|Industry Connection|CTSO Connection|Pro Tip|Differentiation Tip):\s*(.+)$/gm, function(_, label, body) {
-    const palettes = {
-      'EL Strategy':          ['#6a1b9a','#f7f0fc'],
-      'EL Support':           ['#6a1b9a','#f7f0fc'],
-      'Teacher Move':         ['#2e7d32','#f2f8f3'],
-      'Teacher Note':         ['#f57f17','#fffde7'],
-      'Strategy':             ['#1565c0','#f0f4fd'],
-      'UDL Tip':              ['#00695c','#f0faf8'],
-      'Industry Connection':  ['#bf360c','#fff5f2'],
-      'CTSO Connection':      ['#ad1457','#fdf0f6'],
-      'Pro Tip':              ['#4527a0','#f3f0fb'],
-      'Differentiation Tip':  ['#4e342e','#faf5f3'],
-    };
-    const [color, bg] = palettes[label] || ['#3D3272','#f5f3fd'];
-    const inner = body.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    return `<div style="background:${bg};border-left:3px solid ${color};border-radius:0 6px 6px 0;padding:10px 16px;margin:10px 0;font-family:'DM Sans',sans-serif">
-      <span style="font-size:9.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:${color};margin-right:8px">${label}:</span><span style="font-size:13px;color:#2d2650;line-height:1.6">${inner}</span>
-    </div>`;
-  });
+  // ── Split into preamble (title) + ## sections ──
+  var title='', pre=[], sections=[], cur=null;
+  for(var k=0;k<raw.length;k++){
+    var ln=raw[k];
+    var h1=ln.match(/^#\s+(.+)$/);
+    var h2=ln.match(/^##\s+(.+)$/);
+    if(h1 && !title){ title=h1[1].trim(); continue; }
+    if(h2){ cur={title:h2[1].trim(), lines:[]}; sections.push(cur); continue; }
+    if(cur) cur.lines.push(ln); else pre.push(ln);
+  }
 
-  // ── 10. Checkboxes ──
-  s = s.replace(/^- \[x\] (.+)$/gm, (_, t) =>
-    `<div style="display:flex;gap:9px;align-items:flex-start;margin:5px 0;font-family:'DM Sans',sans-serif"><span style="color:#2e7d32;font-weight:700;font-size:14px;line-height:1.4;flex-shrink:0">✓</span><span style="font-size:13.5px;color:#2d2650;line-height:1.6">${t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</span></div>`);
-  s = s.replace(/^- \[ \] (.+)$/gm, (_, t) =>
-    `<div style="display:flex;gap:9px;align-items:flex-start;margin:5px 0;font-family:'DM Sans',sans-serif"><span style="width:14px;height:14px;border:1.5px solid #bbb;border-radius:2px;flex-shrink:0;margin-top:3px;display:inline-block"></span><span style="font-size:13.5px;color:#2d2650;line-height:1.6">${t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</span></div>`);
+  // ── Header ──
+  var html='<div style="'+F+';color:'+INK+';background:#fff">';
+  html+='<div style="padding:16px 20px 14px;border-bottom:2px solid '+NAVY+'">'
+    +'<div style="font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:'+TEAL+';margin-bottom:5px">IteraAI · AI-Powered Instructional Design</div>'
+    +'<div style="font-size:20px;font-weight:800;color:'+NAVY+';line-height:1.2;letter-spacing:-.01em">'+inl(title||'Instructional Resource')+'</div>';
+  var preHtml = renderBlocks(pre);
+  html+= preHtml ? '<div style="margin-top:8px">'+preHtml+'</div>' : '';
+  html+='</div>';
 
-  // ── 11. Unordered bullets ──
-  s = s.replace(/^[-•●] (.+)$/gm, (_, t) =>
-    `<div style="display:flex;gap:12px;align-items:flex-start;margin:5px 0;font-family:'DM Sans',sans-serif"><span style="width:5px;height:5px;border-radius:50%;background:#8B6FD4;flex-shrink:0;margin-top:9px;display:inline-block"></span><span style="font-size:13.5px;color:#2d2650;line-height:1.65">${t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</span></div>`);
+  // ── Sections ──
+  for(var s=0;s<sections.length;s++){
+    var sec=sections[s], a=accentFor(sec.title), inner=renderBlocks(sec.lines);
+    var headBar='<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">'
+      +'<div style="width:3px;height:15px;background:'+a.c+';border-radius:2px;flex-shrink:0"></div>'
+      +'<div style="font-size:13px;font-weight:800;letter-spacing:-.01em;color:'+a.c+';'+F+'">'+inl(sec.title)+'</div></div>';
+    if(a.box){
+      html+='<div style="background:'+a.bg+';border:1px solid '+a.c+'26;border-radius:7px;padding:12px 15px;margin:13px 0">'+headBar+inner+'</div>';
+    } else {
+      html+='<div style="padding:0 20px;margin:14px 0">'+headBar+inner+'</div>';
+    }
+  }
 
-  // ── 12. Ordered lists ──
-  s = s.replace(/^(\d+)\. (.+)$/gm, function(_, n, t) {
-    return `<div style="display:flex;gap:11px;align-items:flex-start;margin:7px 0;font-family:'DM Sans',sans-serif">
-      <span style="background:#1e1145;color:white;border-radius:50%;min-width:21px;height:21px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;line-height:1">${n}</span>
-      <span style="font-size:13.5px;color:#2d2650;line-height:1.65">${t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</span>
-    </div>`;
-  });
-
-  // ── 13. Horizontal rules ──
-  s = s.replace(/^---+$/gm,
-    '<div style="height:1px;background:linear-gradient(90deg,#e8e4f5,#c8c0e8,#e8e4f5);margin:28px 0"></div>');
-
-  // ── 14. Key: Value info rows (after bold processing) ──
-  s = s.replace(/^<strong>([^<:]+):<\/strong>\s*(.+)$/gm, function(_, label, val) {
-    return `<div style="display:flex;gap:14px;align-items:baseline;padding:7px 0;border-bottom:1px solid #f0edf9;font-family:'DM Sans',sans-serif">
-      <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8B6FD4;min-width:140px;flex-shrink:0">${label}</span>
-      <span style="font-size:13.5px;color:#2d2650;line-height:1.5">${val}</span>
-    </div>`;
-  });
-
-  // ── 15. Paragraph spacing & line breaks ──
-  s = s.replace(/\n\n/g, '<div style="margin-bottom:10px"></div>');
-  s = s.replace(/\n/g, '<br>');
-
-  // ── 16. Wrap in publication shell ──
-  return `<div style="font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;color:#2d2650;line-height:1.7;max-width:100%;background:#ffffff">
-    ${s}
-    <div style="padding:14px 36px;background:#f5f3fd;border-top:2px solid #1e1145;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#8B6FD4;font-family:'DM Sans',sans-serif;margin-top:32px">
-      <span style="font-weight:700;letter-spacing:0.04em">IteraAI  ·  AI-Powered CTE Pathways For Multilingual Learners</span>
-      <span>© 2026 Juliano Calvo  ·  For Educational Use Only</span>
-    </div>
-  </div>`;
+  // ── Footer ──
+  html+='<div style="margin-top:16px;padding:9px 20px;border-top:1px solid '+LINE+';display:flex;justify-content:space-between;align-items:center;font-size:10px;color:'+MUT+';'+F+'">'
+    +'<span style="font-weight:700;color:'+NAVY+'">IteraAI · AI-Powered Instructional Design</span>'
+    +'<span>Accessible · Multilingual · Culturally Responsive</span></div>';
+  html+='</div>';
+  return html;
 }
 
 
