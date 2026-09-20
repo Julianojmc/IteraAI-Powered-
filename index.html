@@ -7843,8 +7843,9 @@ By the end of this activity, students will be able to:
     while(true){
       const {done, value} = await reader.read();
       if(done) break;
-      buffer = decoder.decode(value, {stream:true});
+      buffer += decoder.decode(value, {stream:true});
       const lines = buffer.split('\n');
+      buffer = lines.pop();  // keep the incomplete trailing line for the next chunk
       for(const line of lines){
         if(!line.startsWith('data:')) continue;
         const data = line.slice(5).trim();
