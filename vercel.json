@@ -4,10 +4,17 @@
       "maxDuration": 300
     }
   },
-  "routes": [
-    { "src": "/api/claude", "dest": "/api/claude" },
-    { "src": "/iteraai-crm", "dest": "/iteraai-crm.html" },
-    { "src": "/iteraai-student", "dest": "/iteraai-student.html" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/iteraai-crm", "destination": "/iteraai-crm.html" },
+    { "source": "/iteraai-student", "destination": "/iteraai-student.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
   ]
 }
