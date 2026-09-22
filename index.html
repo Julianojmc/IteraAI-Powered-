@@ -17,7 +17,7 @@
 }
 </style>
 <style>
-:root{--teal:#00C9A7;--teal-light:#e8f4f1;--teal-mid:#007A66;--orange:#e8601c;--orange-light:#fff3ed;--gold:#FFB627;--gold-light:#fdf3dc;--purple:#8B6FD4;--purple-light:#f0ebfb;--ink:#0A0E1A;--slate:#1C2333;--muted:#5a6070;--border:#d8dde6;--bg:#f0f7f5;--white:#ffffff;--radius:14px;--shadow:0 4px 24px rgba(0,201,167,.12);--shadow-sm:0 2px 10px rgba(0,201,167,.08)}
+:root{--teal:#00C9A7;--teal-light:#e8f4f1;--teal-mid:#007A66;--orange:#e8601c;--orange-light:#fff3ed;--gold:#FFB627;--gold-light:#fdf3dc;--purple:#2E9E8C;--purple-light:#e8f4f1;--ink:#0A0E1A;--slate:#1C2333;--muted:#5a6070;--border:#d8dde6;--bg:#f0f7f5;--white:#ffffff;--radius:14px;--shadow:0 4px 24px rgba(0,201,167,.12);--shadow-sm:0 2px 10px rgba(0,201,167,.08)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-sans);background:var(--bg);color:var(--ink);min-height:100vh}
 header{background:linear-gradient(135deg,#040d0b 0%,#003d35 50%,#00C9A7 100%);padding:36px 40px 32px;position:relative;overflow:hidden}
@@ -190,10 +190,10 @@ textarea{resize:vertical;min-height:78px;line-height:1.5}
 @media(max-width:920px){.main{grid-template-columns:1fr}.sidebar{position:static}}
 @media(max-width:580px){header{padding:24px 18px}.main{padding:18px 14px 60px}.fbar{padding:0 12px}.cte-grid{grid-template-columns:1fr}}
 /* ═══ CARL CHATBOT ═══ */
-#carl-fab{position:fixed;bottom:28px;right:28px;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#007A66,#00C9A7);border:none;color:white;font-size:26px;cursor:pointer;box-shadow:0 6px 24px rgba(0,201,167,.42);z-index:8000;display:flex;align-items:center;justify-content:center;transition:all .22s}
+#carl-fab{position:fixed;bottom:28px;right:28px;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#007A66,#00C9A7);border:none;color:white;font-size:26px;cursor:pointer;box-shadow:0 6px 24px rgba(0,201,167,.42);z-index:9500;display:flex;align-items:center;justify-content:center;transition:all .22s}
 #carl-fab:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(0,201,167,.55)}
 #carl-fab .carl-badge{position:absolute;top:-3px;right:-3px;width:18px;height:18px;background:var(--orange);border-radius:50%;border:2px solid white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;color:white}
-.carl-panel{position:fixed;bottom:102px;right:28px;width:380px;max-height:560px;background:white;border-radius:18px;box-shadow:0 12px 50px rgba(0,0,0,.18);z-index:8001;display:none;flex-direction:column;overflow:hidden;border:1.5px solid var(--border);animation:slideUp .25s ease}
+.carl-panel{position:fixed;bottom:102px;right:28px;width:380px;max-height:560px;background:white;border-radius:18px;box-shadow:0 12px 50px rgba(0,0,0,.18);z-index:9501;display:none;flex-direction:column;overflow:hidden;border:1.5px solid var(--border);animation:slideUp .25s ease}
 .carl-panel.open{display:flex}
 @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .carl-hdr{background:linear-gradient(135deg,#040d0b,#00C9A7);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0}
@@ -1023,7 +1023,7 @@ header { margin-top: 58px !important; }
 .it-coach-btn:hover { background:#00b096;transform:scale(1.04); }
 
 /* Scaffolds */
-#it-page-scaffolds .it-page-hero { background:linear-gradient(135deg,#6B50C0,#8B6FD4,#B09AE8); }
+#it-page-scaffolds .it-page-hero { background:linear-gradient(135deg,#6B50C0,#2E9E8C,#B09AE8); }
 
 /* ── Global File Context Tray ── */
 #itera-file-tray{position:fixed;top:58px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;overflow:hidden;max-height:0;transition:max-height .35s ease,padding .35s ease;box-shadow:0 4px 12px rgba(0,0,0,.08);z-index:10001}
@@ -1129,16 +1129,16 @@ header { margin-top: 58px !important; }
 
 /* ── 1. COLOR SYSTEM OVERRIDE ── */
 :root {
-  /* Primary: rich purple */
-  --purple:       #8B6FD4;
-  --purple-deep:  #6B50C0;
-  --purple-mid:   #9E85E0;
-  --purple-light: #EEE8FA;
-  --purple-xlight:#F6F4FD;
+  /* Primary: deep teal (rebranded from purple — same var names, teal values) */
+  --purple:       #0C7A68;
+  --purple-deep:  #084C40;
+  --purple-mid:   #109C84;
+  --purple-light: #E3F3EF;
+  --purple-xlight:#F0F9F6;
 
-  /* Accent: warm lavender */
-  --lavender:     #C9BCFA;
-  --lavender-mid: #B3A2F2;
+  /* Accent: soft teal */
+  --lavender:     #7FD8C8;
+  --lavender-mid: #4FC3AE;
 
   /* Keep teal as secondary accent only */
   --teal:         #00C9A7;
@@ -1179,23 +1179,23 @@ h1,h2,h3,h4,h5,h6 {
 /* ── 3. TOP NAV ── */
 #it-nav {
   background: rgba(13,10,30,0.97) !important;
-  border-bottom: 1px solid rgba(103,65,217,0.22) !important;
+  border-bottom: 1px solid rgba(0,122,102,0.22) !important;
   box-shadow: 0 2px 24px rgba(0,0,0,0.28) !important;
 }
 
 .itn-btn { color: rgba(255,255,255,0.85) !important; font-family: var(--font-sans) !important; font-size: 12.5px !important; }
-.itn-btn:hover { background: rgba(103,65,217,0.14) !important; color: var(--lavender) !important; }
-.itn-btn.active { background: rgba(103,65,217,0.2) !important; color: var(--lavender-mid) !important; }
+.itn-btn:hover { background: rgba(0,122,102,0.14) !important; color: var(--lavender) !important; }
+.itn-btn.active { background: rgba(0,122,102,0.2) !important; color: var(--lavender-mid) !important; }
 
 .itn-pill {
   background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important;
-  box-shadow: 0 3px 14px rgba(103,65,217,0.38) !important;
+  box-shadow: 0 3px 14px rgba(0,122,102,0.38) !important;
   border-radius: 9px !important;
   font-family: var(--font-display) !important;
   font-weight: 700 !important;
   letter-spacing: 0.01em !important;
 }
-.itn-pill:hover { box-shadow: 0 5px 20px rgba(103,65,217,0.52) !important; }
+.itn-pill:hover { box-shadow: 0 5px 20px rgba(0,122,102,0.52) !important; }
 
 .itn-badge {
   background: rgba(240,180,41,0.14) !important;
@@ -1208,30 +1208,30 @@ h1,h2,h3,h4,h5,h6 {
 /* Upload btn in nav */
 .itn-upload-btn {
   border-color: var(--purple-mid) !important;
-  background: rgba(103,65,217,0.1) !important;
+  background: rgba(0,122,102,0.1) !important;
   color: var(--lavender-mid) !important;
 }
 .itn-upload-btn:hover { background: var(--purple) !important; color: white !important; border-color: var(--purple) !important; }
 .itn-upload-btn.active { background: var(--purple) !important; color: white !important; }
 
 /* Mobile menu */
-#it-mobile-menu { background: rgba(13,10,30,0.98) !important; border-bottom: 1px solid rgba(103,65,217,0.15) !important; }
-.itn-mob-btn:hover, .itn-mob-btn.active { background: rgba(103,65,217,0.14) !important; color: var(--lavender-mid) !important; }
+#it-mobile-menu { background: rgba(13,10,30,0.98) !important; border-bottom: 1px solid rgba(0,122,102,0.15) !important; }
+.itn-mob-btn:hover, .itn-mob-btn.active { background: rgba(0,122,102,0.14) !important; color: var(--lavender-mid) !important; }
 
 /* ── 4. HOME OVERLAY ── */
 #it-page-home {
-  background: linear-gradient(160deg, #3D3272 0%, #5448A0 28%, #5448A0 58%, #6B50C0 100%) !important;
+  background: linear-gradient(160deg,#f4faf9 0%,#eaf4f2 100%) !important;
 }
 
 .it-home-grid-bg {
   background-image:
-    linear-gradient(rgba(103,65,217,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(103,65,217,0.06) 1px, transparent 1px) !important;
+    linear-gradient(rgba(0,122,102,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,122,102,0.06) 1px, transparent 1px) !important;
   background-size: 52px 52px !important;
 }
 
 .it-home-orb-1 {
-  background: radial-gradient(circle, rgba(103,65,217,0.2) 0%, transparent 70%) !important;
+  background: radial-gradient(circle, rgba(0,122,102,0.2) 0%, transparent 70%) !important;
   width: 620px !important; height: 620px !important;
 }
 .it-home-orb-2 {
@@ -1262,24 +1262,24 @@ h1,h2,h3,h4,h5,h6 {
 /* Feature stack cards on home */
 .it-feat-card {
   background: rgba(255,255,255,0.05) !important;
-  border: 1px solid rgba(103,65,217,0.22) !important;
+  border: 1px solid rgba(0,122,102,0.22) !important;
   border-radius: 14px !important;
 }
 .it-feat-card:hover {
-  background: rgba(103,65,217,0.12) !important;
-  border-color: rgba(103,65,217,0.42) !important;
+  background: rgba(0,122,102,0.12) !important;
+  border-color: rgba(0,122,102,0.42) !important;
 }
 
 /* CTA Buttons */
 .it-home-cta-p {
   background: linear-gradient(135deg, var(--purple-mid), var(--purple-deep)) !important;
-  box-shadow: 0 4px 20px rgba(103,65,217,0.4) !important;
+  box-shadow: 0 4px 20px rgba(0,122,102,0.4) !important;
   border-radius: 12px !important;
   font-family: var(--font-display) !important;
   font-weight: 700 !important;
   letter-spacing: 0.01em !important;
 }
-.it-home-cta-p:hover { box-shadow: 0 7px 28px rgba(103,65,217,0.56) !important; }
+.it-home-cta-p:hover { box-shadow: 0 7px 28px rgba(0,122,102,0.56) !important; }
 
 .it-home-cta-s {
   background: rgba(255,255,255,0.08) !important;
@@ -1290,8 +1290,8 @@ h1,h2,h3,h4,h5,h6 {
 .it-home-cta-s:hover { background: rgba(255,255,255,0.14) !important; }
 
 /* ── 5. STATS BAR ── */
-.it-stats { border-top: 1px solid rgba(103,65,217,0.18) !important; }
-.it-stat { border-right: 1px solid rgba(103,65,217,0.1) !important; }
+.it-stats { border-top: 1px solid rgba(0,122,102,0.18) !important; }
+.it-stat { border-right: 1px solid rgba(0,122,102,0.1) !important; }
 .it-stat-n {
   font-family: var(--font-display) !important;
   font-size: 32px !important;
@@ -1311,15 +1311,15 @@ h1,h2,h3,h4,h5,h6 {
 
 .it-for-card {
   background: rgba(255,255,255,0.04) !important;
-  border: 1.5px solid rgba(103,65,217,0.12) !important;
+  border: 1.5px solid rgba(0,122,102,0.12) !important;
   border-radius: 16px !important;
   transition: all 0.22s !important;
 }
 .it-for-card:hover {
-  border-color: rgba(103,65,217,0.38) !important;
-  background: rgba(103,65,217,0.08) !important;
+  border-color: rgba(0,122,102,0.38) !important;
+  background: rgba(0,122,102,0.08) !important;
   transform: translateY(-4px) !important;
-  box-shadow: 0 12px 36px rgba(103,65,217,0.18) !important;
+  box-shadow: 0 12px 36px rgba(0,122,102,0.18) !important;
 }
 .it-for-card h4 { font-family: var(--font-display) !important; font-weight: 700 !important; }
 .it-for-card-icon { font-size: 28px !important; }
@@ -1337,7 +1337,7 @@ h1,h2,h3,h4,h5,h6 {
   position: absolute;
   top: -80px; right: -80px;
   width: 320px; height: 320px;
-  background: radial-gradient(circle, rgba(103,65,217,0.2), transparent 70%);
+  background: radial-gradient(circle, rgba(0,122,102,0.2), transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -1357,7 +1357,7 @@ h1,h2,h3,h4,h5,h6 {
 .fbar {
   background: var(--white) !important;
   border-bottom: 1px solid var(--border) !important;
-  box-shadow: 0 2px 12px rgba(103,65,217,0.08) !important;
+  box-shadow: 0 2px 12px rgba(0,122,102,0.08) !important;
 }
 .ptab { font-family: var(--font-sans) !important; color: var(--muted) !important; border-radius: 0 !important; }
 .ptab:hover { color: var(--purple) !important; background: var(--purple-xlight) !important; }
@@ -1387,14 +1387,14 @@ h1,h2,h3,h4,h5,h6 {
 .pdot.done { background: var(--purple-mid) !important; }
 .pdot.active {
   background: var(--purple) !important;
-  box-shadow: 0 0 0 4px rgba(103,65,217,0.2) !important;
+  box-shadow: 0 0 0 4px rgba(0,122,102,0.2) !important;
 }
 .pline.done { background: var(--purple-mid) !important; }
 
 /* ── 10. FORM ELEMENTS ── */
 select:focus, input[type=text]:focus, textarea:focus {
   border-color: var(--purple) !important;
-  box-shadow: 0 0 0 3px rgba(103,65,217,0.12) !important;
+  box-shadow: 0 0 0 3px rgba(0,122,102,0.12) !important;
 }
 select, input[type=text], textarea {
   border-color: var(--border) !important;
@@ -1411,9 +1411,9 @@ select, input[type=text], textarea {
 .chip.pu.selected { background: var(--purple) !important; border-color: var(--purple) !important; }
 
 /* EL box purple tint */
-.elbox { background: var(--purple-xlight) !important; border-color: rgba(103,65,217,0.25) !important; }
+.elbox { background: var(--purple-xlight) !important; border-color: rgba(0,122,102,0.25) !important; }
 .elbox h4 { color: var(--purple) !important; }
-.stag { border-color: rgba(103,65,217,0.25) !important; color: var(--purple) !important; }
+.stag { border-color: rgba(0,122,102,0.25) !important; color: var(--purple) !important; }
 .stag:hover, .stag.active { background: var(--purple) !important; color: white !important; border-color: var(--purple) !important; }
 
 /* CTE grid cells */
@@ -1429,21 +1429,21 @@ select, input[type=text], textarea {
 /* ── 11. GENERATE BUTTON ── */
 .gbtn {
   background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important;
-  box-shadow: 0 4px 18px rgba(103,65,217,0.32) !important;
+  box-shadow: 0 4px 18px rgba(0,122,102,0.32) !important;
   font-family: var(--font-display) !important;
   font-weight: 700 !important;
   letter-spacing: 0.01em !important;
   border-radius: 12px !important;
 }
-.gbtn:hover { box-shadow: 0 7px 26px rgba(103,65,217,0.48) !important; }
+.gbtn:hover { box-shadow: 0 7px 26px rgba(0,122,102,0.48) !important; }
 
 /* AI button */
 .bai { background: linear-gradient(135deg, #E8601C, #C9820A) !important; }
 
 /* Sidebar prompt card */
 .pcard { background: var(--slate) !important; }
-.pcardh { background: linear-gradient(135deg, #5448A0, var(--purple-deep)) !important; }
-.lbadge { background: rgba(103,65,217,0.2) !important; border-color: rgba(103,65,217,0.3) !important; }
+.pcardh { background: linear-gradient(135deg, #0C7A68, var(--purple-deep)) !important; }
+.lbadge { background: rgba(0,122,102,0.2) !important; border-color: rgba(0,122,102,0.3) !important; }
 .ldot { background: var(--lavender) !important; }
 
 .qfill { background: linear-gradient(90deg, #E8601C, var(--gold), var(--purple-mid)) !important; }
@@ -1463,11 +1463,11 @@ select, input[type=text], textarea {
 /* ── 14. CARL CHATBOT ── */
 #carl-fab {
   background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important;
-  box-shadow: 0 6px 24px rgba(103,65,217,0.42) !important;
+  box-shadow: 0 6px 24px rgba(0,122,102,0.42) !important;
 }
-#carl-fab:hover { box-shadow: 0 8px 32px rgba(103,65,217,0.58) !important; }
-.carl-hdr { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
-.carl-msg.bot .carl-bubble { background: var(--purple-xlight) !important; border-color: rgba(103,65,217,0.18) !important; }
+#carl-fab:hover { box-shadow: 0 8px 32px rgba(0,122,102,0.58) !important; }
+.carl-hdr { background: linear-gradient(135deg, #0C7A68, var(--purple-deep)) !important; }
+.carl-msg.bot .carl-bubble { background: var(--purple-xlight) !important; border-color: rgba(0,122,102,0.18) !important; }
 .carl-msg.user .carl-bubble { background: var(--purple) !important; }
 .carl-q-btn { border-color: var(--purple) !important; color: var(--purple) !important; }
 .carl-q-btn:hover { background: var(--purple) !important; color: white !important; }
@@ -1478,10 +1478,10 @@ select, input[type=text], textarea {
 
 /* ── 15. LIBRARY PANEL ── */
 .lib-header { background: linear-gradient(135deg, #5448A0, var(--purple), var(--purple-mid)) !important; }
-.lib-card:hover { border-color: var(--purple) !important; box-shadow: 0 6px 24px rgba(103,65,217,0.14) !important; }
+.lib-card:hover { border-color: var(--purple) !important; box-shadow: 0 6px 24px rgba(0,122,102,0.14) !important; }
 .lib-card-tag { background: var(--purple-light) !important; color: var(--purple) !important; }
 .lib-card-btn:hover { border-color: var(--purple) !important; color: var(--purple) !important; background: var(--purple-xlight) !important; }
-#lib-search:focus { border-color: var(--purple) !important; box-shadow: 0 0 0 3px rgba(103,65,217,0.1) !important; }
+#lib-search:focus { border-color: var(--purple) !important; box-shadow: 0 0 0 3px rgba(0,122,102,0.1) !important; }
 .lib-filters select:focus { border-color: var(--purple) !important; }
 .lib-export-btn:hover { border-color: var(--purple) !important; color: var(--purple) !important; background: var(--purple-xlight) !important; }
 
@@ -1498,7 +1498,7 @@ select, input[type=text], textarea {
 .connect-card-hdr h3 { color: var(--purple) !important; }
 .connect-field input:focus, .connect-field select:focus, .connect-field textarea:focus {
   border-color: var(--purple) !important;
-  box-shadow: 0 0 0 3px rgba(103,65,217,0.08) !important;
+  box-shadow: 0 0 0 3px rgba(0,122,102,0.08) !important;
 }
 .connect-chip:hover { border-color: var(--purple) !important; color: var(--purple) !important; background: var(--purple-xlight) !important; }
 .connect-chip.sel { border-color: var(--purple) !important; background: var(--purple) !important; }
@@ -1506,23 +1506,23 @@ select, input[type=text], textarea {
 .connect-scale-btn.sel { background: var(--purple) !important; border-color: var(--purple) !important; }
 .connect-submit {
   background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important;
-  box-shadow: 0 4px 16px rgba(103,65,217,0.28) !important;
+  box-shadow: 0 4px 16px rgba(0,122,102,0.28) !important;
   font-family: var(--font-display) !important;
   font-weight: 700 !important;
 }
-.connect-submit:hover { box-shadow: 0 6px 22px rgba(103,65,217,0.42) !important; }
+.connect-submit:hover { box-shadow: 0 6px 22px rgba(0,122,102,0.42) !important; }
 .connect-progress { background: var(--purple-xlight) !important; color: var(--purple) !important; }
-.ctab-btn.active { background: var(--purple) !important; border-color: var(--purple) !important; box-shadow: 0 3px 12px rgba(103,65,217,0.25) !important; }
+.ctab-btn.active { background: var(--purple) !important; border-color: var(--purple) !important; box-shadow: 0 3px 12px rgba(0,122,102,0.25) !important; }
 .ctab-btn:hover:not(.active) { border-color: var(--purple) !important; color: var(--purple) !important; background: var(--purple-xlight) !important; }
 .connect-thanks h3 { color: var(--purple) !important; }
 
 /* ── 19. PLANS PAGE ── */
-.it-plan.featured { border-color: var(--purple) !important; box-shadow: 0 4px 24px rgba(103,65,217,0.2) !important; }
-.it-plan:hover { box-shadow: 0 8px 28px rgba(103,65,217,0.14) !important; }
+.it-plan.featured { border-color: var(--purple) !important; box-shadow: 0 4px 24px rgba(0,122,102,0.2) !important; }
+.it-plan:hover { box-shadow: 0 8px 28px rgba(0,122,102,0.14) !important; }
 .it-plan-badge { background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important; }
 .it-plan-price { color: var(--purple) !important; }
 .it-plan-cta { border-color: var(--purple) !important; }
-.it-plan-cta.p { background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important; box-shadow: 0 3px 12px rgba(103,65,217,0.25) !important; }
+.it-plan-cta.p { background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important; box-shadow: 0 3px 12px rgba(0,122,102,0.25) !important; }
 .it-plan-cta.o { color: var(--purple) !important; }
 .it-plan-cta.o:hover { background: var(--purple-xlight) !important; }
 .it-plan-feats li::before { color: var(--purple) !important; }
@@ -1531,7 +1531,7 @@ select, input[type=text], textarea {
 .it-access-hdr { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 
 /* ── 20. HELP PAGE ── */
-.it-help-card:hover { border-color: var(--purple) !important; box-shadow: 0 4px 18px rgba(103,65,217,0.1) !important; }
+.it-help-card:hover { border-color: var(--purple) !important; box-shadow: 0 4px 18px rgba(0,122,102,0.1) !important; }
 .it-faq-q:hover, .it-faq-q.open { background: var(--purple-xlight) !important; color: var(--purple) !important; }
 .it-coach-cta { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 .it-coach-btn { background: var(--purple) !important; }
@@ -1544,7 +1544,7 @@ select, input[type=text], textarea {
 .it-creator .it-creator-role { color: var(--lavender) !important; }
 
 /* ── 22. FOOTER ── */
-.it-footer { background: #2D2650 !important; border-top: 1px solid rgba(103,65,217,0.14) !important; }
+.it-footer { background: #2D2650 !important; border-top: 1px solid rgba(0,122,102,0.14) !important; }
 .it-footer-links a:hover { color: var(--lavender) !important; }
 .site-footer { background: #2D2650 !important; border-top: 3px solid var(--purple) !important; }
 
@@ -1568,9 +1568,9 @@ select, input[type=text], textarea {
 .lockout-hdr { background: linear-gradient(135deg, #3D3272, var(--purple-deep)) !important; }
 .lockout-connect-btn {
   background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important;
-  box-shadow: 0 4px 16px rgba(103,65,217,0.3) !important;
+  box-shadow: 0 4px 16px rgba(0,122,102,0.3) !important;
 }
-.lockout-connect-btn:hover { box-shadow: 0 6px 22px rgba(103,65,217,0.42) !important; }
+.lockout-connect-btn:hover { box-shadow: 0 6px 22px rgba(0,122,102,0.42) !important; }
 
 /* ── 27. DEV ADMIN ── */
 .dev-admin-hdr { background: linear-gradient(135deg, #3D3272 0%, #5448A0 100%) !important; }
@@ -1578,24 +1578,24 @@ select, input[type=text], textarea {
 .dev-ext-pin-card { background: linear-gradient(135deg, #2D2650, #5448A0) !important; }
 
 /* ── 28. PW-GATE LANDING PAGE ── */
-#pw-gate .pg-hero { background: linear-gradient(160deg, #3D3272 0%, #5448A0 28%, #7060C0 62%, #8B6FD4 100%) !important; }
+#pw-gate .pg-hero { background: linear-gradient(160deg, #3D3272 0%, #5448A0 28%, #7060C0 62%, #2E9E8C 100%) !important; }
 #pw-gate .pg-eyebrow { background: rgba(184,169,248,0.15) !important; border-color: rgba(184,169,248,0.28) !important; color: var(--lavender) !important; }
 #pw-gate h1.pg-h1 { font-family: var(--font-display) !important; letter-spacing: -0.03em !important; font-weight: 900 !important; }
 #pw-gate h1.pg-h1 em { color: var(--lavender) !important; }
 #pw-gate .pg-card-top { background: linear-gradient(135deg, #5448A0, var(--purple)) !important; }
-#pw-gate .pg-btn { background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important; box-shadow: 0 4px 18px rgba(103,65,217,0.32) !important; }
-#pw-gate .pg-btn:hover { box-shadow: 0 8px 26px rgba(103,65,217,0.44) !important; }
-#pw-gate .pg-role-btn:hover { background: rgba(103,65,217,0.08) !important; color: var(--purple) !important; }
+#pw-gate .pg-btn { background: linear-gradient(135deg, var(--purple), var(--purple-deep)) !important; box-shadow: 0 4px 18px rgba(0,122,102,0.32) !important; }
+#pw-gate .pg-btn:hover { box-shadow: 0 8px 26px rgba(0,122,102,0.44) !important; }
+#pw-gate .pg-role-btn:hover { background: rgba(0,122,102,0.08) !important; color: var(--purple) !important; }
 #pw-gate .pg-role-btn.active { color: var(--purple) !important; }
-#pw-gate .pg-frow input:focus, #pw-gate .pg-frow select:focus { border-color: var(--purple) !important; box-shadow: 0 0 0 3px rgba(103,65,217,0.1) !important; }
+#pw-gate .pg-frow input:focus, #pw-gate .pg-frow select:focus { border-color: var(--purple) !important; box-shadow: 0 0 0 3px rgba(0,122,102,0.1) !important; }
 #pw-gate .pg-chip:hover { border-color: var(--purple) !important; color: var(--purple) !important; }
 #pw-gate .pg-chip.on { background: var(--purple) !important; border-color: var(--purple) !important; }
 #pw-gate .pg-consent label a { color: var(--purple) !important; }
 #pw-gate .pg-eyebrow-sm { color: var(--purple-mid) !important; }
 #pw-gate h2.pg-sec em { color: var(--purple) !important; }
-#pw-gate .pg-feat-card:hover { box-shadow: 0 16px 48px rgba(103,65,217,0.12) !important; border-color: rgba(103,65,217,0.25) !important; }
+#pw-gate .pg-feat-card:hover { box-shadow: 0 16px 48px rgba(0,122,102,0.12) !important; border-color: rgba(0,122,102,0.25) !important; }
 #pw-gate .pg-feat-tag { background: var(--purple-xlight) !important; color: var(--purple) !important; }
-#pw-gate .pg-plan.feat { border-color: var(--purple) !important; box-shadow: 0 8px 40px rgba(103,65,217,0.18) !important; }
+#pw-gate .pg-plan.feat { border-color: var(--purple) !important; box-shadow: 0 8px 40px rgba(0,122,102,0.18) !important; }
 #pw-gate .pg-plan.feat .pg-plan-hdr { background: linear-gradient(135deg, #5448A0, var(--purple-deep)) !important; }
 #pw-gate .pg-plan-cta { border-color: var(--purple) !important; }
 #pw-gate .pg-plan-cta.solid { background: linear-gradient(135deg, var(--purple-deep), var(--purple)) !important; }
@@ -1608,12 +1608,12 @@ select, input[type=text], textarea {
 #pw-gate .pg-cta-btn { color: var(--purple-deep) !important; }
 #pw-gate footer.pg-footer { background: #2D2650 !important; }
 #pw-gate .pg-footer-links a:hover { color: var(--lavender) !important; }
-#pw-gate .pg-o1 { background: radial-gradient(circle, rgba(103,65,217,0.18), transparent 70%) !important; }
+#pw-gate .pg-o1 { background: radial-gradient(circle, rgba(0,122,102,0.18), transparent 70%) !important; }
 #pw-gate .pg-success-share { color: var(--purple) !important; background: var(--purple-xlight) !important; }
 #pw-gate .pg-spots-fill { background: rgba(255,255,255,0.85) !important; }
 
 /* ── 29. SHEET/DUAL ENROLLMENT ── */
-.stpl:hover { border-color: var(--purple) !important; background: var(--purple-xlight) !important; box-shadow: 0 4px 18px rgba(103,65,217,0.12) !important; }
+.stpl:hover { border-color: var(--purple) !important; background: var(--purple-xlight) !important; box-shadow: 0 4px 18px rgba(0,122,102,0.12) !important; }
 .stpl-blank:hover { border-color: var(--purple) !important; background: var(--purple-xlight) !important; }
 .stpl-tags span { background: var(--purple-xlight) !important; color: var(--purple) !important; }
 
@@ -1631,8 +1631,8 @@ select { background-color: var(--white) !important; }
 /* ── 32. SCROLLBAR THEMING ── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: var(--purple-xlight); }
-::-webkit-scrollbar-thumb { background: rgba(103,65,217,0.3); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(103,65,217,0.5); }
+::-webkit-scrollbar-thumb { background: rgba(0,122,102,0.3); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,122,102,0.5); }
 
 /* ── 33. REFINED HEADER (app area) ── */
 header {
@@ -1763,7 +1763,7 @@ header h1 span { color: var(--lavender) !important; }
   font-weight: 800 !important;
   font-family: var(--font-display) !important;
   color: var(--purple) !important;
-  border: 1.5px solid rgba(103,65,217,0.18) !important;
+  border: 1.5px solid rgba(0,122,102,0.18) !important;
   letter-spacing: -0.01em;
 }
 
@@ -1772,8 +1772,8 @@ header h1 span { color: var(--lavender) !important; }
   display: block !important;
   width: 36px !important;
   height: 36px !important;
-  background: rgba(103,65,217,0.12) !important;
-  border: 1.5px solid rgba(103,65,217,0.18) !important;
+  background: rgba(0,122,102,0.12) !important;
+  border: 1.5px solid rgba(0,122,102,0.18) !important;
   border-radius: 8px !important;
   margin-bottom: 14px !important;
   font-size: 0 !important; /* hide empty text */
@@ -1800,7 +1800,7 @@ header h1 span { color: var(--lavender) !important; }
 }
 #pw-gate .pg-feat-icon {
   background: var(--purple-xlight) !important;
-  border: 1.5px solid rgba(103,65,217,0.2) !important;
+  border: 1.5px solid rgba(0,122,102,0.2) !important;
 }
 
 /* ── PROOF SECTION AVATAR boxes ── */
@@ -2225,7 +2225,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
       </div>
       <div class="it-feat-stack">
         <div class="it-feat-card" onclick="itNav('tool')">
-          <div class="it-feat-icon" style="background:rgba(103,65,217,0.12);color:var(--purple);border:1.5px solid rgba(103,65,217,0.18)">P</div>
+          <div class="it-feat-icon" style="background:rgba(0,122,102,0.12);color:var(--purple);border:1.5px solid rgba(0,122,102,0.18)">P</div>
           <div><strong>P.A.R.T.S. Prompt Builder</strong><span>Build standards-aligned AI prompts with a guided 5-step framework</span></div>
         </div>
         <div class="it-feat-card" onclick="itNav('tool')">
@@ -2233,7 +2233,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
           <div><strong>My Library</strong><span>Save, search, and reuse your best prompts across sessions</span></div>
         </div>
         <div class="it-feat-card" onclick="itNav('scaffolds')">
-          <div class="it-feat-icon" style="background:rgba(103,65,217,0.1);color:var(--purple);border:1.5px solid rgba(103,65,217,0.18)">S</div>
+          <div class="it-feat-icon" style="background:rgba(0,122,102,0.1);color:var(--purple);border:1.5px solid rgba(0,122,102,0.18)">S</div>
           <div><strong>Supports &amp; Scaffolds</strong><span>SIOP strategies and language scaffold resources embedded</span></div>
         </div>
         <div class="it-feat-card" onclick="itNav('tool')">
@@ -2255,11 +2255,11 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
       <h2 class="it-section-h">Every Educator in the CTE Ecosystem</h2>
       <p class="it-section-sub">From classroom teachers to district leaders, IteraAI adapts to your role and amplifies your impact on multilingual CTE learners.</p>
       <div class="it-for-grid">
-        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span><h4>CTE Classroom Teachers</h4><p>Build differentiated lessons, scaffolded activities, and multilingual resources tailored to your pathway and students' ELD levels.</p></div>
-        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></span><h4>Admin &amp; District Leaders</h4><p>Generate Perkins V reports, LCAP-aligned documents, program quality reviews, and stakeholder communications with AI.</p></div>
+        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(0,122,102,0.12);border:1.5px solid rgba(0,122,102,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span><h4>CTE Classroom Teachers</h4><p>Build differentiated lessons, scaffolded activities, and multilingual resources tailored to your pathway and students' ELD levels.</p></div>
+        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(0,122,102,0.12);border:1.5px solid rgba(0,122,102,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></span><h4>Admin &amp; District Leaders</h4><p>Generate Perkins V reports, LCAP-aligned documents, program quality reviews, and stakeholder communications with AI.</p></div>
         <div class="it-for-card" onclick="itNav('scaffolds')"><span class="it-for-card-icon" style="background:rgba(0,168,140,0.12);border:1.5px solid rgba(0,168,140,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00A88C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span><h4>EL Specialists &amp; TOSAs</h4><p>Access SIOP/SDAIE-aligned resources, translanguaging supports, and multilingual scaffolds embedded in every prompt.</p></div>
-        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><h4>Instructional Coaches</h4><p>Design PD tools, coaching templates, and observation protocols grounded in California CTE and ELD frameworks.</p></div>
-        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(103,65,217,0.12);border:1.5px solid rgba(103,65,217,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span><h4>CTE Coordinators</h4><p>Streamline curriculum alignment, articulation agreements, advisory committee prep, and sector-wide planning docs.</p></div>
+        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(0,122,102,0.12);border:1.5px solid rgba(0,122,102,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><h4>Instructional Coaches</h4><p>Design PD tools, coaching templates, and observation protocols grounded in California CTE and ELD frameworks.</p></div>
+        <div class="it-for-card" onclick="itNav('tool')"><span class="it-for-card-icon" style="background:rgba(0,122,102,0.12);border:1.5px solid rgba(0,122,102,0.18);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></span><h4>CTE Coordinators</h4><p>Streamline curriculum alignment, articulation agreements, advisory committee prep, and sector-wide planning docs.</p></div>
         <div class="it-for-card" onclick="itNav('connect')"><span class="it-for-card-icon" style="background:rgba(240,180,41,0.12);border:1.5px solid rgba(240,180,41,0.22);width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B08000" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0018 8 6 6 0 006 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 018.91 14"/></svg></span><h4>Educators Everywhere</h4><p>Share feedback, suggest features, and shape the future of IteraAI — every voice helps build better tools for learners.</p></div>
       </div>
     </div>
@@ -2309,12 +2309,12 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
   <div class="it-page-hero" style="background:linear-gradient(135deg,#040d0b,#003d35)"><h1>Help &amp; Getting Started</h1><p>Everything you need to get the most out of IteraAI — from your first prompt to advanced CTE enhancements.</p></div>
   <div class="it-page-body">
     <div class="it-help-grid">
-      <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><h3>Quick Start: Prompt Builder</h3><p>Open Prompt Builder and follow P.A.R.T.S. — Persona, Aim, Recipients, Theme, Structure. Each step guides you with CTE-specific choices.</p></div>
+      <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><h3>Quick Start: Prompt Builder</h3><p>Open Prompt Builder and follow P.A.R.T.S. — Persona, Aim, Recipients, Theme, Structure. Each step guides you with CTE-specific choices.</p></div>
       <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8601C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M19 3l.75 2.25L22 6l-2.25.75L19 9l-.75-2.25L16 6l2.25-.75z"/></svg></span><h3>Generating AI Documents</h3><p>After completing your prompt, click "Generate with AI" to send it to Claude. Review, copy, or save the generated document to your library.</p></div>
       <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B08000" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span><h3>Using My Library</h3><p>All saved prompts appear in My Library. Search by keyword, filter by type, and reopen any prompt to regenerate or copy it at any time.</p></div>
-      <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></span><h3>Admin / District Mode</h3><p>Switch using "I am a:" toggle in the header. Activates an A.R.T. framework for district leadership and Perkins V documentation.</p></div>
+      <div class="it-help-card" onclick="itNav('tool')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></span><h3>Admin / District Mode</h3><p>Switch using "I am a:" toggle in the header. Activates an A.R.T. framework for district leadership and Perkins V documentation.</p></div>
       <div class="it-help-card" onclick="itNav('scaffolds')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A88C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></span><h3>EL Supports &amp; Scaffolds</h3><p>Visit Supports page to see how SIOP, translanguaging, and differentiation are embedded. Use Step R to activate multilingual features.</p></div>
-      <div class="it-help-card" onclick="itNav('connect')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><h3>Contact &amp; Feedback</h3><p>Use Connect to rate IteraAI, share your story, or suggest a feature. The IteraAI team reads every message and responds to feedback.</p></div>
+      <div class="it-help-card" onclick="itNav('connect')"><span class="it-help-card-icon" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:9px;margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><h3>Contact &amp; Feedback</h3><p>Use Connect to rate IteraAI, share your story, or suggest a feature. The IteraAI team reads every message and responds to feedback.</p></div>
     </div>
     <div class="it-faq-title">Frequently Asked Questions</div>
     <div class="it-faq-item"><div class="it-faq-q" onclick="itFaq(this)">What is the P.A.R.T.S. Framework? <span class="it-faq-arr">▾</span></div><div class="it-faq-a">P.A.R.T.S. stands for Persona, Aim, Recipients, Theme, and Structure. It's IteraAI's guided 5-step prompt engineering framework that helps CTE educators build powerful, standards-aligned AI prompts. Each step builds on the last to produce a complete, contextual prompt ready for Claude AI.</div></div>
@@ -2650,11 +2650,11 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
     <h2 class="pg-sec">Everything a CTE educator serving<br><em>multilingual students needs</em></h2>
     <p class="pg-sec-sub">Built for classrooms where Spanish, Vietnamese, Tagalog, Somali, and dozens of other languages are spoken every day.</p>
     <div class="pg-feat-grid">
-      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="pg-feat-title">P.A.R.T.S. Prompt Builder</div><p class="pg-feat-desc">A guided 5-step framework — Persona, Aim, Recipients, Theme &amp; Style, Structure — that builds professional AI prompts in minutes.</p><span class="pg-feat-tag">Teacher Mode</span></div>
+      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div class="pg-feat-title">P.A.R.T.S. Prompt Builder</div><p class="pg-feat-desc">A guided 5-step framework — Persona, Aim, Recipients, Theme &amp; Style, Structure — that builds professional AI prompts in minutes.</p><span class="pg-feat-tag">Teacher Mode</span></div>
       <div class="pg-feat-card"><div class="pg-feat-icon" style="background:#FFF3ED;border:1.5px solid rgba(232,96,28,0.2)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8601C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div><div class="pg-feat-title">Multilingual Learner Engine</div><p class="pg-feat-desc">SIOP, SDAIE, translanguaging, sentence frames, ELD scaffolds, and 40+ home language options — baked into every prompt you generate.</p><span class="pg-feat-tag">EL Specialist</span></div>
-      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></div><div class="pg-feat-title">Admin &amp; District Mode</div><p class="pg-feat-desc">Generate Perkins V action plans, LCAP documents, board presentations, compliance reports, and strategic planning tools — all AI-powered.</p><span class="pg-feat-tag">Admin Mode</span></div>
+      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></div><div class="pg-feat-title">Admin &amp; District Mode</div><p class="pg-feat-desc">Generate Perkins V action plans, LCAP documents, board presentations, compliance reports, and strategic planning tools — all AI-powered.</p><span class="pg-feat-tag">Admin Mode</span></div>
       <div class="pg-feat-card"><div class="pg-feat-icon" style="background:#FDF3DC;border:1.5px solid rgba(240,180,41,0.25)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B08000" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div><div class="pg-feat-title">Spreadsheet Prompt Builder</div><p class="pg-feat-desc">Get complete, working spreadsheet code for EL monitoring, grade trackers, Perkins budgets, and more. Describe it — the AI builds it.</p><span class="pg-feat-tag">Data Tools</span></div>
-      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M19 3l.75 2.25L22 6l-2.25.75L19 9l-.75-2.25L16 6l2.25-.75z"/></svg></div><div class="pg-feat-title">Ask Carl</div><p class="pg-feat-desc">A CTE expert chatbot trained on Perkins V, 11 Elements of HQ CTE, LCAP, Title III, and CA ELD standards. Available 24/7.</p><span class="pg-feat-tag">Always On</span></div>
+      <div class="pg-feat-card"><div class="pg-feat-icon" style="background:var(--purple-xlight);border:1.5px solid var(--purple-light)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/><path d="M19 3l.75 2.25L22 6l-2.25.75L19 9l-.75-2.25L16 6l2.25-.75z"/></svg></div><div class="pg-feat-title">Ask Carl</div><p class="pg-feat-desc">A CTE expert chatbot trained on Perkins V, 11 Elements of HQ CTE, LCAP, Title III, and CA ELD standards. Available 24/7.</p><span class="pg-feat-tag">Always On</span></div>
       <div class="pg-feat-card"><div class="pg-feat-icon" style="background:#FFF3ED;border:1.5px solid rgba(232,96,28,0.2)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8601C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div><div class="pg-feat-title">Personal Prompt Library</div><p class="pg-feat-desc">Save, tag, search, and reuse your best prompts. Filter by sector, ELD level, or grade. Export your entire library anytime.</p><span class="pg-feat-tag">All Plans</span></div>
     </div>
   </div>
@@ -2948,7 +2948,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 
 <!-- STEP 0 — PERSONA -->
 <div class="sp active" id="step-0">
-<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="ch-text"><h2>P — Persona <span class="hbtn" onclick="showTT('persona')">?</span></h2><p>Tell the AI who you are — your role, experience level, and teaching context.</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="ch-text"><h2>P — Persona <span class="hbtn" onclick="showTT('persona')">?</span></h2><p>Tell the AI who you are — your role, experience level, and teaching context.</p></div></div>
 <div class="cb">
   <div class="fr"><label>Your Role <span class="req">*</span></label>
     <select id="persona-sel" onchange="updatePersona()">
@@ -3281,7 +3281,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 
 <!-- STEP 3 — THEME -->
 <div class="sp" id="step-3">
-<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="12,2 2,7 12,12 22,7"/><polyline points="2,17 12,22 22,17"/><polyline points="2,12 12,17 22,12"/></svg></div><div class="ch-text"><h2>T — Theme <span class="hbtn" onclick="showTT('theme')">?</span></h2><p>Define the instructional style, pedagogical approach, and ML/EL strategies to embed.</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><polygon points="12,2 2,7 12,12 22,7"/><polyline points="2,17 12,22 22,17"/><polyline points="2,12 12,17 22,12"/></svg></div><div class="ch-text"><h2>T — Theme <span class="hbtn" onclick="showTT('theme')">?</span></h2><p>Define the instructional style, pedagogical approach, and ML/EL strategies to embed.</p></div></div>
 <div class="cb">
   <div class="fr"><label>Instructional Approach <span class="hint">select all that reflect your goals</span></label>
     <div class="cg">
@@ -3322,7 +3322,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
   <div class="fr" style="margin-top:14px"><label>Additional Style Notes <span class="hint">optional</span></label>
     <textarea id="theme-notes" placeholder="e.g. I want activities that honor students' immigrant identities. Use real industry job titles and authentic workplace scenarios that reflect our community..." oninput="rebuildPrompt()"></textarea>
   </div>
-  <button class="gbtn" style="background:linear-gradient(135deg,#3d2460,#8B6FD4)" onclick="goToStep(4)">Next: Define Structure →</button>
+  <button class="gbtn" style="background:linear-gradient(135deg,#3d2460,#2E9E8C)" onclick="goToStep(4)">Next: Define Structure →</button>
 </div></div>
 </div>
 
@@ -3778,7 +3778,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
 
 <!-- ADMIN STEP 0 — PURPOSE -->
 <div class="asp active" id="astep-0">
-<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B6FD4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></div><div class="ch-text"><h2>P — Purpose: Your Leadership Role <span class="hbtn" onclick="showTT('admin_purpose')">?</span></h2><p>Tell the AI who you are and what kind of leader you are in your district or school system.</p></div></div>
+<div class="card"><div class="ch"><div class="ci" style="background:var(--purple-xlight)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2E9E8C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex-shrink:0"><path d="M6 22V4a2 2 0 012-2h8a2 2 0 012 2v18z"/><path d="M6 12H4a2 2 0 00-2 2v6a2 2 0 002 2h2"/><path d="M18 9h2a2 2 0 012 2v9a2 2 0 01-2 2h-2"/><line x1="10" y1="6" x2="10" y2="6.01"/><line x1="14" y1="6" x2="14" y2="6.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="10" y1="14" x2="10" y2="14.01"/><line x1="14" y1="14" x2="14" y2="14.01"/></svg></div><div class="ch-text"><h2>P — Purpose: Your Leadership Role <span class="hbtn" onclick="showTT('admin_purpose')">?</span></h2><p>Tell the AI who you are and what kind of leader you are in your district or school system.</p></div></div>
 <div class="cb">
   <div class="fr"><label>Your Leadership Role <span class="req">*</span></label>
     <select id="a-role" onchange="handleCustomOrSel('a-role','a-role-custom','a-role-custom-row');aRebuild()">
@@ -3838,7 +3838,7 @@ button, .btn, .bpri, .bsec, .bsave, .bai, .gbtn {
       <input type="text" id="a-goal-custom" placeholder="Describe what you need the AI to create..." oninput="aRebuild()">
     </div>
   </div>
-  <button class="gbtn" style="background:linear-gradient(135deg,#3d2460,#8B6FD4)" onclick="goToAdminStep(1)">Next: Define Audience →</button>
+  <button class="gbtn" style="background:linear-gradient(135deg,#3d2460,#2E9E8C)" onclick="goToAdminStep(1)">Next: Define Audience →</button>
 </div></div>
 </div>
 
@@ -6622,8 +6622,8 @@ function printDocumentAsPDF(title, text){
     '<style>' +
     '* { box-sizing: border-box; margin: 0; padding: 0; }' +
     'body { font-family: "DM Sans", sans-serif; font-size: 13px; line-height: 1.8; color: #3D3272; padding: 48px 56px; max-width: 760px; margin: 0 auto; }' +
-    '.doc-header { border-bottom: 3px solid #8B6FD4; padding-bottom: 16px; margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }' +
-    '.doc-brand { font-family: "Outfit", sans-serif; font-size: 13px; font-weight: 700; color: #8B6FD4; letter-spacing: 0.04em; text-transform: uppercase; }' +
+    '.doc-header { border-bottom: 3px solid #2E9E8C; padding-bottom: 16px; margin-bottom: 28px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }' +
+    '.doc-brand { font-family: "Outfit", sans-serif; font-size: 13px; font-weight: 700; color: #2E9E8C; letter-spacing: 0.04em; text-transform: uppercase; }' +
     '.doc-date { font-size: 11px; color: #64607A; margin-top: 3px; }' +
     'h2 { font-family: "Outfit", sans-serif; font-size: 17px; font-weight: 700; color: #3D3272; margin: 22px 0 7px; padding-bottom: 5px; border-bottom: 1.5px solid #E2DCFC; letter-spacing: -0.015em; }' +
     'h3 { font-family: "Outfit", sans-serif; font-size: 14px; font-weight: 700; color: #3D3272; margin: 18px 0 5px; }' +
@@ -7513,19 +7513,18 @@ const ANTHROPIC_API_KEY = '';
 let carlOpen = false;
 let carlHistory = [];
 
-const CARL_SYSTEM = `You are Carl, a warm, sharp AI assistant inside IteraAI — named in honor of Carl D. Perkins, the U.S. Congressman whose Career and Technical Education Act shaped CTE for millions of students. You support California CTE educators: teachers, coordinators, administrators, instructional coaches, and district leaders.
+const CARL_SYSTEM = `You are Carl, a warm, knowledgeable AI mentor inside IteraAI. You support California HIGH SCHOOL educators across ALL subjects and roles — teachers, coordinators, administrators, instructional coaches, and district leaders. Your signature depth is designing instruction for multilingual and multicultural learners; career/CTE readiness is one specialty among many, not your only focus. Help just as fluently with English, math, science, history, world languages, the arts, electives, advisory and SEL as with CTE.
 
 YOUR DEEP EXPERTISE (speak with real authority here):
-- California CTE: 15 Industry Sectors, Model Curriculum Standards, Pathway Standards, Program Quality Review (PQR)
-- Perkins V: core indicators, APR, equity, local application
-- 11 Elements of High-Quality CTE (CA State Plan)
-- English Learner support in CTE: CA ELD Standards, SIOP, SDAIE, translanguaging, EL civil rights
-- LCAP and CA accountability: Dashboard, College/Career Indicator (CCI), EL subgroups
-- CTSOs (FCCLA, FBLA, HOSA, SkillsUSA, FFA, DECA), Work-Based Learning, dual enrollment, A-G
+- Multilingual/multicultural instruction: CA ELD Standards, SIOP/SDAIE, comprehensible input, sentence frames, translanguaging, newcomer supports, home-language-as-asset
+- Designing lessons, units, rubrics, assessments and scaffolds across ALL high school subjects (ELA, math, science, social studies, world languages, arts, electives, advisory/SEL)
+- Differentiation and UDL for mixed-ability, mixed-proficiency classrooms
+- Family and community engagement, including bilingual communication
+- College and career readiness (including CTE) as ONE area among many — never your only focus
 - AI in education and prompt design, including the P.A.R.T.S. framework
 
 HOW YOU HELP:
-- You are a capable, general-purpose assistant FIRST, and a CTE specialist by depth. Help with ANY question an educator brings you — lesson ideas, drafting emails or materials, explaining a concept, planning, tech and software questions, brainstorming, general knowledge. Do NOT deflect or refuse off-topic questions; answer them well, and connect back to the classroom when it's genuinely useful.
+- You are a capable, general-purpose mentor FIRST, with special depth in multilingual instruction across all subjects. Help with ANY question an educator brings you — lesson ideas, drafting emails or materials, explaining a concept, planning, tech and software questions, brainstorming, general knowledge. Do NOT deflect or refuse off-topic questions; answer them well, and connect back to the classroom when it's genuinely useful.
 - Be warm, encouraging, and professional. Use clear language; go technical only when the user is clearly an expert.
 - Be honest about uncertainty rather than guessing. For legal or district-specific policy, suggest verifying with CDE or appropriate counsel.
 - Keep replies focused and practical — educators are busy. Match length to the question: a quick question gets a quick answer.
@@ -8636,7 +8635,7 @@ function resetDualWorkflow() {
 function iepMarkdown(text) {
   if (!text) return '';
   // ── IteraAI visual system palette ──
-  var NAVY='#183B56', TEAL='#2A7F7F', GOLD='#B4791F', INK='#27313A',
+  var NAVY='#183B56', TEAL='#2E9E8C', GOLD='#B4791F', INK='#27313A',
       SOFT='#F4F7F8', MLB='#EAF3F8', UDLB='#EDF5EF', TASKB='#FBF6EC',
       LINE='#dbe3e7', MUT='#5b6a73';
   var F = "font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif";
@@ -9217,7 +9216,7 @@ window.itNav = function(page) {
    Carl stays as the floating companion; this reuses his persona front-and-center.
    ═══════════════════════════════════════════ */
 (function(){
-  var TEAL='#2A7F7F', NAVY='#183B56', INK='#27313A', MUT='#5b6a73', BORD='#e6ebef', CARD='#fff';
+  var TEAL='#2E9E8C', NAVY='#183B56', INK='#27313A', MUT='#5b6a73', BORD='#e6ebef', CARD='#fff';
   var homeHistory=[];
   function pname(){ try{ return (localStorage.getItem(REG_NAME_KEY)||'').split(' ')[0]; }catch(e){ return ''; } }
   function readProfile(){ try{ return JSON.parse(localStorage.getItem('iteraai_teacher_profile_v1')||'null'); }catch(e){ return null; } }
@@ -9240,10 +9239,19 @@ window.itNav = function(page) {
   }
   window.homeChatSend=async function(){
     var inp=document.getElementById('home-chat-input'); if(!inp) return;
-    var text=(inp.value||'').trim(); if(!text) return;
+    var text=(inp.value||'').trim();
+    var ctx=window.iteraFileContext;
+    if(!text && !ctx) return;
     inp.value=''; inp.style.height='auto';
     var sg=document.getElementById('home-chat-sugg'); if(sg) sg.style.display='none';
-    addHomeMsg('user',text); homeHistory.push({role:'user',content:text});
+    var content, label=text;
+    if(ctx){
+      if(ctx.type==='text'){ content=(text||'Please review this file.')+'\n\n[Attached: '+ctx.name+']\n'+(''+(ctx.text||'')).slice(0,8000); }
+      else { content=[ (ctx.mediaType==='application/pdf'?{type:'document',source:{type:'base64',media_type:'application/pdf',data:ctx.base64}}:{type:'image',source:{type:'base64',media_type:ctx.mediaType,data:ctx.base64}}), {type:'text',text:(text||'Please review this file.')+'\n\n[Attached: '+ctx.name+']'} ]; }
+      label=(text?text+'  ':'')+'📎 '+ctx.name;
+      window.iteraFileContext=null; var fc=document.getElementById('home-chat-file'); if(fc){ fc.style.display='none'; fc.innerHTML=''; }
+    } else { content=text; }
+    addHomeMsg('user',label); homeHistory.push({role:'user',content:content});
     var typing=addHomeTyping();
     try{
       var sys=(typeof CARL_SYSTEM!=='undefined')?CARL_SYSTEM:'You are Carl, a warm, knowledgeable IteraAI mentor for educators of multilingual and multicultural students.';
@@ -9271,8 +9279,11 @@ window.itNav = function(page) {
       + '<div style="background:'+CARD+';border:1px solid '+BORD+';border-radius:16px;box-shadow:0 6px 24px rgba(24,59,86,.06);overflow:hidden">'
       +   '<div id="home-chat-msgs" style="padding:18px 18px 6px;max-height:340px;overflow-y:auto"></div>'
       +   '<div id="home-chat-sugg" style="display:flex;flex-wrap:wrap;gap:8px;padding:4px 18px 12px"></div>'
-      +   '<div style="display:flex;gap:10px;align-items:flex-end;border-top:1px solid '+BORD+';padding:12px 14px;background:#fbfdfe">'
-      +     '<textarea id="home-chat-input" rows="1" placeholder="Ask Carl anything, or describe what you need to create&hellip;" style="flex:1;resize:none;border:1px solid '+BORD+';border-radius:12px;padding:11px 13px;font-size:14px;font-family:inherit;color:'+INK+';max-height:120px;outline:none"></textarea>'
+      +   '<div id="home-chat-file" style="display:none;padding:8px 16px 0;font-size:12.5px;color:'+MUT+'"></div>'
+      +   '<div style="display:flex;gap:8px;align-items:flex-end;border-top:1px solid '+BORD+';padding:12px 14px;background:#fbfdfe">'
+      +     '<label for="home-file-input" title="Attach a file" style="width:42px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid '+BORD+';border-radius:12px;cursor:pointer;color:'+MUT+';flex-shrink:0;font-size:17px">&#128206;</label>'
+      +     '<input id="home-file-input" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.gif,.txt,.md,.csv,.docx" style="display:none">'
+      +     '<textarea id="home-chat-input" rows="1" placeholder="Ask Carl anything&hellip;" style="flex:1;resize:none;border:1px solid '+BORD+';border-radius:12px;padding:11px 13px;font-size:14px;font-family:inherit;color:'+INK+';max-height:120px;outline:none"></textarea>'
       +     '<button id="home-chat-send" title="Send" style="background:'+TEAL+';color:#fff;border:none;border-radius:12px;width:44px;height:44px;font-size:18px;cursor:pointer;flex-shrink:0">&uarr;</button>'
       +   '</div>'
       + '</div>'
@@ -9306,12 +9317,27 @@ window.itNav = function(page) {
       sw.appendChild(b);
     });
 
-    addHomeMsg('bot','Hi'+(nm?' '+nm:'')+"! I'm Carl. Tell me what you're planning &mdash; a lesson, a rubric, a family letter &mdash; or ask me anything about teaching multilingual and multicultural students. I'll help you build it.");
+    // greeting bubble removed per design — the rotating placeholder carousel shows prompts instead
 
     var inp=home.querySelector('#home-chat-input');
     inp.addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'; });
     inp.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); window.homeChatSend(); } });
     home.querySelector('#home-chat-send').onclick=window.homeChatSend;
+
+    // rotating placeholder "carousel" — cycles every 3s unless the user is typing/focused
+    var PH=['Ask Carl anything…','Draft a bell-ringer for newcomer students…','Write a rubric for a group presentation…','Make a parent letter in English & Spanish…','Simplify a reading to a lower level…','Create a vocabulary set: word, definition, example…','Plan a lesson for mixed ELD levels…','Turn my notes into a study guide…'];
+    var _phi=0;
+    setInterval(function(){ var el=document.getElementById('home-chat-input'); if(!el||el.value||document.activeElement===el) return; _phi=(_phi+1)%PH.length; el.setAttribute('placeholder',PH[_phi]); },3000);
+
+    // file upload (like Claude / ChatGPT) — stored on window.iteraFileContext, sent with the next message
+    function homeShowChip(name){ var fc=document.getElementById('home-chat-file'); if(!fc) return; fc.style.display='block'; fc.innerHTML=''; var t=document.createElement('span'); t.innerHTML='&#128206; '+esc(name)+'&nbsp;&nbsp;'; var x=document.createElement('span'); x.textContent='✕ remove'; x.style.cssText='cursor:pointer;color:'+TEAL+';font-weight:700'; x.onclick=function(){ window.iteraFileContext=null; fc.style.display='none'; fc.innerHTML=''; }; fc.appendChild(t); fc.appendChild(x); }
+    function homeAttach(file){ if(!file) return; var name=file.name, ext=(name.split('.').pop()||'').toLowerCase(); var rd=new FileReader();
+      if(['txt','md','csv'].indexOf(ext)>-1){ rd.onload=function(){ window.iteraFileContext={name:name,type:'text',text:rd.result}; homeShowChip(name); }; rd.readAsText(file); }
+      else if(ext==='pdf'||['png','jpg','jpeg','webp','gif'].indexOf(ext)>-1){ rd.onload=function(){ window.iteraFileContext={name:name,type:'bin',mediaType:(file.type||(ext==='pdf'?'application/pdf':'image/'+ext)),base64:(''+rd.result).split(',')[1]}; homeShowChip(name); }; rd.readAsDataURL(file); }
+      else if(ext==='docx' && typeof iftHandleFile==='function'){ iftHandleFile(file); setTimeout(function(){ homeShowChip(name); },150); }
+      else { alert('Please attach a PDF, image, .txt/.md/.csv, or .docx file.'); }
+    }
+    var fin=home.querySelector('#home-file-input'); if(fin) fin.addEventListener('change',function(){ homeAttach(this.files[0]); this.value=''; });
 
     var m=document.createElement('div'); m.id='itw-modal';
     m.style.cssText='display:none;position:fixed;inset:0;z-index:99998;background:rgba(16,32,40,.5);align-items:flex-start;justify-content:center;overflow-y:auto;font-family:\'DM Sans\',sans-serif';
